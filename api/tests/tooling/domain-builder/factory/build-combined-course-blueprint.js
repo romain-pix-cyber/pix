@@ -1,7 +1,4 @@
-import {
-  COMBINED_COURSE_BLUEPRINT_ITEMS,
-  CombinedCourseBlueprint,
-} from '../../../../src/quest/domain/models/CombinedCourseBlueprint.js';
+import { CombinedCourseBlueprint } from '../../../../src/quest/domain/models/CombinedCourseBlueprint.js';
 
 function buildCombinedCourseBlueprint({
   id = 1,
@@ -11,25 +8,19 @@ function buildCombinedCourseBlueprint({
   illustration = '/illustrations/image.svg',
   createdAt = new Date(),
   updatedAt = new Date(),
-  content = [{ type: COMBINED_COURSE_BLUEPRINT_ITEMS.MODULE, value: 'module-123' }],
   organizationIds = [],
-  modulesByShortId,
   quest,
 } = {}) {
-  return CombinedCourseBlueprint.buildWithQuest({
-    combinedCourseBlueprint: {
-      id,
-      name,
-      internalName,
-      description,
-      illustration,
-      content,
-      createdAt,
-      updatedAt,
-      organizationIds,
-      quest,
-    },
-    modulesByShortId,
+  return new CombinedCourseBlueprint({
+    id,
+    name,
+    internalName,
+    description,
+    illustration,
+    createdAt,
+    updatedAt,
+    organizationIds,
+    quest,
   });
 }
 

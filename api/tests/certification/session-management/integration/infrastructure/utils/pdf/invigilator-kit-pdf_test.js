@@ -5,8 +5,7 @@ import pdfLibUtils from 'pdf-lib/cjs/utils/index.js';
 
 import { getInvigilatorKitPdfBuffer } from '../../../../../../../src/certification/session-management/infrastructure/utils/pdf/invigilator-kit-pdf.js';
 import { ENGLISH_SPOKEN, FRENCH_SPOKEN } from '../../../../../../../src/shared/domain/services/locale-service.js';
-import { domainBuilder, expect, sinon } from '../../../../../../test-helper.js';
-import { isSameBinary } from '../../../../../../tooling/binary-comparator.js';
+import { domainBuilder, expect, isSameBinary, sinon } from '../../../../../../test-helper.js';
 
 const __dirname = url.fileURLToPath(new URL('.', import.meta.url));
 

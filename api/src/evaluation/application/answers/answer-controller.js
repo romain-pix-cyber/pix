@@ -1,5 +1,6 @@
 // import { usecases as questUsecases } from '../../../quest/domain/usecases/index.js';
 // import { featureToggles } from '../../../shared/infrastructure/feature-toggles/index.js';
+import * as certificationEvaluationApi from '../../../certification/evaluation/application/api/certification-evaluation-api.js';
 import * as assessmentRepository from '../../../shared/infrastructure/repositories/assessment-repository.js';
 import {
   extractUserIdFromRequest,
@@ -9,7 +10,7 @@ import { evaluationUsecases } from '../../domain/usecases/index.js';
 import * as answerSerializer from '../../infrastructure/serializers/jsonapi/answer-serializer.js';
 import * as correctionSerializer from '../../infrastructure/serializers/jsonapi/correction-serializer.js';
 
-async function save(request, h, dependencies = { answerSerializer, assessmentRepository }) {
+async function save(request, h, dependencies = { answerSerializer, assessmentRepository, certificationEvaluationApi }) {
   const answer = dependencies.answerSerializer.deserialize(request.payload);
   const userId = extractUserIdFromRequest(request);
   const locale = getChallengeLocale(request);
@@ -25,11 +26,10 @@ async function save(request, h, dependencies = { answerSerializer, assessmentRep
   } else if (assessment.isForCampaign()) {
     correctedAnswer = await evaluationUsecases.saveAndCorrectAnswerForCampaign({ answer, assessment, userId, locale });
   } else if (assessment.isCertification()) {
-    correctedAnswer = await evaluationUsecases.saveAndCorrectAnswerForCertification({
+    correctedAnswer = await dependencies.certificationEvaluationApi.evaluateAndSaveAnswer({
       answer,
-      assessment,
       userId,
-      locale,
+      certificationCourseId: assessment.certificationCourseId,
     });
   } else {
     correctedAnswer = await evaluationUsecases.saveAndCorrectAnswerForDemoAndPreview({

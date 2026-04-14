@@ -21,6 +21,7 @@ module('Integration | Component | CombinedCourseBlueprints::Details', function (
       name: 'Parcours apprenant',
       description: 'Mon super parcours apprenant',
       illustration: 'http://pix.fr/mon-illu.png',
+      attestationKey: 'SIXTH_GRADE',
       content: [
         { type: 'module', value: 'abc-123' },
         { type: 'evaluation', value: 123 },
@@ -35,6 +36,7 @@ module('Integration | Component | CombinedCourseBlueprints::Details', function (
     assert.ok(screen.getByRole('heading', { name: 'Modèle de parcours apprenant' }));
     assert.ok(screen.getByText('Parcours apprenant'));
     assert.ok(screen.getByText('25/12/2025'));
+    assert.ok(screen.getByText('SIXTH_GRADE'));
     assert.ok(screen.getByText('Mon super parcours apprenant'));
     assert.ok(screen.getByText('Module - abc-123', { exact: false }));
     assert.ok(screen.getByText('Profil cible - 123', { exact: false }));

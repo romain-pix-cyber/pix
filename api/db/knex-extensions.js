@@ -31,8 +31,7 @@ export function configureGlobalExtensions() {
   QueryBuilder.prototype.toSQL = function () {
     const ret = originalToSQL.apply(this);
     const request = getInContext('request');
-    const comments = [['path', request?.route?.path]].map((comment) => comment.join(': ')).join(' ');
-    ret.sql = `/* ${comments} */ `.concat(ret.sql);
+    ret.sql = `/* path:${request?.route?.path} | routeDomain:${request?.route?.realm?.plugin} */ `.concat(ret.sql);
     return ret;
   };
 }

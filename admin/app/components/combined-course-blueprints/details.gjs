@@ -59,6 +59,12 @@ export default class Details extends Component {
                 {{formatDate @model.createdAt}}
               </DescriptionList.Item>
 
+              <DescriptionList.Divider />
+
+              <DescriptionList.Item @label={{t "components.combined-course-blueprints.labels.attestation"}}>
+                <SafeMarkdownToHtml @markdown={{@model.attestationKey}} />
+              </DescriptionList.Item>
+
               {{#if @model.description}}
                 <DescriptionList.Divider />
 
@@ -74,6 +80,7 @@ export default class Details extends Component {
                 </DescriptionList.Item>
                 <DescriptionList.Divider />
               {{/if}}
+
             </DescriptionList>
             <div class="combined-course-blueprint__content">
               {{#each @model.content as |requirement|}}

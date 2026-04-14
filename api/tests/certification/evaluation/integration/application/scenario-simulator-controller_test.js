@@ -3,7 +3,7 @@ import pickChallengeService from '../../../../../src/certification/evaluation/do
 import { usecases } from '../../../../../src/certification/evaluation/domain/usecases/index.js';
 import { pickAnswerStatusService } from '../../../../../src/certification/shared/domain/services/pick-answer-status-service.js';
 import { securityPreHandlers } from '../../../../../src/shared/application/security-pre-handlers.js';
-import { domainBuilder, expect, HttpTestServer, parseJsonStream, sinon } from '../../../../test-helper.js';
+import { domainBuilder, expect, HttpTestServer, parseNDJSON, sinon } from '../../../../test-helper.js';
 
 describe('Integration | Application | scenario-simulator-controller', function () {
   let httpTestServer;
@@ -86,7 +86,7 @@ describe('Integration | Application | scenario-simulator-controller', function (
 
           // then
           expect(response.statusCode).to.equal(200);
-          const parsedResult = parseJsonStream(response);
+          const parsedResult = parseNDJSON(response.result);
           expect(parsedResult).to.deep.equal([
             {
               index: 0,
@@ -146,7 +146,7 @@ describe('Integration | Application | scenario-simulator-controller', function (
 
             // then
             expect(response.statusCode).to.equal(200);
-            const parsedResult = parseJsonStream(response);
+            const parsedResult = parseNDJSON(response.result);
             expect(parsedResult).to.deep.equal([
               {
                 index: 0,
@@ -207,7 +207,7 @@ describe('Integration | Application | scenario-simulator-controller', function (
 
             // then
             expect(response.statusCode).to.equal(200);
-            const parsedResult = parseJsonStream(response);
+            const parsedResult = parseNDJSON(response.result);
             expect(parsedResult).to.deep.equal([
               {
                 index: 0,
@@ -268,7 +268,7 @@ describe('Integration | Application | scenario-simulator-controller', function (
 
             // then
             expect(response.statusCode).to.equal(200);
-            const parsedResult = parseJsonStream(response);
+            const parsedResult = parseNDJSON(response.result);
             expect(parsedResult).to.deep.equal([
               {
                 index: 0,
@@ -352,7 +352,7 @@ describe('Integration | Application | scenario-simulator-controller', function (
 
             // then
             expect(response.statusCode).to.equal(200);
-            const parsedResult = parseJsonStream(response);
+            const parsedResult = parseNDJSON(response.result);
             expect(parsedResult).to.deep.equal([
               {
                 index: 0,

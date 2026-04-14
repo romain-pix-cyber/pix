@@ -2,21 +2,15 @@ import * as attestationRepository from '../../../../../src/quest/infrastructure/
 import { AttestationStorage } from '../../../../../src/quest/infrastructure/storage/attestation-storage.js';
 import { AlreadyExistingEntityError } from '../../../../../src/shared/domain/errors.js';
 import { S3UploadError } from '../../../../../src/shared/domain/errors.js';
-import {
-  catchErr,
-  databaseBuilder,
-  expect,
-  getFakeAttestationTemplate,
-  knex,
-  mockAttestationStorageUpload,
-} from '../../../../test-helper.js';
+import { catchErr, databaseBuilder, expect, knex, mockAttestationStorageUpload } from '../../../../test-helper.js';
+import { AttestationTemplateFixture } from '../../../../tooling/fixtures/index.js';
 
 describe('Quest | Integration | Repository | attestation', function () {
   describe('#save', function () {
     it('should upload attestation file and save attestation in db', async function () {
       const templateName = 'name';
       const templateKey = 'key';
-      const templateFile = getFakeAttestationTemplate();
+      const templateFile = await AttestationTemplateFixture.getFile();
 
       //when
       const storageMock = mockAttestationStorageUpload({ attestation: { templateName } });
@@ -40,7 +34,7 @@ describe('Quest | Integration | Repository | attestation', function () {
     it('should not save attestation in db if file upload failed', async function () {
       const templateName = 'name';
       const templateKey = 'key';
-      const templateFile = getFakeAttestationTemplate();
+      const templateFile = await AttestationTemplateFixture.getFile();
 
       //when
       const storageMock = mockAttestationStorageUpload({ attestation: { templateName }, isFailed: true });
@@ -62,7 +56,7 @@ describe('Quest | Integration | Repository | attestation', function () {
     it('should not save attestation in db if attestation exists', async function () {
       const templateName = 'name';
       const templateKey = 'key';
-      const templateFile = getFakeAttestationTemplate();
+      const templateFile = await AttestationTemplateFixture.getFile();
 
       databaseBuilder.factory.buildAttestation({ key: templateKey, templateName: 'anotherTemplateName' });
       await databaseBuilder.commit();

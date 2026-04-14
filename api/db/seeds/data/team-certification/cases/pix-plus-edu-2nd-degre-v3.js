@@ -134,6 +134,7 @@ export class PixPlusEdu2ndDegreV3Seed {
       pixScore: null,
       status: 'validated',
       reachedMeshIndex: 0,
+      eduV3ExternalJuryResult: 'EXPERT',
       capacity: 2.0,
       versionId,
     });

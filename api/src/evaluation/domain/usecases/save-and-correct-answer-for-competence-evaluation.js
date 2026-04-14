@@ -39,13 +39,12 @@ export async function saveAndCorrectAnswerForCompetenceEvaluation({
   const correctedAnswer = correctionService.evaluateAnswer({
     challenge,
     answer,
-    assessment,
+    challengeSubmittedAt: assessment.lastQuestionDate,
+    hasChallengeBeenFocusedOut: assessment.hasLastQuestionBeenFocusedOut,
+    isCertificationEvaluation: false,
     accessibilityAdjustmentNeeded: false,
     forceOKAnswer,
   });
-  const now = new Date();
-  const lastQuestionDate = assessment.lastQuestionDate || now;
-  correctedAnswer.setTimeSpentFrom({ now, lastQuestionDate });
 
   const targetSkills = await skillRepository.findActiveByCompetenceId(assessment.competenceId);
   const knowledgeElementsBefore = await knowledgeElementRepository.findUniqByUserId({ userId });

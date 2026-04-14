@@ -7,7 +7,6 @@ import {
   datamartBuilder,
   expect,
   generateAuthenticatedUserRequestHeaders,
-  insertUserWithRoleSuperAdmin,
   knex,
 } from '../../../../test-helper.js';
 
@@ -21,7 +20,7 @@ describe('Certification | Configuration | Acceptance | API | complementary-certi
   describe('GET /api/admin/complementary-certifications/', function () {
     it('should return 200 HTTP status code', async function () {
       // given
-      const superAdmin = await insertUserWithRoleSuperAdmin();
+      const superAdmin = databaseBuilder.factory.buildUser.withRoleSuperAdmin();
       const options = {
         method: 'GET',
         url: '/api/admin/complementary-certifications',
@@ -74,7 +73,7 @@ describe('Certification | Configuration | Acceptance | API | complementary-certi
     context('when no search term provided', function () {
       it('should return 200 HTTP status code', async function () {
         // given
-        const superAdmin = await insertUserWithRoleSuperAdmin();
+        const superAdmin = databaseBuilder.factory.buildUser.withRoleSuperAdmin();
         const options = {
           method: 'GET',
           url: '/api/admin/complementary-certifications/attachable-target-profiles',
@@ -110,7 +109,7 @@ describe('Certification | Configuration | Acceptance | API | complementary-certi
     context('when a search term is provided', function () {
       it('should return 200 HTTP status code', async function () {
         // given
-        const superAdmin = await insertUserWithRoleSuperAdmin();
+        const superAdmin = databaseBuilder.factory.buildUser.withRoleSuperAdmin();
         const options = {
           method: 'GET',
           url: '/api/admin/complementary-certifications/attachable-target-profiles?searchTerm=that%20way',
@@ -153,7 +152,7 @@ describe('Certification | Configuration | Acceptance | API | complementary-certi
     it('should return 200 HTTP status code', async function () {
       // given
       const server = await createServer();
-      const superAdmin = await insertUserWithRoleSuperAdmin();
+      const superAdmin = databaseBuilder.factory.buildUser.withRoleSuperAdmin();
       const attachedAt = new Date('2019-01-01');
 
       databaseBuilder.factory.buildComplementaryCertification({
@@ -254,7 +253,7 @@ describe('Certification | Configuration | Acceptance | API | complementary-certi
   describe('PATCH /api/admin/complementary-certifications/{complementaryCertificationKey}/consolidated-framework', function () {
     it('should return 200 HTTP status code and update framework with calibration', async function () {
       // given
-      const superAdmin = await insertUserWithRoleSuperAdmin();
+      const superAdmin = databaseBuilder.factory.buildUser.withRoleSuperAdmin();
 
       const complementaryCertification = databaseBuilder.factory.buildComplementaryCertification();
       const certificationVersion = databaseBuilder.factory.buildCertificationVersion({

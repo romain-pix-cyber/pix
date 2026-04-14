@@ -71,7 +71,7 @@ async function getCombinedCourseDetails({
     }
   }
 
-  combinedCourseDetails.generateItems({
+  combinedCourseDetails.setDataAndGenerateItems({
     participation,
     recommendedModuleIdsForUser,
     dataForQuest,
@@ -136,7 +136,7 @@ async function getCombinedCourseDetailsForMultipleLearners({
     const dataForQuest = dataForQuestByLearnerId.get(organizationLearnerId);
     const recommendedModuleIdsForUser = recommendedModulesByLearnerId.get(organizationLearnerId) ?? [];
 
-    combinedCourseDetails.generateItems({
+    combinedCourseDetails.setDataAndGenerateItems({
       participation,
       recommendedModuleIdsForUser,
       dataForQuest,

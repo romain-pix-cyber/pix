@@ -542,7 +542,7 @@
                 "id": "40de84e9-fc48-40c3-9d3f-499f6454d46a",
                 "type": "text",
                 "tag": " ",
-                "content": "<p>Nous savons désormais que répondre à une requête demande de<strong> nombreux calculs</strong> <strong>sur des ordinateurs très puissants</strong>. Cela consomme<strong> beaucoup</strong> <strong>d’électricité </strong>et <strong>d’eau.</strong> </p><p>🤔Et si personne ne fait de demande ?</p><p>Les <strong>machines</strong> restent <strong>allumées en permanence</strong> et elles continuent à <strong>consommer de l’énergie</strong>.⚡&nbsp;</p><br>"
+                "content": "<p>Nous savons désormais que répondre à une requête demande de<strong> nombreux calculs</strong> <strong>sur des ordinateurs très puissants</strong>. Cela consomme<strong> beaucoup</strong> <strong>d’électricité </strong>et <strong>d’eau.</strong> </p><p>🤔Et si personne ne fait de demande ?</p><p>Les <strong>machines</strong> restent <strong>allumées en permanence</strong> et elles continuent à <strong>consommer de l’énergie</strong>.⚡&nbsp;</p>"
               }
             }
           ]
@@ -614,7 +614,7 @@
                   "capacityImage": "https://assets.pix.org/modules/les-ia-consomment/poi-requetes-multiples/supercalculator_capacity1.svg"
                 },
                 "title": "",
-                "functionalInstruction": ""
+                "functionalInstruction": "Choisissez le type et le nombre de requêtes, puis observez ce qui se passe."
               }
             },
             {

@@ -61,7 +61,7 @@
               "type": "element",
               "element": {
                 "id": "be1361b1-0008-4a78-bb0e-86c1ba5f1e01",
-                "type": "qcu-discovery",
+                "type": "qcu-declarative",
                 "instruction": "À votre avis, qu’est-ce qui pourrait aider Maëva à mieux s’y retrouver ?",
                 "hasShortProposals": false,
                 "proposals": [
@@ -76,7 +76,7 @@
                     "id": "2",
                     "content": "Supprimer ce qui ne sert plus.",
                     "feedback": {
-                      "diagnosis": "<p>Effectivement, penser à supprimer des éléments quand ils ne sont plus utiles peut aider à s’y retrouver plus facilement.<br>Mais il existe plusieurs autres options&nbsp;: regrouper des éléments et choisir des noms compréhensibles peut aussi permettre de mieux s’organiser sur un ordinateur.</p>"
+                      "diagnosis": "<p>Effectivement, supprimer des éléments quand ils ne sont plus utiles peut aider à s’y retrouver plus facilement.<br>Mais il existe plusieurs autres options&nbsp;: regrouper des éléments et choisir des noms compréhensibles peut aussi permettre de mieux s’organiser sur un ordinateur.</p>"
                     }
                   },
                   {
@@ -93,8 +93,7 @@
                       "diagnosis": "<p>Il existe des moyens simples pour mieux s’organiser sur un ordinateur&nbsp;: choisir des noms compréhensibles, regrouper des éléments dans des dossiers ou encore supprimer les éléments quand ils ne sont plus utiles.</p>"
                     }
                   }
-                ],
-                "solution": "1"
+                ]
               }
             }
           ]
@@ -154,56 +153,6 @@
                 {
                   "elements": [
                     {
-                      "id": "0c8f70da-3f74-4a57-9a33-f5e6a9dd559e",
-                      "type": "qrocm",
-                      "instruction": "Sélectionnez la bonne réponse pour compléter la phrase.",
-                      "proposals": [
-                        {
-                          "type": "text",
-                          "content": "«&nbsp;Janvier&nbsp;» est un&nbsp;"
-                        },
-                        {
-                          "type": "select",
-                          "input": "janvier",
-                          "display": "inline",
-                          "placeholder": "Sélectionnez",
-                          "ariaLabel": "Sélectionnez",
-                          "tolerances": [],
-                          "options": [
-                            {
-                              "id": "1",
-                              "content": "fichier"
-                            },
-                            {
-                              "id": "2",
-                              "content": "dossier"
-                            }
-                          ],
-                          "solutions": [
-                            "2"
-                          ]
-                        },
-                        {
-                          "type": "text",
-                          "content": "."
-                        }
-                      ],
-                      "feedbacks": {
-                        "valid": {
-                          "state": "",
-                          "diagnosis": "<p>Effectivement, «&nbsp;Janvier&nbsp;»&nbsp;est bien un <strong>dossier</strong>, il peut<strong> contenir&nbsp;des fichiers</strong>. Les dossiers sont représentés par une icône spécifique, souvent sous forme d’une pochette. 📂</p>"
-                        },
-                        "invalid": {
-                          "state": "",
-                          "diagnosis": "Eh non, «&nbsp;Janvier&nbsp;»&nbsp;est bien un <strong>dossier</strong>, il <strong>contient des fichiers</strong>. Les dossiers sont représentés par une icône spécifique, souvent sous forme d’une pochette. 📂"
-                        }
-                      }
-                    }
-                  ]
-                },
-                {
-                  "elements": [
-                    {
                       "id": "937568c7-f340-4754-8ae8-58b4ee86c18b",
                       "type": "qrocm",
                       "instruction": "Sélectionnez la bonne réponse pour compléter la phrase.",
@@ -246,6 +195,56 @@
                         "invalid": {
                           "state": "",
                           "diagnosis": " Eh non, «&nbsp;Demande de documents&nbsp;» est&nbsp;bien un <strong>fichier</strong>. Un fichier peut être représenté par un aperçu de son contenu, ou par une icône qui varie selon le type de fichier (texte, image, son, vidéo, etc.). Ici c’est un fichier de texte.&nbsp;"
+                        }
+                      }
+                    }
+                  ]
+                },
+                {
+                  "elements": [
+                    {
+                      "id": "0c8f70da-3f74-4a57-9a33-f5e6a9dd559e",
+                      "type": "qrocm",
+                      "instruction": "Sélectionnez la bonne réponse pour compléter la phrase.",
+                      "proposals": [
+                        {
+                          "type": "text",
+                          "content": "«&nbsp;Janvier&nbsp;» est un&nbsp;"
+                        },
+                        {
+                          "type": "select",
+                          "input": "janvier",
+                          "display": "inline",
+                          "placeholder": "Sélectionnez",
+                          "ariaLabel": "Sélectionnez",
+                          "tolerances": [],
+                          "options": [
+                            {
+                              "id": "1",
+                              "content": "fichier"
+                            },
+                            {
+                              "id": "2",
+                              "content": "dossier"
+                            }
+                          ],
+                          "solutions": [
+                            "2"
+                          ]
+                        },
+                        {
+                          "type": "text",
+                          "content": "."
+                        }
+                      ],
+                      "feedbacks": {
+                        "valid": {
+                          "state": "",
+                          "diagnosis": "<p>Effectivement, «&nbsp;Janvier&nbsp;»&nbsp;est bien un <strong>dossier</strong>, il peut<strong> contenir&nbsp;des fichiers</strong>. Les dossiers sont représentés par une icône spécifique, souvent sous forme d’une pochette. 📂</p>"
+                        },
+                        "invalid": {
+                          "state": "",
+                          "diagnosis": "Eh non, «&nbsp;Janvier&nbsp;»&nbsp;est bien un <strong>dossier</strong>, il <strong>contient des fichiers</strong>. Les dossiers sont représentés par une icône spécifique, souvent sous forme d’une pochette. 📂"
                         }
                       }
                     }
@@ -353,7 +352,7 @@
                 "id": "db1d3007-f6d7-4242-aff6-807aa1e1f5a0",
                 "type": "text",
                 "tag": " ",
-                "content": "<h5><strong>Comment afficher le contenu d’un dossier ? </strong>📂</h5><p>Pour afficher le contenu d’un dossier, double-cliquez dessus. Une fenêtre s’ouvre et affiche le contenu du dossier.</p><p><strong>🤔 Bon à savoir</strong><br>Un dossier peut contenir des fichiers mais aussi d’autres dossiers.</p>"
+                "content": "<h5><strong>Comment afficher le contenu d’un dossier ? </strong>📂</h5><p>Pour afficher le contenu d’un dossier, double-cliquez dessus. Une fenêtre s’ouvre et affiche le contenu du dossier.</p><p><br><strong>🤔 Bon à savoir</strong><br>Un dossier peut contenir des fichiers mais aussi d’autres dossiers.</p>"
               }
             }
           ]
@@ -385,7 +384,7 @@
                 "id": "7aee6701-cb39-46e9-8069-09984704661f",
                 "type": "text",
                 "tag": " ",
-                "content": "Maintenant que Maëva a un dossier «&nbsp;Photos&nbsp;», elle y a rangé les photos qui étaient sur son bureau. Sauf la photo nommée «&nbsp;DCIM2115&nbsp;». <br>Elle veut d’abord changer le nom de la photo. Puis la déplacer dans le dossier «&nbsp;Photos&nbsp;»."
+                "content": "Maëva a rangé ses fichiers photos dans son dossier «&nbsp;Photos&nbsp;». Sauf la photo nommée «&nbsp;DCIM2115&nbsp;». <br>Elle veut d’abord changer le nom de la photo. Puis la déplacer dans le dossier «&nbsp;Photos&nbsp;»."
               }
             },
             {
@@ -428,7 +427,7 @@
                 "id": "8c2acdd0-84cb-4c7f-9915-7a5f126796df",
                 "type": "text",
                 "tag": " ",
-                "content": "<p>Le <strong>nom du fichier</strong> est parfois créé automatiquement ou choisi par quelqu’un d’autre. De la même manière, parfois un fichier est <strong>placé automatiquement dans un dossier</strong>, le dossier téléchargement par exemple.</p><p>Vous pouvez <strong>renommer </strong>et <strong>déplacer </strong>vos fichiers selon votre préférence.</p><p><strong>🤔 Le saviez-vous  ?<br></strong>Un dossier peut contenir autant de fichiers que l’on souhaite. </p><p><strong>Astuce&nbsp;<br></strong>Si vous savez utiliser le glisser-déposer, vous pouvez l’utiliser pour déplacer des fichiers dans des dossiers.</p>"
+                "content": "<p>Parfois, ce n’est pas vous qui choisissez le <strong>nom du fichier</strong>. Par exemple, une photo récupérée depuis votre appareil photo aura déjà un nom <strong>donné automatiquement</strong>.<br>De la même manière, parfois un fichier est <strong>placé automatiquement dans un dossier</strong>, le dossier téléchargement par exemple.</p><p><br>Vous pouvez <strong>renommer </strong>et <strong>déplacer </strong>vos fichiers selon votre préférence.</p><p><br><strong>🤔 Bon à savoir</strong><br>Un dossier peut contenir autant de fichiers que l’on souhaite. </p><p><br>💡 <strong>Astuce&nbsp;<br></strong>Si vous savez utiliser le glisser-déposer, vous pouvez l’utiliser pour déplacer des fichiers dans des dossiers.</p>"
               }
             }
           ]
@@ -475,28 +474,28 @@
                     "id": "1",
                     "content": "Non, il est supprimé définitivement de l’ordinateur.",
                     "feedback": {
-                      "diagnosis": "<p>Eh non, quand un fichier est supprimé, il est déplacé dans <strong>la corbeille</strong>.<br>Pour l’instant, le fichier n’est <strong>pas effacé</strong> de l’ordinateur, l’utilisateur peut encore le <strong>récupérer</strong>.</p>"
+                      "diagnosis": "<p>Eh non, quand un fichier est supprimé, il est déplacé dans <strong>la corbeille</strong>.<br>Pour l’instant, le fichier n’est <strong>pas effacé</strong> de l’ordinateur, vous pouvez encore le <strong>récupérer</strong>.</p>"
                     }
                   },
                   {
                     "id": "2",
                     "content": "Oui, mais uniquement dans les 5 minutes qui suivent la suppression.",
                     "feedback": {
-                      "diagnosis": "<p> Eh non, quand un fichier est supprimé, il est déplacé dans <strong>la corbeille</strong>.<br>Pour l’instant, le fichier n’est <strong>pas effacé</strong> de l’ordinateur, l’utilisateur peut encore le <strong>récupérer</strong>.</p>"
+                      "diagnosis": "<p> Eh non, quand un fichier est supprimé, il est déplacé dans <strong>la corbeille</strong>.<br>Pour l’instant, le fichier n’est <strong>pas effacé</strong> de l’ordinateur, vous pouvez encore le <strong>récupérer</strong>.</p>"
                     }
                   },
                   {
                     "id": "3",
                     "content": "Oui, les fichiers supprimés sont dans la corbeille de l’ordinateur.",
                     "feedback": {
-                      "diagnosis": "<p> Effectivement, quand un fichier est supprimé, il est déplacé dans <strong>la corbeille</strong>.<br>Pour l’instant, le fichier n’est <strong>pas effacé</strong> de l’ordinateur, l’utilisateur peut encore le <strong>récupérer</strong>.</p>"
+                      "diagnosis": "<p> Effectivement, quand un fichier est supprimé, il est déplacé dans <strong>la corbeille</strong>.<br>Pour l’instant, le fichier n’est <strong>pas effacé</strong> de l’ordinateur, vous pouvez encore le <strong>récupérer</strong>.</p>"
                     }
                   },
                   {
                     "id": "4",
                     "content": "Je ne sais pas.",
                     "feedback": {
-                      "diagnosis": "<p> Quand un fichier est supprimé, il est déplacé dans <strong>la corbeille</strong>.<br>Pour l’instant, le fichier n’est <strong>pas effacé</strong> de l’ordinateur, l’utilisateur peut encore le <strong>récupérer</strong>.</p>"
+                      "diagnosis": "<p> Quand un fichier est supprimé, il est déplacé dans <strong>la corbeille</strong>.<br>Pour l’instant, le fichier n’est <strong>pas effacé</strong> de l’ordinateur, vous pouvez encore le <strong>récupérer</strong>.</p>"
                     }
                   }
                 ],
@@ -562,7 +561,7 @@
                 "id": "aa2945b0-cec7-4b40-8ce7-82d97b37a451",
                 "type": "text",
                 "tag": " ",
-                "content": "<h5>Comment supprimer un fichier ou un dossier ?</h5><p>Pour supprimer un fichier ou un dossier inutile&nbsp;:&nbsp;</p><ul><li>Faites un clic droit dessus puis cliquez sur «&nbsp;<strong>Supprimer </strong>» (Windows) ou «&nbsp;<strong>Placer dans la corbeille </strong>» (Mac). Le fichier est alors <strong>déplacé dans la corbeille</strong>. 🗑️</li><li><strong>Videz la corbeille </strong>pour <strong>supprimer définitivement</strong> les fichiers et dossiers qui s’y trouvent.&nbsp;❌</li></ul><p>[ avec image ou short video  ]</p><p><br><strong>🤔 Bon à savoir<br></strong>Certaines corbeilles ne gardent les fichiers et dossiers que pendant 30 à 60 jours. Ils sont ensuite supprimés automatiquement.<br></p>"
+                "content": "<h5>Comment supprimer un fichier ou un dossier ?</h5><p>Pour supprimer un fichier ou un dossier inutile&nbsp;:&nbsp;</p><ol><li>Faites un clic droit dessus puis cliquez sur «&nbsp;<strong>Supprimer </strong>» (Windows) ou «&nbsp;<strong>Placer dans la corbeille </strong>» (Mac). Le fichier est alors <strong>déplacé dans la corbeille</strong>. 🗑️</li><li><strong>Videz la corbeille </strong>pour <strong>supprimer définitivement</strong> les fichiers et dossiers qui s’y trouvent.&nbsp;❌</li></ol><p>[ avec image ou short video  ]</p><p><br><strong>🤔 Bon à savoir<br></strong>Certaines corbeilles ne gardent les fichiers et dossiers que pendant 30 à 60 jours. Ils sont ensuite supprimés automatiquement.<br></p>"
               }
             }
           ]
@@ -690,7 +689,7 @@
               "element": {
                 "id": "0af6f2d1-0c78-4bb4-9fe5-0d895f900483",
                 "type": "qrocm",
-                "instruction": "Combien de fichiers et combien de dossiers voyez-vous sur ce bureau ?",
+                "instruction": "Combien de fichiers et combien de dossiers y a-t-il sur ce bureau ?",
                 "proposals": [
                   {
                     "type": "text",

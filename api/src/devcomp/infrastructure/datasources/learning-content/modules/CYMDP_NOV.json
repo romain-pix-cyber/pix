@@ -287,7 +287,7 @@
                 "type": "custom",
                 "title": "",
                 "instruction": "<p>Essayez les mots de passe de la liste ci-dessous pour trouver le mot de passe du compte d’Ulysse.</p>",
-                "functionalInstruction": "",
+                "functionalInstruction": "Cliquez sur un mot de passe pour le tester.",
                 "tagName": "test-top-mdp",
                 "props": {
                   "titleLevel": 0,
@@ -801,12 +801,7 @@
                 "functionalInstruction": "",
                 "tagName": "mdp-classement",
                 "props": {
-                  "passwords": [
-                    "r7&Kp9!qZ4#tV2",
-                    "MonCh@t!23\"",
-                    "Bonjour1",
-                    "1234567"
-                  ]
+                  "passwords": ["r7&Kp9!qZ4#tV2", "MonCh@t!23\"", "Bonjour1", "1234567"]
                 }
               }
             }

@@ -302,7 +302,6 @@ describe('Certification | Enrolment | Acceptance | Application | Routes | enrolm
     });
 
     afterEach(async function () {
-      server = await createServer();
       clearResolveMx();
     });
 

@@ -46,10 +46,6 @@ describe('Unit | Application | Learner Management | organization-import-controll
       usecases.saveOrganizationLearnerImportFormats.resolves(null);
     });
 
-    afterEach(function () {
-      sinon.restore();
-    });
-
     it('should update organization import format', async function () {
       await organizationImportController.saveOrganizationLearnerImportFormats(request);
       expect(usecases.saveOrganizationLearnerImportFormats).to.have.been.calledOnceWithExactly({

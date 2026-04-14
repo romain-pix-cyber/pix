@@ -8,6 +8,7 @@ describe('Unit | Domain | Models | Answer', function () {
       // given
       const rawData = {
         id: 2,
+        createdAt: new Date('2020-01-01'),
         value: 'Avast, Norton',
         result: 'ok',
         resultDetails: 'champs1 : ok \n champs2 : ko',
@@ -21,6 +22,7 @@ describe('Unit | Domain | Models | Answer', function () {
 
       const expectedAnswer = {
         id: 2,
+        createdAt: new Date('2020-01-01'),
         value: 'Avast, Norton',
         result: { status: 'ok' },
         resultDetails: 'champs1 : ok \n champs2 : ko',

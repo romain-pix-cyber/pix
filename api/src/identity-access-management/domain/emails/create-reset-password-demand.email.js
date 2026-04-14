@@ -1,4 +1,4 @@
-import { FRENCH_FRANCE, isFranceLocale } from '../../../shared/domain/services/locale-service.js';
+import { FRENCH_FRANCE } from '../../../shared/domain/services/locale-service.js';
 import {
   getPixAppUrl,
   getPixWebsiteDomain,
@@ -30,7 +30,6 @@ export function createResetPasswordDemandEmail({ email, temporaryKey, locale = F
       homeName: getPixWebsiteDomain(locale),
       homeUrl: getPixWebsiteUrl(locale),
       helpdeskUrl: getSupportUrl(locale),
-      displayNationalLogo: isFranceLocale(locale),
       resetUrl: getPixAppUrl(locale, { pathname: `/changer-mot-de-passe/${temporaryKey}` }),
       clickOnTheButton: i18n.__('reset-password-demand-email.params.clickOnTheButton'),
       contactUs: i18n.__('reset-password-demand-email.params.contactUs'),

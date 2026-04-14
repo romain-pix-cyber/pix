@@ -1,4 +1,3 @@
-import { DomainTransaction } from '../../../../../../src/shared/domain/DomainTransaction.js';
 import { EntityValidationError } from '../../../../../../src/shared/domain/errors.js';
 import {
   CORRELATION_METADATA,
@@ -12,7 +11,7 @@ import {
   JobRepository,
   JobRetry,
 } from '../../../../../../src/shared/infrastructure/repositories/jobs/job-repository.js';
-import { catchErr, catchErrSync, expect, knex } from '../../../../../test-helper.js';
+import { catchErrSync, expect } from '../../../../../test-helper.js';
 
 describe('Integration | Infrastructure | Repositories | Jobs | job-repository', function () {
   it('create one job db with given config', async function () {
@@ -30,11 +29,11 @@ describe('Integration | Infrastructure | Repositories | Jobs | job-repository', 
     await expect(name).to.have.been.performed.withJob({
       name,
       data: expectedParams,
-      expirein: '48:00:00',
+      expireIn: 48 * 3600,
       priority,
-      retrydelay: 30,
-      retrylimit: 10,
-      retrybackoff: true,
+      retryDelay: 30,
+      retryLimit: 10,
+      retryBackoff: true,
     });
   });
 
@@ -96,11 +95,11 @@ describe('Integration | Infrastructure | Repositories | Jobs | job-repository', 
     await expect(name).to.have.been.performed.withJob({
       name,
       data: expectedParams,
-      expirein: '48:00:00',
+      expireIn: 48 * 3600,
       priority,
-      retrydelay: 30,
-      retrylimit: 10,
-      retrybackoff: true,
+      retryDelay: 30,
+      retryLimit: 10,
+      retryBackoff: true,
     });
   });
 
@@ -119,63 +118,6 @@ describe('Integration | Infrastructure | Repositories | Jobs | job-repository', 
 
     // then
     expect(jobsInserted.rowCount).to.equal(2);
-  });
-
-  context('transaction', function () {
-    context('when no transaction ongoing', function () {
-      // todo GUL ca me plait pas trop la manière dont c'est fait
-      // avant ça pétait au moment de faire l'insert car le job n'a pas une data valide en jsonb
-      // maintenant je pète avant, au moment d'ajouter mon contexte de corrélation aux params de base du job
-      // ne faudrait-il pas de toute façon valider les params du performAsync() avant de soumettre à PG ??
-      it("should not insert any jobs if one of them is invalid and can't be inserted", async function () {
-        // given
-        const name = 'JobTest';
-        // Knex doc : default chunk for batchInsert is 1000
-        const defaultChunkValidJobs = [...Array(1000).keys()].map((i) => ({ jobParam: i }));
-        const invalidJob = '>';
-        const priority = JobPriority.HIGH;
-        const job = new JobRepository({ name, priority });
-
-        // when
-        await catchErr(job.performAsync, job)(...defaultChunkValidJobs, invalidJob);
-
-        // then
-        //expect(expectedError.detail).to.equal('Token ">" is invalid.');
-        const { count } = await knex('pgboss.job').count('id').first();
-        expect(count).to.equal(0);
-      });
-    });
-
-    context('when a transaction ongoing in DomainTransaction', function () {
-      it('should use the same existing transaction', async function () {
-        // given
-        const name = 'JobTest';
-        const jobs = [{ jobParam: 1 }, { jobParam: 2 }];
-        const priority = JobPriority.HIGH;
-        const job = new JobRepository({ name, priority });
-
-        // when
-        let knexConn;
-        const callback = async () => {
-          knexConn = DomainTransaction.getConnection();
-          await knexConn('features').insert({ key: 'someRandomFeature' });
-          await job.performAsync(...jobs);
-          const { count: countFeaturesBefore } = await knexConn('features').count('id').first();
-          expect(countFeaturesBefore).to.equal(1);
-          const { count: countJobsBefore } = await knexConn('pgboss.job').count('id').first();
-          expect(countJobsBefore).to.equal(2);
-          throw new Error('I want to rollback');
-        };
-        const expectedError = await catchErr(DomainTransaction.execute)(callback);
-
-        // then
-        expect(expectedError.message).to.equal('I want to rollback');
-        const { count: countFeaturesAfter } = await knex('features').count('id').first();
-        expect(countFeaturesAfter).to.equal(0);
-        const { count: countJobsAfter } = await knex('pgboss.job').count('id').first();
-        expect(countJobsAfter).to.equal(0);
-      });
-    });
   });
 
   describe('JobExpireIn', function () {

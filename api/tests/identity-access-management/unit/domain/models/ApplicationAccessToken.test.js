@@ -8,10 +8,6 @@ describe('Unit | Identity Access Management | Domain | Model | ApplicationAccess
     sinon.stub(config.authentication, 'accessTokenLifespanMs').value(3600000);
   });
 
-  afterEach(function () {
-    sinon.restore();
-  });
-
   describe('ApplicationAccessToken.decode', function () {
     it('decodes a valid token', function () {
       // given

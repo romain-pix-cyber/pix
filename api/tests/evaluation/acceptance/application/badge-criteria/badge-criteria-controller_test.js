@@ -3,7 +3,6 @@ import {
   databaseBuilder,
   expect,
   generateAuthenticatedUserRequestHeaders,
-  insertUserWithRoleSuperAdmin,
   knex,
 } from '../../../../test-helper.js';
 
@@ -17,7 +16,7 @@ describe('Acceptance | API | Badge Criteria', function () {
   describe('PATCH /api/admin/badge-criteria/{badgeCriterionId}', function () {
     it('should update the badge criterion', async function () {
       // given
-      const superAdmin = await insertUserWithRoleSuperAdmin();
+      const superAdmin = databaseBuilder.factory.buildUser.withRoleSuperAdmin();
       const initialBadgeCriterion = databaseBuilder.factory.buildBadgeCriterion({
         name: 'old name',
         threshold: 10,

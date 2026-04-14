@@ -146,6 +146,7 @@ of an adaptative/mobile-first approach — refactoring is welcome here */
 @use 'components/tutorial-item' as *;
 @use 'components/tutorial-panel' as *;
 @use 'components/user-account' as *;
+@use 'components/user-account/add-email-with-validation' as *;
 @use 'components/user-account/update-email-with-validation' as *;
 @use 'components/user-account/email-verification-code' as *;
 @use 'components/user-certification-hexagon-score' as *;

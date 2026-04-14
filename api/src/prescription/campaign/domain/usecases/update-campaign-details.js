@@ -10,7 +10,6 @@ const updateCampaignDetails = async function ({
   isForAbsoluteNovice,
   isAuthorizedToUpdateIsForAbsoluteNovice,
   campaignAdministrationRepository,
-  campaignUpdateValidator,
 }) {
   const campaign = await campaignAdministrationRepository.get(campaignId);
 
@@ -27,8 +26,6 @@ const updateCampaignDetails = async function ({
     },
     isAuthorizedToUpdateIsForAbsoluteNovice,
   );
-  // TODO : should be called inside model method updateFields
-  campaignUpdateValidator.validate(campaign);
 
   return campaignAdministrationRepository.update(campaign);
 };

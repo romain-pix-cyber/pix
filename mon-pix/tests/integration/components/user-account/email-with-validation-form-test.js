@@ -11,7 +11,7 @@ module('Integration | Component | user-account | email-with-validation-form', fu
   setupIntlRenderingTest(hooks);
 
   module('when editing e-mail', function () {
-    test('should display save and cancel button', async function (assert) {
+    test('should display save and cancel button, and security information', async function (assert) {
       // when
       const screen = await render(hbs`<UserAccount::EmailWithValidationForm />`);
 
@@ -19,9 +19,13 @@ module('Integration | Component | user-account | email-with-validation-form', fu
       assert.ok(screen.getByRole('button', { name: t('common.actions.cancel') }));
       assert.ok(
         screen.getByRole('button', {
-          name: t('pages.user-account.account-update-email-with-validation.save-button'),
+          name: t('pages.user-account.account-add-or-update-email-with-validation.save-button'),
         }),
       );
+      const securityInformation = t(
+        'pages.user-account.account-add-or-update-email-with-validation.fields.password.security-information',
+      );
+      assert.ok(screen.getByText(securityInformation));
     });
 
     module('when the user cancel edition', function () {
@@ -107,7 +111,9 @@ module('Integration | Component | user-account | email-with-validation-form', fu
 
       // then
       assert.ok(
-        screen.getByText(t('pages.user-account.account-update-email-with-validation.fields.errors.invalid-password')),
+        screen.getByText(
+          t('pages.user-account.account-add-or-update-email-with-validation.fields.errors.invalid-password'),
+        ),
       );
     });
 
@@ -129,7 +135,9 @@ module('Integration | Component | user-account | email-with-validation-form', fu
       // then
       assert.ok(
         screen.getByText(
-          t('pages.user-account.account-update-email-with-validation.fields.errors.invalid-or-already-used-email'),
+          t(
+            'pages.user-account.account-add-or-update-email-with-validation.fields.errors.invalid-or-already-used-email',
+          ),
         ),
       );
     });
@@ -151,7 +159,9 @@ module('Integration | Component | user-account | email-with-validation-form', fu
 
       // then
       assert.ok(
-        screen.getByText(t('pages.user-account.account-update-email-with-validation.fields.errors.empty-password')),
+        screen.getByText(
+          t('pages.user-account.account-add-or-update-email-with-validation.fields.errors.empty-password'),
+        ),
       );
     });
   });
@@ -161,7 +171,7 @@ module('Integration | Component | user-account | email-with-validation-form', fu
     await fillIn(screen.getByLabelText('Mot de passe'), password);
     await click(
       screen.getByRole('button', {
-        name: t('pages.user-account.account-update-email-with-validation.save-button'),
+        name: t('pages.user-account.account-add-or-update-email-with-validation.save-button'),
       }),
     );
   }

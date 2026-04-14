@@ -5,7 +5,7 @@ import {
 import { updateCampaignCode } from '../../../../../../src/prescription/campaign/domain/usecases/update-campaign-code.js';
 import { catchErr, expect, sinon } from '../../../../../test-helper.js';
 
-describe('Unit | UseCase | update-campaign-code', function () {
+describe('Unit | Campaign | Domain | UseCase | update-campaign-code', function () {
   let campaignAdministrationRepository, codeGenerator, campaignStub, accessCodeRepository;
 
   beforeEach(function () {
@@ -15,28 +15,6 @@ describe('Unit | UseCase | update-campaign-code', function () {
     };
     codeGenerator = { validate: sinon.stub() };
     campaignStub = { updateFields: sinon.stub() };
-  });
-
-  it('should update campaign code', async function () {
-    // given
-    const campaignId = Symbol('campaign-id');
-    const campaignCode = Symbol('campaign-code');
-
-    codeGenerator.validate.withArgs(campaignCode).returns(true);
-    campaignAdministrationRepository.get.withArgs(campaignId).resolves(campaignStub);
-    accessCodeRepository.isCodeAvailable.withArgs({ code: campaignCode }).resolves(true);
-
-    // when
-    await updateCampaignCode({
-      campaignId,
-      campaignCode,
-      campaignAdministrationRepository,
-      codeGenerator,
-      accessCodeRepository,
-    });
-
-    // then
-    expect(campaignAdministrationRepository.update).to.have.been.calledOnceWithExactly(campaignStub);
   });
 
   context('when campaignId not match a campaign', function () {

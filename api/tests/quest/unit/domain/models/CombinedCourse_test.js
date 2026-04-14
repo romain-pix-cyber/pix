@@ -3,12 +3,17 @@ import {
   CombinedCourseParticipationStatuses,
   CombinedCourseStatuses,
 } from '../../../../../src/prescription/shared/domain/constants.js';
-import { CombinedCourse } from '../../../../../src/quest/domain/models/CombinedCourse.js';
+import { CombinedCourse, CombinedCourseDetails } from '../../../../../src/quest/domain/models/CombinedCourse.js';
 import {
   COMBINED_COURSE_ITEM_TYPES,
   CombinedCourseItem,
 } from '../../../../../src/quest/domain/models/CombinedCourseItem.js';
 import { CombinedCourseParticipation } from '../../../../../src/quest/domain/models/CombinedCourseParticipation.js';
+import {
+  OrganizationLearnerParticipation,
+  OrganizationLearnerParticipationStatuses,
+  OrganizationLearnerParticipationTypes,
+} from '../../../../../src/quest/domain/models/OrganizationLearnerParticipation.js';
 import { domainBuilder, expect, sinon } from '../../../../test-helper.js';
 
 describe('Quest | Unit | Domain | Models | CombinedCourse', function () {
@@ -149,7 +154,7 @@ describe('Quest | Unit | Domain | Models | CombinedCourse', function () {
           ],
         });
 
-        combinedCourseDetails.generateItems({ participation, dataForQuest });
+        combinedCourseDetails.setDataAndGenerateItems({ participation, dataForQuest });
 
         // then
         expect(combinedCourseDetails.participationDetails).deep.equal({
@@ -205,7 +210,7 @@ describe('Quest | Unit | Domain | Models | CombinedCourse', function () {
         });
 
         combinedCourseDetails.setRecommandableModuleIds([{ moduleId: 'ebcde1', targetProfileIds: [666] }]);
-        combinedCourseDetails.generateItems({ participation, dataForQuest });
+        combinedCourseDetails.setDataAndGenerateItems({ participation, dataForQuest });
 
         // then
         expect(combinedCourseDetails.participationDetails).deep.equal({
@@ -226,7 +231,7 @@ describe('Quest | Unit | Domain | Models | CombinedCourse', function () {
       });
     });
 
-    describe('#generateItems', function () {
+    describe('#setDataAndGenerateItems', function () {
       describe('when item is type campaign', function () {
         it('returns a combined course item for provided campaign', async function () {
           // given
@@ -242,7 +247,7 @@ describe('Quest | Unit | Domain | Models | CombinedCourse', function () {
             campaignParticipations: [{ campaignId: 2, status: CampaignParticipationStatuses.SHARED }],
           });
 
-          combinedCourseDetails.generateItems({ dataForQuest });
+          combinedCourseDetails.setDataAndGenerateItems({ dataForQuest });
 
           // then
           expect(combinedCourseDetails.items).to.deep.equal([
@@ -272,7 +277,7 @@ describe('Quest | Unit | Domain | Models | CombinedCourse', function () {
             combinedCourseItems: [{ campaignId: 7 }],
           });
 
-          combinedCourseDetails.generateItems();
+          combinedCourseDetails.setDataAndGenerateItems();
 
           // then
           expect(combinedCourseDetails.items).to.deep.equal([
@@ -313,7 +318,7 @@ describe('Quest | Unit | Domain | Models | CombinedCourse', function () {
           });
 
           await combinedCourseDetails.setEncryptedUrl();
-          combinedCourseDetails.generateItems({ dataForQuest });
+          combinedCourseDetails.setDataAndGenerateItems({ dataForQuest });
 
           // then
           expect(combinedCourseDetails.items).to.deep.equal([
@@ -356,7 +361,7 @@ describe('Quest | Unit | Domain | Models | CombinedCourse', function () {
 
           await combinedCourseDetails.setEncryptedUrl();
           combinedCourseDetails.setRecommandableModuleIds(recommendableModuleIds);
-          combinedCourseDetails.generateItems({ dataForQuest });
+          combinedCourseDetails.setDataAndGenerateItems({ dataForQuest });
 
           // then
           expect(combinedCourseDetails.items).to.deep.equal([
@@ -400,7 +405,7 @@ describe('Quest | Unit | Domain | Models | CombinedCourse', function () {
 
           await combinedCourseDetails.setEncryptedUrl();
           combinedCourseDetails.setRecommandableModuleIds(recommendableModuleIds);
-          combinedCourseDetails.generateItems({ recommendedModuleIdsForUser, dataForQuest });
+          combinedCourseDetails.setDataAndGenerateItems({ recommendedModuleIdsForUser, dataForQuest });
 
           // then
           expect(combinedCourseDetails.items).to.deep.equal([
@@ -446,7 +451,7 @@ describe('Quest | Unit | Domain | Models | CombinedCourse', function () {
           });
 
           await combinedCourseDetails.setEncryptedUrl();
-          combinedCourseDetails.generateItems({ dataForQuest });
+          combinedCourseDetails.setDataAndGenerateItems({ dataForQuest });
 
           const [moduleItem] = combinedCourseDetails.items;
 
@@ -491,7 +496,7 @@ describe('Quest | Unit | Domain | Models | CombinedCourse', function () {
               { moduleId: 'abcdef2', targetProfileIds: [888] },
             ]);
             await combinedCourseDetails.setEncryptedUrl();
-            combinedCourseDetails.generateItems({ dataForQuest });
+            combinedCourseDetails.setDataAndGenerateItems({ dataForQuest });
 
             // then
             expect(combinedCourseDetails.items).to.deep.equal([
@@ -551,7 +556,7 @@ describe('Quest | Unit | Domain | Models | CombinedCourse', function () {
               { moduleId: 'abcdef2', targetProfileIds: [101] },
             ]);
             await combinedCourseDetails.setEncryptedUrl();
-            combinedCourseDetails.generateItems({ dataForQuest });
+            combinedCourseDetails.setDataAndGenerateItems({ dataForQuest });
 
             // then
             expect(combinedCourseDetails.items).to.deep.equal([
@@ -613,7 +618,7 @@ describe('Quest | Unit | Domain | Models | CombinedCourse', function () {
               { moduleId: 'abcdef2', targetProfileIds: [888] },
             ]);
             await combinedCourseDetails.setEncryptedUrl();
-            combinedCourseDetails.generateItems();
+            combinedCourseDetails.setDataAndGenerateItems();
 
             // then
             expect(combinedCourseDetails.items).to.deep.equal([
@@ -670,7 +675,7 @@ describe('Quest | Unit | Domain | Models | CombinedCourse', function () {
 
             combinedCourseDetails.setRecommandableModuleIds([{ moduleId: 'abcdef2', targetProfileIds: [888] }]);
             await combinedCourseDetails.setEncryptedUrl();
-            combinedCourseDetails.generateItems({ dataForQuest });
+            combinedCourseDetails.setDataAndGenerateItems({ dataForQuest });
 
             // then
             expect(combinedCourseDetails.items).to.deep.equal([
@@ -731,7 +736,7 @@ describe('Quest | Unit | Domain | Models | CombinedCourse', function () {
         });
 
         await combinedCourseDetails.setEncryptedUrl();
-        combinedCourseDetails.generateItems({ dataForQuest });
+        combinedCourseDetails.setDataAndGenerateItems({ dataForQuest });
 
         // then
         expect(combinedCourseDetails.items).to.deep.equal([
@@ -790,7 +795,7 @@ describe('Quest | Unit | Domain | Models | CombinedCourse', function () {
             ],
           });
 
-          combinedCourseDetails.generateItems({ dataForQuest });
+          combinedCourseDetails.setDataAndGenerateItems({ dataForQuest });
 
           const [campaignItem] = combinedCourseDetails.items;
 
@@ -815,7 +820,7 @@ describe('Quest | Unit | Domain | Models | CombinedCourse', function () {
             ],
           });
 
-          combinedCourseDetails.generateItems({ dataForQuest });
+          combinedCourseDetails.setDataAndGenerateItems({ dataForQuest });
 
           const [campaignItem] = combinedCourseDetails.items;
 
@@ -862,7 +867,7 @@ describe('Quest | Unit | Domain | Models | CombinedCourse', function () {
           { moduleId: 'abcde2', targetProfileIds: [888, 999] },
         ]);
 
-        combinedCourseDetails.generateItems({
+        combinedCourseDetails.setDataAndGenerateItems({
           dataForQuest,
           recommendedModuleIdsForUser: [
             { moduleId: 'abcde3' },
@@ -957,7 +962,7 @@ describe('Quest | Unit | Domain | Models | CombinedCourse', function () {
 
           await combinedCourseDetails.setEncryptedUrl();
 
-          combinedCourseDetails.generateItems();
+          combinedCourseDetails.setDataAndGenerateItems();
 
           // then
           expect(combinedCourseDetails.status).to.deep.equal(CombinedCourseStatuses.NOT_STARTED);
@@ -981,7 +986,7 @@ describe('Quest | Unit | Domain | Models | CombinedCourse', function () {
 
           await combinedCourseDetails.setEncryptedUrl();
 
-          combinedCourseDetails.generateItems({ participation: combinedCourseParticipation });
+          combinedCourseDetails.setDataAndGenerateItems({ participation: combinedCourseParticipation });
 
           // then
           expect(combinedCourseDetails.status).to.deep.equal(CombinedCourseStatuses.STARTED);
@@ -1003,11 +1008,76 @@ describe('Quest | Unit | Domain | Models | CombinedCourse', function () {
 
           await combinedCourseDetails.setEncryptedUrl();
 
-          combinedCourseDetails.generateItems({ participation: combinedCourseParticipation });
+          combinedCourseDetails.setDataAndGenerateItems({ participation: combinedCourseParticipation });
 
           // then
           expect(combinedCourseDetails.status).to.deep.equal(CombinedCourseStatuses.COMPLETED);
         });
+      });
+    });
+
+    describe('#updateItemsFromPassages', function () {
+      it('should generate items and return an updated instance of Combined Course Details', async function () {
+        const combinedCourseDetails = domainBuilder.buildCombinedCourseDetails({
+          name,
+          code,
+          organizationId,
+          questId,
+          combinedCourseItems: [
+            { campaignId: 3, targetProfileId: 999 },
+            { moduleId: 'abc123' },
+            { moduleId: 'abcde1' },
+          ],
+          cryptoService,
+        });
+
+        const dataForQuest = domainBuilder.buildCombinedCourseDataForQuest({
+          campaignParticipations: [
+            { id: 1, campaignId: 3, targetProfileId: 999, status: CampaignParticipationStatuses.SHARED },
+          ],
+          passages: [
+            {
+              referenceId: 'abc123',
+              isTerminated: false,
+            },
+            {
+              referenceId: 'abcde1',
+              isTerminated: false,
+            },
+          ],
+        });
+
+        combinedCourseDetails.setDataAndGenerateItems({ dataForQuest });
+
+        await combinedCourseDetails.setEncryptedUrl();
+
+        const passages = [
+          new OrganizationLearnerParticipation({
+            organizationLearnerId: 123,
+            type: OrganizationLearnerParticipationTypes.PASSAGE,
+            referenceId: 'abc123',
+            status: OrganizationLearnerParticipationStatuses.COMPLETED,
+          }),
+          new OrganizationLearnerParticipation({
+            organizationLearnerId: 456,
+            type: OrganizationLearnerParticipationTypes.PASSAGE,
+            referenceId: 'abcde1',
+            status: OrganizationLearnerParticipationStatuses.NOT_STARTED,
+          }),
+        ];
+        const result = combinedCourseDetails.updateItemsFromPassages(passages);
+
+        expect(result).to.be.instanceOf(CombinedCourseDetails);
+        expect(result.items[0]).to.be.instanceOf(CombinedCourseItem);
+        expect(result.items[0].type).to.equal(COMBINED_COURSE_ITEM_TYPES.CAMPAIGN);
+        expect(result.items[0].isCompleted).to.be.true;
+
+        expect(result.items[1]).to.be.instanceOf(CombinedCourseItem);
+        expect(result.items[2]).to.be.instanceOf(CombinedCourseItem);
+        expect(result.items[1].id).to.equal('abc123');
+        expect(result.items[2].id).to.equal('abcde1');
+        expect(result.items[1].isCompleted).to.be.true;
+        expect(result.items[2].isCompleted).to.be.false;
       });
     });
   });

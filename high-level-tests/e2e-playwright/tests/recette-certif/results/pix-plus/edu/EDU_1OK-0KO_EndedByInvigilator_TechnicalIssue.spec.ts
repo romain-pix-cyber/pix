@@ -156,6 +156,14 @@ test(
       ]);
     });
 
+    await test.step('Cannot set external jury result', async () => {
+      await pixAdminRoleCertifPage.goto(process.env.PIX_ADMIN_URL!);
+      const adminHomepage = new AdminHomePage(pixAdminRoleCertifPage);
+      const sessionsMainPage = await adminHomepage.goToCertificationSessionsTab();
+      await sessionsMainPage.goToCertificationWithSearchBar(certificationNumber);
+      await expect(pixAdminRoleCertifPage.getByText('Résultats de la certification Pix+ Edu')).not.toBeVisible();
+    });
+
     await snapshotHandler.expectOrRecord(snapshotPath);
   },
 );

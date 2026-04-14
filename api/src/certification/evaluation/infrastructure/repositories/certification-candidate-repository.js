@@ -26,13 +26,7 @@ export const findByAssessmentId = async function ({ assessmentId }) {
     .select('certification-candidates.accessibilityAdjustmentNeeded', 'certification-candidates.reconciledAt', {
       complementaryCertificationKey: 'complementary-certifications.key',
     })
-    .join('certification-courses', function () {
-      this.on('certification-courses.userId', '=', 'certification-candidates.userId').andOn(
-        'certification-courses.sessionId',
-        '=',
-        'certification-candidates.sessionId',
-      );
-    })
+    .join('certification-courses', 'certification-courses.candidateId', 'certification-candidates.id')
     .join('assessments', 'assessments.certificationCourseId', 'certification-courses.id')
     .leftJoin(
       'complementary-certification-courses',

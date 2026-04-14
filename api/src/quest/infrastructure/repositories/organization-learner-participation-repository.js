@@ -48,6 +48,8 @@ export const synchronize = async ({ organizationLearnerId, moduleIds, modulesApi
     .where('organizationLearnerId', organizationLearnerId)
     .whereIn('referenceId', moduleIds);
 
+  const updatedParticipations = [];
+
   for (const modulePassage of modulePassages) {
     const learnerParticipationModule = learnerParticipationsByModule.find(
       (learnerParticipation) => learnerParticipation.referenceId === modulePassage.id,
@@ -64,6 +66,8 @@ export const synchronize = async ({ organizationLearnerId, moduleIds, modulesApi
         moduleId: modulePassage.id,
       });
 
+    updatedParticipations.push(new OrganizationLearnerParticipation(organizationLearnerPassageParticipation));
+
     if (organizationLearnerParticipationId) {
       await knexConn('organization_learner_participations')
         .update(organizationLearnerPassageParticipation)
@@ -72,6 +76,8 @@ export const synchronize = async ({ organizationLearnerId, moduleIds, modulesApi
       await knexConn('organization_learner_participations').insert(organizationLearnerPassageParticipation);
     }
   }
+
+  return updatedParticipations;
 };
 
 export const deleteCombinedCourseParticipationByCombinedCourseIdAndOrganizationLearnerId = async ({

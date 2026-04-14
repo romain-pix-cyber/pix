@@ -461,7 +461,7 @@ describe('Unit | Infrastructure | Datasources | Learning Content | Module Dataso
         const sample = {
           id: randomUUID(),
           type: 'text',
-          tag: 'key-points',
+          tag: 'tip',
           content: "<p>Ceci est un texte qui accepte de l'HTML.</p>",
         };
 
@@ -476,7 +476,7 @@ describe('Unit | Infrastructure | Datasources | Learning Content | Module Dataso
 
     describe('for text element', function () {
       it('should validate all tag values', async function () {
-        const validTags = [' ', 'context', 'did-you-know', 'further-information', 'key-points', 'tip'];
+        const validTags = [' ', 'context', 'did-you-know', 'further-information', 'tip'];
 
         for (const tag of validTags) {
           try {

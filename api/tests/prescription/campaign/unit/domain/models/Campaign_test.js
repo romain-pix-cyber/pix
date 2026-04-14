@@ -19,6 +19,10 @@ describe('Campaign', function () {
     clock = sinon.useFakeTimers({ now, toFake: ['Date'] });
     campaign = new Campaign({
       id: 1,
+      type: CampaignTypes.ASSESSMENT,
+      ownerId: 12,
+      creatorId: 12,
+      organizationId: 1,
       code: 'RIGHTCODE',
       name: 'Assessment101',
       title: 'Minus One',

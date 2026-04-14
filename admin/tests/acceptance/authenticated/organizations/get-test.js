@@ -348,42 +348,6 @@ module('Acceptance | Organizations | Get', function (hooks) {
         });
       });
 
-      module('Child organizations tab', function () {
-        test('it should display child organizations tab, with number of child organizations', async function (assert) {
-          // given
-          server.create('organization', {
-            parentOrganizationId: 1,
-            name: 'Child of My Organization',
-            features: { PLACES_MANAGEMENT: { active: false } },
-          });
-
-          // when
-          const screen = await visit('/organizations/1');
-
-          // then
-          const navigationTabs = screen.getByRole('navigation', { name: t('pages.organization.navbar.aria-label') });
-          assert.ok(
-            within(navigationTabs).getByRole('link', { name: `${t('pages.organization.navbar.children')} (1)` }),
-          );
-        });
-
-        test('it should navigate to child organizations page when clicking tab', async function (assert) {
-          // given
-          const screen = await visit(`/organizations/${ORGANIZATION_ID}`);
-
-          // when
-          const navigationTabs = screen.getByRole('navigation', { name: t('pages.organization.navbar.aria-label') });
-
-          const targetProfilesTab = within(navigationTabs).getByRole('link', {
-            name: `${t('pages.organization.navbar.children')} (0)`,
-          });
-          await click(targetProfilesTab);
-
-          // then
-          assert.strictEqual(currentURL(), `/organizations/${ORGANIZATION_ID}/children`);
-        });
-      });
-
       module('Network tab', function () {
         module('when organization is part of a network', function (hooks) {
           hooks.beforeEach(() => {

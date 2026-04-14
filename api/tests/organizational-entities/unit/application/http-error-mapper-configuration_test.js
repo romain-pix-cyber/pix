@@ -2,6 +2,7 @@ import { organizationalEntitiesDomainErrorMappingConfiguration } from '../../../
 import {
   CountryNotFoundError,
   NetworkAlreadyExistError,
+  ParentOrganizationNotInNetworkError,
   StructureNotFoundError,
   TagNotFoundError,
   UnableToDetachParentOrganizationFromChildOrganization,
@@ -111,6 +112,25 @@ describe('Unit | Organizational Entities | Application | HttpErrorMapperConfigur
       // then
       expect(error).to.be.instanceOf(HttpErrors.ConflictError);
       expect(error.message).to.equal('Network already exists');
+      expect(error.meta).to.equal(meta);
+    });
+  });
+
+  context('when mapping "ParentOrganizationNotInNetworkError"', function () {
+    it('should return an UnprocessableEntityError Http Error', function () {
+      // given
+      const httpErrorMapper = organizationalEntitiesDomainErrorMappingConfiguration.find(
+        (httpErrorMapper) => httpErrorMapper.name === ParentOrganizationNotInNetworkError.name,
+      );
+
+      const meta = { parentOrganizationId: 123 };
+
+      // when
+      const error = httpErrorMapper.httpErrorFn(new ParentOrganizationNotInNetworkError({ meta }));
+
+      // then
+      expect(error).to.be.instanceOf(HttpErrors.UnprocessableEntityError);
+      expect(error.message).to.equal('Parent organization not in network');
       expect(error.meta).to.equal(meta);
     });
   });

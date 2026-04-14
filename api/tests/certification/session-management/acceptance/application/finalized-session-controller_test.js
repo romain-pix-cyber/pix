@@ -3,15 +3,15 @@ import {
   databaseBuilder,
   expect,
   generateAuthenticatedUserRequestHeaders,
-  insertUserWithRoleSuperAdmin,
 } from '../../../../test-helper.js';
 
 describe('Certification | Session-management | Acceptance | Application | finalized-session-controller', function () {
-  let server, options;
+  let server, options, superAdmin;
 
   beforeEach(async function () {
     server = await createServer();
-    await insertUserWithRoleSuperAdmin();
+    superAdmin = databaseBuilder.factory.buildUser.withRoleSuperAdmin();
+    await databaseBuilder.commit();
   });
 
   describe('GET /api/admin/sessions/to-publish', function () {
@@ -37,7 +37,7 @@ describe('Certification | Session-management | Acceptance | Application | finali
 
     context('When user is authorized', function () {
       beforeEach(function () {
-        options.headers = generateAuthenticatedUserRequestHeaders();
+        options.headers = generateAuthenticatedUserRequestHeaders({ userId: superAdmin.id });
       });
 
       it('should return a 200 status code response with JSON API serialized', async function () {
@@ -90,7 +90,7 @@ describe('Certification | Session-management | Acceptance | Application | finali
           method: 'GET',
           url: '/api/admin/sessions/with-required-action',
           payload: {},
-          headers: generateAuthenticatedUserRequestHeaders(),
+          headers: generateAuthenticatedUserRequestHeaders({ userId: superAdmin.id }),
         };
 
         // when
@@ -125,7 +125,7 @@ describe('Certification | Session-management | Acceptance | Application | finali
             method: 'GET',
             url: '/api/admin/sessions/with-required-action?filter[version]=3',
             payload: {},
-            headers: generateAuthenticatedUserRequestHeaders(),
+            headers: generateAuthenticatedUserRequestHeaders({ userId: superAdmin.id }),
           };
 
           // when

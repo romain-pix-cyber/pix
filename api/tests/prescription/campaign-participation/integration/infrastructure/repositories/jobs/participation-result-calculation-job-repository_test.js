@@ -13,13 +13,10 @@ describe('Integration | Prescription | Infrastructure | Repository | Jobs | part
       // then
       await expect(ParticipationResultCalculationJob.name).to.have.been.performed.withJob({
         name: ParticipationResultCalculationJob.name,
-        retrylimit: JobRetry.FEW_RETRY.retryLimit,
-        retrydelay: JobRetry.FEW_RETRY.retryDelay,
-        retrybackoff: JobRetry.FEW_RETRY.retryBackoff,
-        data: {
-          campaignParticipationId: 3,
-          correlationContext: EMPTY_CORRELATION_INFO,
-        },
+        retryLimit: JobRetry.FEW_RETRY.retryLimit,
+        retryDelay: JobRetry.FEW_RETRY.retryDelay,
+        retryBackoff: JobRetry.FEW_RETRY.retryBackoff,
+        data: { campaignParticipationId: 3, correlationContext: EMPTY_CORRELATION_INFO },
       });
     });
   });

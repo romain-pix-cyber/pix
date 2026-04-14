@@ -14,6 +14,7 @@ const COLUMNS = Object.freeze([
   'assessmentId',
   'challengeId',
   'timeSpent',
+  'createdAt',
 ]);
 
 export async function get(id) {

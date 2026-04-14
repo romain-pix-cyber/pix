@@ -1,6 +1,20 @@
 import { oidcAuthenticationServiceRegistry, usecases } from '../../domain/usecases/index.js';
+import { addOidcProviderValidator } from '../../domain/validators/add-oidc-provider.validator.js';
 import * as oidcProviderSerializer from '../../infrastructure/serializers/jsonapi/oidc-identity-providers.serializer.js';
 import { getForwardedOrigin, RequestedApplication } from '../../infrastructure/utils/network.js';
+
+/**
+ * @param request
+ * @param h
+ * @returns {Promise<*>}
+ */
+async function getImportTemplate(request, h) {
+  return h
+    .response(addOidcProviderValidator.getImportTemplate())
+    .header('Content-Type', 'text/plain; charset=utf-8')
+    .header('content-disposition', 'filename=oidc-providers-import.json')
+    .code(200);
+}
 
 /**
  * @param request
@@ -67,4 +81,9 @@ async function reconcileUserForAdmin(
  * getAllIdentityProvidersForAdmin: (function(*, *): Promise<*>)
  * }} oidcProviderAdminController
  */
-export const oidcProviderAdminController = { createInBatch, getAllIdentityProvidersForAdmin, reconcileUserForAdmin };
+export const oidcProviderAdminController = {
+  getImportTemplate,
+  createInBatch,
+  getAllIdentityProvidersForAdmin,
+  reconcileUserForAdmin,
+};

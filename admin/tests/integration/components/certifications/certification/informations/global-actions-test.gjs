@@ -817,7 +817,7 @@ module('Integration | Component | Certifications | Certification | Information |
         });
       });
       module('when certification has no status, session is finalized and not published', function () {
-        test('should display a cancel button', async function (assert) {
+        test('should display a rescore button', async function (assert) {
           // given
           const certification = store.createRecord('certification', {
             userId: 1,
@@ -835,11 +835,9 @@ module('Integration | Component | Certifications | Certification | Information |
             .exists();
         });
       });
-    });
 
-    module('when should not display', function () {
       module('when certification status is cancelled', function () {
-        test('should not display a rescoring button', async function (assert) {
+        test('should display a rescoring button', async function (assert) {
           // given
           const certification = store.createRecord('certification', {
             userId: 1,
@@ -854,12 +852,12 @@ module('Integration | Component | Certifications | Certification | Information |
           // then
           assert
             .dom(screen.queryByRole('button', { name: t('components.certifications.global-actions.rescoring.button') }))
-            .doesNotExist();
+            .exists();
         });
       });
 
       module('when certification status is rejected', function () {
-        test('should not display a rescoring button', async function (assert) {
+        test('should display a rescoring button', async function (assert) {
           // given
           const certification = store.createRecord('certification', {
             userId: 1,
@@ -874,10 +872,12 @@ module('Integration | Component | Certifications | Certification | Information |
           // then
           assert
             .dom(screen.queryByRole('button', { name: t('components.certifications.global-actions.rescoring.button') }))
-            .doesNotExist();
+            .exists();
         });
       });
+    });
 
+    module('when should not display', function () {
       module('when session is not finalized', function () {
         test('should not display a rescoring button', async function (assert) {
           // given

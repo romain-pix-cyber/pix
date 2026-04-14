@@ -1,4 +1,4 @@
-import { usecases } from '../../../../../../src/prescription/campaign/domain/usecases/index.js';
+import { updateCampaign } from '../../../../../../src/prescription/campaign/domain/usecases/update-campaign.js';
 import { EntityValidationError } from '../../../../../../src/shared/domain/errors.js';
 import { catchErr, domainBuilder, expect, sinon } from '../../../../../test-helper.js';
 
@@ -68,7 +68,7 @@ describe('Unit | UseCase | update-campaign', function () {
       };
 
       // when
-      const resultCampaign = await usecases.updateCampaign({
+      const resultCampaign = await updateCampaign({
         userId: userWithMembership.id,
         campaignId: campaign.id,
         ownerId,
@@ -101,7 +101,7 @@ describe('Unit | UseCase | update-campaign', function () {
         .resolves([]);
 
       // when
-      const error = await catchErr(usecases.updateCampaign)({
+      const error = await catchErr(updateCampaign)({
         userId: userWithMembership.id,
         campaignId: originalCampaign.id,
         ownerId: ownerWithoutMembership.id,

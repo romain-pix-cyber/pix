@@ -6,10 +6,6 @@ import { logger } from '../../../../../../src/shared/infrastructure/utils/logger
 import { nock } from '../../../../../test-helper.js';
 
 describe('Integration | UseCase | upload-cpf-files', function () {
-  after(function () {
-    nock.cleanAll();
-  });
-
   it('should upload a file', async function () {
     // given
     nock('http://cpf-exports.fake.endpoint.example.net:80')

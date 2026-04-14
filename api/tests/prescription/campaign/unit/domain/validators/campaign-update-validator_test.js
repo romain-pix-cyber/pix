@@ -567,6 +567,18 @@ describe('Unit | Domain | Validators | campaign-validator', function () {
         expect(() => campaignUpdateValidator.validate(campaign)).to.not.throw();
       });
 
+      it('should resolve when it is a relative url', function () {
+        // given
+        const campaign = {
+          ...campaignOfTypeAssessment,
+          customResultPageButtonText: 'some text',
+          customResultPageButtonUrl: '/a/relative/url',
+        };
+
+        // when/then
+        expect(() => campaignUpdateValidator.validate(campaign)).to.not.throw();
+      });
+
       it('should reject with error when it is not a url', function () {
         // given
         const expectedError = {

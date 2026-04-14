@@ -3,7 +3,6 @@ import {
   databaseBuilder,
   expect,
   generateAuthenticatedUserRequestHeaders,
-  insertUserWithRoleSuperAdmin,
 } from '../../../../test-helper.js';
 
 describe('Acceptance | Route | Delete Organizations Places Lot', function () {
@@ -12,13 +11,13 @@ describe('Acceptance | Route | Delete Organizations Places Lot', function () {
       // given
       const server = await createServer();
 
-      const adminUser = await insertUserWithRoleSuperAdmin();
+      const superAdmin = databaseBuilder.factory.buildUser.withRoleSuperAdmin();
       const organizationPlace = databaseBuilder.factory.buildOrganizationPlace();
 
       const options = {
         method: 'DELETE',
         url: `/api/admin/organizations/${organizationPlace.organizationId}/places/${organizationPlace.id}`,
-        headers: generateAuthenticatedUserRequestHeaders({ userId: adminUser.id }),
+        headers: generateAuthenticatedUserRequestHeaders({ userId: superAdmin.id }),
       };
 
       await databaseBuilder.commit();
@@ -33,13 +32,13 @@ describe('Acceptance | Route | Delete Organizations Places Lot', function () {
       // given
       const server = await createServer();
 
-      const adminUser = await insertUserWithRoleSuperAdmin();
+      const superAdmin = databaseBuilder.factory.buildUser.withRoleSuperAdmin();
       const organizationPlace = databaseBuilder.factory.buildOrganizationPlace();
 
       const options = {
         method: 'DELETE',
         url: `/api/admin/organizations/${organizationPlace.organizationId}/places/123156`,
-        headers: generateAuthenticatedUserRequestHeaders({ userId: adminUser.id }),
+        headers: generateAuthenticatedUserRequestHeaders({ userId: superAdmin.id }),
       };
 
       await databaseBuilder.commit();
@@ -54,16 +53,16 @@ describe('Acceptance | Route | Delete Organizations Places Lot', function () {
       // given
       const server = await createServer();
 
-      const adminUser = await insertUserWithRoleSuperAdmin();
+      const superAdmin = databaseBuilder.factory.buildUser.withRoleSuperAdmin();
       const organizationPlace = databaseBuilder.factory.buildOrganizationPlace({
         deletedAt: new Date(),
-        deletedBy: adminUser.id,
+        deletedBy: superAdmin.id,
       });
 
       const options = {
         method: 'DELETE',
         url: `/api/admin/organizations/${organizationPlace.organizationId}/places/${organizationPlace.id}`,
-        headers: generateAuthenticatedUserRequestHeaders({ userId: adminUser.id }),
+        headers: generateAuthenticatedUserRequestHeaders({ userId: superAdmin.id }),
       };
 
       await databaseBuilder.commit();

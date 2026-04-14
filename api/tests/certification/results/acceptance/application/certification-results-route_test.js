@@ -7,7 +7,6 @@ import {
   databaseBuilder,
   expect,
   generateAuthenticatedUserRequestHeaders,
-  insertUserWithRoleSuperAdmin,
 } from '../../../../test-helper.js';
 
 describe('Certification | Results | Acceptance | Application | Routes | certification results', function () {
@@ -200,12 +199,12 @@ describe('Certification | Results | Acceptance | Application | Routes | certific
           payload: {},
         };
         const server = await createServer();
-        await insertUserWithRoleSuperAdmin();
+        const superAdmin = databaseBuilder.factory.buildUser.withRoleSuperAdmin();
         databaseBuilder.factory.buildSession({ id: 121 });
         await databaseBuilder.commit();
 
         // when
-        options.headers = generateAuthenticatedUserRequestHeaders();
+        options.headers = generateAuthenticatedUserRequestHeaders({ userId: superAdmin.id });
         const response = await server.inject(options);
 
         // then
@@ -223,7 +222,6 @@ describe('Certification | Results | Acceptance | Application | Routes | certific
           payload: {},
         };
         const server = await createServer();
-        await insertUserWithRoleSuperAdmin();
 
         // when
         options.headers = generateAuthenticatedUserRequestHeaders({ userId: 1111 });
@@ -244,7 +242,6 @@ describe('Certification | Results | Acceptance | Application | Routes | certific
           payload: {},
         };
         const server = await createServer();
-        await insertUserWithRoleSuperAdmin();
 
         // when
         options.headers = {};

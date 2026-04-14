@@ -11,13 +11,10 @@ describe('Learning Content | Integration | Repository | Jobs | LcmsRefreshCacheJ
 
       // then
       await expect(LcmsRefreshCacheJob.name).to.have.been.performed.withJob({
-        retrylimit: 0,
-        retrydelay: 0,
-        retrybackoff: false,
-        data: {
-          userId: 123,
-          correlationContext: EMPTY_CORRELATION_INFO,
-        },
+        retryLimit: 0,
+        retryDelay: 0,
+        retryBackoff: false,
+        data: { userId: 123, correlationContext: EMPTY_CORRELATION_INFO },
       });
     });
   });

@@ -486,7 +486,7 @@ module('Integration | Component | organizations/features-section', function (hoo
       this.owner.register('service:access-control', AccessControlStub);
     });
 
-    test('it shows unchecked checkbox and no sub-checkbox when feature is inactive', async function (assert) {
+    test('it shows unchecked checkbox and disabled sub-checkbox when feature is inactive', async function (assert) {
       // given
       const onSubmit = onSubmitStub;
       const organization = EmberObject.create({
@@ -575,6 +575,30 @@ module('Integration | Component | organizations/features-section', function (hoo
 
       // then
       assert.false(
+        screen.getByLabelText(
+          t('components.organizations.information-section-view.features.ORGANIZATION_PLACES_LIMIT.label'),
+        ).checked,
+      );
+    });
+
+    test('it automatically checks the limit sub-checkbox when PLACES_MANAGEMENT is being checked', async function (assert) {
+      // given
+      const onSubmit = onSubmitStub;
+      const organization = EmberObject.create({
+        features: { PLACES_MANAGEMENT: { active: false, params: null } },
+      });
+
+      const screen = await render(
+        <template><FeaturesSection @organization={{organization}} @onSubmit={{onSubmit}} /></template>,
+      );
+
+      // when
+      await click(
+        screen.getByLabelText(t('components.organizations.information-section-view.features.PLACES_MANAGEMENT')),
+      );
+
+      // then
+      assert.true(
         screen.getByLabelText(
           t('components.organizations.information-section-view.features.ORGANIZATION_PLACES_LIMIT.label'),
         ).checked,

@@ -43,13 +43,23 @@ describe('Certification | Evaluation | Unit | Domain | Models | Intervals ', fun
   });
 
   describe('findIntervalIndexFromCapacity', function () {
-    describe('when the given capacity is inferior to the first interval minimum value', function () {
-      it('returns the index of the first interval', async function () {
+    describe('when the given capacity is strictly inferior to the first interval minimum value', function () {
+      it('returns null', async function () {
         const intervals = new Intervals({
           intervals: [{ bounds: { min: 1, max: 3 } }, { bounds: { min: 4, max: 7 } }],
         });
 
-        expect(intervals.findIntervalIndexFromCapacity(0)).to.equal(0);
+        expect(intervals.findIntervalIndexFromCapacity(0.99999)).to.be.null;
+      });
+    });
+
+    describe('when the given capacity is exactly the first interval minimum value', function () {
+      it('returns null', async function () {
+        const intervals = new Intervals({
+          intervals: [{ bounds: { min: 1, max: 3 } }, { bounds: { min: 4, max: 7 } }],
+        });
+
+        expect(intervals.findIntervalIndexFromCapacity(1)).to.equal(0);
       });
     });
 
@@ -71,20 +81,6 @@ describe('Certification | Evaluation | Unit | Domain | Models | Intervals ', fun
 
         expect(intervals.findIntervalIndexFromCapacity(2)).to.equal(0);
       });
-    });
-  });
-
-  describe('isCapacityBelowMinimum', function () {
-    it('returns true if the given capacity is inferior to the minimum value of the first interval', async function () {
-      const intervals = new Intervals({ intervals: [{ bounds: { min: 1, max: 3 } }, { bounds: { min: 4, max: 7 } }] });
-
-      expect(intervals.isCapacityBelowMinimum(0)).to.equal(true);
-    });
-
-    it('returns false if the given capacity is not inferior to the minimum value of the first interval', async function () {
-      const intervals = new Intervals({ intervals: [{ bounds: { min: 1, max: 3 } }, { bounds: { min: 4, max: 7 } }] });
-
-      expect(intervals.isCapacityBelowMinimum(7)).to.equal(false);
     });
   });
 

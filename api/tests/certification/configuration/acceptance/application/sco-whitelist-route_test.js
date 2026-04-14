@@ -5,7 +5,6 @@ import {
   databaseBuilder,
   expect,
   generateAuthenticatedUserRequestHeaders,
-  insertUserWithRoleSuperAdmin,
   knex,
 } from '../../../../test-helper.js';
 
@@ -19,7 +18,7 @@ describe('Certification | Configuration | Acceptance | API | sco-whitelist-route
   describe('POST /api/admin/sco-whitelist', function () {
     it('should return 201 HTTP status code', async function () {
       // given
-      const superAdmin = await insertUserWithRoleSuperAdmin();
+      const superAdmin = databaseBuilder.factory.buildUser.withRoleSuperAdmin();
       const buffer = 'externalId\next1\next2';
       const options = {
         method: 'POST',
@@ -58,7 +57,7 @@ describe('Certification | Configuration | Acceptance | API | sco-whitelist-route
     it('should rollback if invalid whitelist given', async function () {
       // given
       const thisExternalIdCannotBeWhitelisted = 'NOT_A_SCO_EXTERNAL_ID';
-      const superAdmin = await insertUserWithRoleSuperAdmin();
+      const superAdmin = databaseBuilder.factory.buildUser.withRoleSuperAdmin();
       const buffer = `externalId\next1\n${thisExternalIdCannotBeWhitelisted}`;
       const options = {
         method: 'POST',
@@ -108,7 +107,7 @@ describe('Certification | Configuration | Acceptance | API | sco-whitelist-route
     it('should return 200 HTTP status code and whitelist as CSV', async function () {
       // given
       const BOM_CHAR = '\ufeff';
-      const superAdmin = await insertUserWithRoleSuperAdmin();
+      const superAdmin = databaseBuilder.factory.buildUser.withRoleSuperAdmin();
       const options = {
         method: 'GET',
         url: '/api/admin/sco-whitelist',

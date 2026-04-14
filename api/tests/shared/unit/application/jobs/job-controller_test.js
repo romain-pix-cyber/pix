@@ -1,7 +1,7 @@
-import { JobController, JobGroup } from '../../../../../src/shared/application/jobs/job-controller.js';
+import { checkJobGroups, JobController, JobGroup } from '../../../../../src/shared/application/jobs/job-controller.js';
 import { EntityValidationError } from '../../../../../src/shared/domain/errors.js';
 import { JobExpireIn } from '../../../../../src/shared/infrastructure/repositories/jobs/job-repository.js';
-import { catchErrSync, expect } from '../../../../test-helper.js';
+import { catchErr, catchErrSync, expect } from '../../../../test-helper.js';
 
 describe('Unit | Shared | Application | Jobs | JobController', function () {
   it('should require a job name', async function () {
@@ -57,5 +57,24 @@ describe('Unit | Shared | Application | Jobs | JobController', function () {
 
     // then
     expect(controller.legacyName).to.be.null;
+  });
+
+  context('#checkJobGroups', function () {
+    it('should throws an error when no groups given', async function () {
+      // given
+      const error = await catchErr(checkJobGroups)();
+
+      // then
+      expect(error).to.be.instanceOf(Error);
+      expect(error.message).to.equal('Job groups are mandatory');
+    });
+    it('should throws an error when group is not valid', async function () {
+      // given
+      const error = await catchErr(checkJobGroups)(['pouet']);
+
+      // then
+      expect(error).to.be.instanceOf(Error);
+      expect(error.message).to.equal(`Job group invalid, allowed Job groups are [${Object.values(JobGroup)}]`);
+    });
   });
 });

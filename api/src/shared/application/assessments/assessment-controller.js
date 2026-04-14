@@ -1,6 +1,7 @@
 /**
  * @typedef {import('../../infrastructure/repositories/index.js').CertificationEvaluationRepository} CertificationEvaluationRepository
  */
+import * as certificationEvaluationApi from '../../../certification/evaluation/application/api/certification-evaluation-api.js';
 import { usecases as certificationUsecases } from '../../../certification/session-management/domain/usecases/index.js';
 import { Answer } from '../../../evaluation/domain/models/Answer.js';
 import { evaluationUsecases } from '../../../evaluation/domain/usecases/index.js';
@@ -89,11 +90,10 @@ const autoValidateNextChallenge = async function (request, h) {
       forceOKAnswer: true,
     });
   } else if (assessment.isCertification()) {
-    await evaluationUsecases.saveAndCorrectAnswerForCertification({
+    await certificationEvaluationApi.evaluateAndSaveAnswer({
       answer: fakeAnswer,
-      assessment,
       userId,
-      locale,
+      certificationCourseId: assessment.certificationCourseId,
       forceOKAnswer: true,
     });
   } else {

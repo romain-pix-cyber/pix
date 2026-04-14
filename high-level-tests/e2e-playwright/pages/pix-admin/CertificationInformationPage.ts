@@ -2,6 +2,8 @@ import type { Page } from '@playwright/test';
 
 import { getNumberValueFromDescriptionList, getStringValueFromDescriptionList } from '../../helpers/utils.ts';
 
+export type EXTERNAL_JURY_LEVELS = 'En attente' | 'Avancé' | 'Expert';
+
 export class CertificationInformationPage {
   constructor(public readonly page: Page) {}
 
@@ -131,5 +133,12 @@ export class CertificationInformationPage {
     await this.page.getByRole('button', { name: 'Re-scorer la certification' }).click();
 
     await this.page.getByText('La certification a bien été rescorée').waitFor({ state: 'visible' });
+  }
+
+  async setExternalJuryResult(externalJuryChoice: EXTERNAL_JURY_LEVELS) {
+    await this.page.getByRole('button', { name: 'Modifier le volet jury', exact: true }).click();
+    await this.page.getByRole('button', { name: 'Sélectionner un niveau' }).click();
+    await this.page.getByRole('option', { name: externalJuryChoice }).click();
+    await this.page.getByRole('button', { name: 'Enregistrer' }).click();
   }
 }

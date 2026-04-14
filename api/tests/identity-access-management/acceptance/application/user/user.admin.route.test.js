@@ -5,7 +5,6 @@ import {
   databaseBuilder,
   expect,
   generateAuthenticatedUserRequestHeaders,
-  insertUserWithRoleSuperAdmin,
   knex,
   sinon,
 } from '../../../../test-helper.js';
@@ -22,7 +21,7 @@ describe('Acceptance | Identity Access Management | Application | Route | Admin 
       // given
       const userId = databaseBuilder.factory.buildUser.withRawPassword().id;
       const userLoginId = databaseBuilder.factory.buildUserLogin({ userId }).id;
-      const superAdmin = await insertUserWithRoleSuperAdmin();
+      const superAdmin = databaseBuilder.factory.buildUser.withRoleSuperAdmin();
       await databaseBuilder.commit();
 
       // when
@@ -60,14 +59,16 @@ describe('Acceptance | Identity Access Management | Application | Route | Admin 
       context('When filters match a list of users', function () {
         it('retrieves this list of users', async function () {
           // given
-          const user = await insertUserWithRoleSuperAdmin();
+          const superAdmin = databaseBuilder.factory.buildUser.withRoleSuperAdmin();
+          await databaseBuilder.commit();
+
           const params =
             '?filter[firstName]=Ann' + '&page[number]=1&page[size]=25' + `&queryType=${QUERY_TYPES.EXACT_QUERY}`;
 
           requestOptions = {
             method: 'GET',
             url: `/api/admin/users${params}`,
-            headers: generateAuthenticatedUserRequestHeaders({ userId: user.id }),
+            headers: generateAuthenticatedUserRequestHeaders({ userId: superAdmin.id }),
           };
           // when
           const response = await server.inject(requestOptions);
@@ -84,14 +85,16 @@ describe('Acceptance | Identity Access Management | Application | Route | Admin 
       context('When filters match a list of users', function () {
         it('retrieves this list of users', async function () {
           // given
-          const user = await insertUserWithRoleSuperAdmin();
+          const superAdmin = databaseBuilder.factory.buildUser.withRoleSuperAdmin();
+          await databaseBuilder.commit();
+
           const params =
             '?filter[firstName]=Ann' + '&page[number]=1&page[size]=25' + `&queryType=${QUERY_TYPES.CONTAINS}`;
 
           requestOptions = {
             method: 'GET',
             url: `/api/admin/users${params}`,
-            headers: generateAuthenticatedUserRequestHeaders({ userId: user.id }),
+            headers: generateAuthenticatedUserRequestHeaders({ userId: superAdmin.id }),
           };
           // when
           const response = await server.inject(requestOptions);
@@ -105,10 +108,12 @@ describe('Acceptance | Identity Access Management | Application | Route | Admin 
   });
 
   describe('PATCH /api/admin/users', function () {
-    let user;
+    let superAdmin, user;
 
     beforeEach(async function () {
-      user = await insertUserWithRoleSuperAdmin();
+      superAdmin = databaseBuilder.factory.buildUser.withRoleSuperAdmin();
+      user = databaseBuilder.factory.buildUser({ firstName: 'Ann' });
+      await databaseBuilder.commit();
     });
 
     it('replies with 200 status code, when user details are updated', async function () {
@@ -116,7 +121,7 @@ describe('Acceptance | Identity Access Management | Application | Route | Admin 
       const options = {
         method: 'PATCH',
         url: `/api/admin/users/${user.id}`,
-        headers: generateAuthenticatedUserRequestHeaders({ userId: user.id }),
+        headers: generateAuthenticatedUserRequestHeaders({ userId: superAdmin.id }),
         payload: {
           data: {
             id: user.id,
@@ -137,7 +142,7 @@ describe('Acceptance | Identity Access Management | Application | Route | Admin 
 
       // then
       expect(response.statusCode).to.equal(200);
-      expect(response.result.data.id).to.equal('1234');
+      expect(response.result.data.id).to.equal(String(user.id));
       expect(response.result.data.type).to.equal('users');
       expect(response.result.data.attributes.email).to.equal('emailUpdated@example.net');
       expect(response.result.data.relationships['organization-learners']).to.not.be.undefined;
@@ -149,10 +154,10 @@ describe('Acceptance | Identity Access Management | Application | Route | Admin 
         // given
         const options = {
           method: 'PATCH',
-          url: `/api/admin/users/${user.id}`,
+          url: `/api/admin/users/${superAdmin.id}`,
           payload: {
             data: {
-              id: user.id,
+              id: superAdmin.id,
               attributes: {
                 firstName: 'firstNameUpdated',
                 lastName: 'lastNameUpdated',
@@ -170,17 +175,17 @@ describe('Acceptance | Identity Access Management | Application | Route | Admin 
       });
 
       it('replies with forbidden error', async function () {
-        user = databaseBuilder.factory.buildUser({ email: 'partial.update@example.net' });
+        superAdmin = databaseBuilder.factory.buildUser({ email: 'partial.update@example.net' });
         await databaseBuilder.commit();
 
         // given
         const options = {
           method: 'PATCH',
-          url: `/api/admin/users/${user.id}`,
-          headers: generateAuthenticatedUserRequestHeaders({ userId: user.id }),
+          url: `/api/admin/users/${superAdmin.id}`,
+          headers: generateAuthenticatedUserRequestHeaders({ userId: superAdmin.id }),
           payload: {
             data: {
-              id: user.id,
+              id: superAdmin.id,
               attributes: {
                 'first-name': 'firstNameUpdated',
                 'last-name': 'lastNameUpdated',
@@ -201,15 +206,12 @@ describe('Acceptance | Identity Access Management | Application | Route | Admin 
 
   describe('GET /admin/users/{id}', function () {
     let clock;
-    let server;
 
     beforeEach(async function () {
       clock = sinon.useFakeTimers({
         now: Date.now(),
         toFake: ['Date'],
       });
-
-      server = await createServer();
     });
 
     afterEach(function () {
@@ -240,7 +242,8 @@ describe('Acceptance | Identity Access Management | Application | Route | Admin 
     describe('Success case', function () {
       it('returns 200 and user serialized', async function () {
         // given
-        const superAdmin = await insertUserWithRoleSuperAdmin();
+        const superAdmin = databaseBuilder.factory.buildUser.withRoleSuperAdmin();
+        await databaseBuilder.commit();
 
         const user = databaseBuilder.factory.buildUser({ username: 'brice.glace0712', locale: 'fr-FR' });
         const blockedAt = new Date('2022-12-07');
@@ -348,7 +351,7 @@ describe('Acceptance | Identity Access Management | Application | Route | Admin 
       describe('When user has a learner without firstName and lastName (ex: from a simplified campaign)', function () {
         it('returns 200', async function () {
           // given
-          const superAdmin = await insertUserWithRoleSuperAdmin();
+          const superAdmin = databaseBuilder.factory.buildUser.withRoleSuperAdmin();
           const user = databaseBuilder.factory.buildUser();
           databaseBuilder.factory.buildOrganizationLearner({ firstName: '', lastName: '', userId: user.id });
           await databaseBuilder.commit();
@@ -368,7 +371,6 @@ describe('Acceptance | Identity Access Management | Application | Route | Admin 
   });
 
   describe('POST /admin/users/{id}/anonymize', function () {
-    let server;
     let superAdmin;
     let response;
     let userId;
@@ -376,10 +378,8 @@ describe('Acceptance | Identity Access Management | Application | Route | Admin 
     let organizationId;
 
     beforeEach(async function () {
-      server = await createServer();
-      superAdmin = await insertUserWithRoleSuperAdmin();
-      const user = databaseBuilder.factory.buildUser.withRawPassword();
-      userId = user.id;
+      superAdmin = databaseBuilder.factory.buildUser.withRoleSuperAdmin();
+      userId = databaseBuilder.factory.buildUser.withRawPassword().id;
       organizationId = databaseBuilder.factory.buildOrganization().id;
       databaseBuilder.factory.buildMembership({
         organizationId,
@@ -390,9 +390,7 @@ describe('Acceptance | Identity Access Management | Application | Route | Admin 
         certificationCenterId,
         userId: userId,
       });
-
       databaseBuilder.factory.buildOrganizationLearner({ userId, organizationId });
-
       await databaseBuilder.commit();
 
       response = await server.inject({
@@ -415,7 +413,7 @@ describe('Acceptance | Identity Access Management | Application | Route | Admin 
       expect(updatedUserAttributes.username).to.be.null;
 
       expect(updatedUserAttributes['has-been-anonymised']).to.be.true;
-      expect(updatedUserAttributes['anonymised-by-full-name']).to.equal('Super Papa');
+      expect(updatedUserAttributes['anonymised-by-full-name']).to.equal('Billy TheKid');
       expect(updatedUserAttributes['updated-at']).to.exist;
     });
 
@@ -443,8 +441,7 @@ describe('Acceptance | Identity Access Management | Application | Route | Admin 
   describe('POST /api/users/{id}/add-pix-authentication-method', function () {
     it('returns 201 HTTP status code', async function () {
       // given
-      const server = await createServer();
-      const superAdmin = await insertUserWithRoleSuperAdmin();
+      const superAdmin = databaseBuilder.factory.buildUser.withRoleSuperAdmin();
       const user = databaseBuilder.factory.buildUser({ email: null });
       await databaseBuilder.commit();
 
@@ -471,19 +468,17 @@ describe('Acceptance | Identity Access Management | Application | Route | Admin 
   });
 
   describe('POST /api/admin/users/{id}/remove-authentication', function () {
-    let server;
     let user;
     let options;
 
     beforeEach(async function () {
-      server = await createServer();
       user = databaseBuilder.factory.buildUser({ username: 'jhn.doe0101', email: null });
       databaseBuilder.factory.buildAuthenticationMethod.withPixAsIdentityProviderAndHashedPassword({
         userId: user.id,
       });
       databaseBuilder.factory.buildAuthenticationMethod.withGarAsIdentityProvider({ userId: user.id });
 
-      const superAdmin = await insertUserWithRoleSuperAdmin();
+      const superAdmin = databaseBuilder.factory.buildUser.withRoleSuperAdmin();
       options = {
         method: 'POST',
         url: `/api/admin/users/${user.id}/remove-authentication`,
@@ -531,12 +526,10 @@ describe('Acceptance | Identity Access Management | Application | Route | Admin 
   });
 
   describe('POST /api/admin/users/{userId}/authentication-methods/{authenticationMethodId}', function () {
-    let server;
     let superAdmin;
 
     beforeEach(async function () {
-      server = await createServer();
-      superAdmin = await insertUserWithRoleSuperAdmin();
+      superAdmin = databaseBuilder.factory.buildUser.withRoleSuperAdmin();
     });
 
     it('returns 204 HTTP status code', async function () {

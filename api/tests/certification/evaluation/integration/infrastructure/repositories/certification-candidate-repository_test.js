@@ -28,6 +28,7 @@ describe('Integration | Repository | certification candidate', function () {
             userId: user.id,
             sessionId: session.id,
             createdAt: new Date('2022-10-01T14:00:00Z'),
+            candidateId: candidate.id,
           });
           const assessmentId = databaseBuilder.factory.buildAssessment({
             certificationCourseId: certificationCourse.id,
@@ -76,6 +77,7 @@ describe('Integration | Repository | certification candidate', function () {
             userId: user.id,
             sessionId: session.id,
             createdAt: new Date('2022-10-01T14:00:00Z'),
+            candidateId: candidate.id,
           });
           databaseBuilder.factory.buildComplementaryCertificationCourse({
             certificationCourseId: certificationCourse.id,
@@ -133,6 +135,7 @@ describe('Integration | Repository | certification candidate', function () {
             userId: user.id,
             sessionId: session.id,
             createdAt: new Date('2022-10-01T14:00:00Z'),
+            candidateId: candidate.id,
           });
           databaseBuilder.factory.buildComplementaryCertificationCourse({
             certificationCourseId: certificationCourse.id,
@@ -237,6 +240,7 @@ describe('Integration | Repository | certification candidate', function () {
             userId: user.id,
             sessionId: session.id,
             createdAt: new Date('2022-10-01T14:00:00Z'),
+            candidateId: candidate.id,
           });
           const assessmentId = databaseBuilder.factory.buildAssessment({
             certificationCourseId: certificationCourse.id,

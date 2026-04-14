@@ -1,10 +1,10 @@
-import { MESH_CONFIGURATION } from '../constants/mesh-configuration.js';
+import { CORE_MESH_CONFIGURATION } from '../constants/mesh-configuration.js';
 
 /**
  * @returns {{key: string, value: Mesh}}
  */
 export function findMeshFromScore({ score, maxReachableLevel }) {
-  const configuration = MESH_CONFIGURATION.entries();
+  const configuration = CORE_MESH_CONFIGURATION.entries();
   let currentMesh = configuration.next();
   let cumulativeSumOfWeights = currentMesh.value[1].weight;
   let currentScoringInterval = 0;
@@ -22,7 +22,7 @@ export function findMeshFromScore({ score, maxReachableLevel }) {
  * @deprecated please use {@link MeshConfiguration#findMeshFromScore}
  */
 export function findIntervalIndexFromScore({ score, maxReachableLevel }) {
-  const configuration = MESH_CONFIGURATION.values();
+  const configuration = CORE_MESH_CONFIGURATION.values();
   let cumulativeSumOfWeights = configuration.next().value.weight;
   let currentScoringInterval = 0;
 

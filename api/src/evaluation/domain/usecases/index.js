@@ -1,5 +1,3 @@
-import * as certificationEvaluationCandidateRepository from '../../../certification/evaluation/infrastructure/repositories/certification-candidate-repository.js';
-import * as certificationChallengeLiveAlertRepository from '../../../certification/shared/infrastructure/repositories/certification-challenge-live-alert-repository.js';
 import * as llmApi from '../../../llm/application/api/llm-api.js';
 import * as campaignRepository from '../../../prescription/campaign/infrastructure/repositories/campaign-repository.js';
 import * as campaignParticipationRepository from '../../../prescription/campaign-participation/infrastructure/repositories/campaign-participation-repository.js';
@@ -55,8 +53,6 @@ const dependencies = {
   badgeRepository,
   campaignParticipationRepository,
   campaignRepository,
-  certificationChallengeLiveAlertRepository,
-  certificationEvaluationCandidateRepository,
   challengeRepository,
   competenceEvaluationRepository,
   competenceRepository,
@@ -113,7 +109,6 @@ import { rememberUserHasSeenAssessmentInstructions } from './remember-user-has-s
 import { rememberUserHasSeenNewDashboardInfo } from './remember-user-has-seen-new-dashboard-info.js';
 import { resetScorecard } from './reset-scorecard.js';
 import { saveAndCorrectAnswerForCampaign } from './save-and-correct-answer-for-campaign.js';
-import { saveAndCorrectAnswerForCertification } from './save-and-correct-answer-for-certification.js';
 import { saveAndCorrectAnswerForCompetenceEvaluation } from './save-and-correct-answer-for-competence-evaluation.js';
 import { saveAndCorrectAnswerForDemoAndPreview } from './save-and-correct-answer-for-demo-and-preview.js';
 import { saveAutonomousCourse } from './save-autonomous-course.js';
@@ -156,7 +151,6 @@ const usecasesWithoutInjectedDependencies = {
   rememberUserHasSeenNewDashboardInfo,
   resetScorecard,
   saveAndCorrectAnswerForCampaign,
-  saveAndCorrectAnswerForCertification,
   saveAndCorrectAnswerForCompetenceEvaluation,
   saveAndCorrectAnswerForDemoAndPreview,
   saveAutonomousCourse,

@@ -11,10 +11,6 @@ import { databaseBuilder, expect, knex, nock } from '../../../../../test-helper.
 const __dirname = url.fileURLToPath(new URL('.', import.meta.url));
 
 describe('Integration | UseCase | integrate-cpf-processing-receipts ', function () {
-  after(function () {
-    nock.cleanAll();
-  });
-
   context('#integrateCpfProccessingReceipts', function () {
     it('should fetch the CPF infos from CPF processing receipts', async function () {
       // given

@@ -938,4 +938,121 @@ describe('Unit | Models | ImportOrganizationLearnerSet', function () {
       expect(learnerSet.learners.existinglearnerIds).to.be.empty;
     });
   });
+
+  describe('#filtersAvailableValues', function () {
+    it('should return an empty array when no header is filterable', function () {
+      const learnerSet = ImportOrganizationLearnerSet.buildSet({ organizationId, importFormat });
+      learnerSet.addLearners([learnerAttributes]);
+
+      expect(learnerSet.filtersAvailableValues).to.deep.equal([]);
+    });
+
+    it('should not return values for a filterable header with a type other than "list"', function () {
+      importFormat.config.headers = [
+        ...importFormat.config.headers,
+        {
+          name: 'group',
+          config: {
+            displayable: { position: 1, name: 'division', filterable: { type: 'string' } },
+          },
+        },
+      ];
+      const learnerSet = ImportOrganizationLearnerSet.buildSet({ organizationId, importFormat });
+      learnerSet.addLearners([{ ...learnerAttributes, group: 'A' }]);
+
+      expect(learnerSet.filtersAvailableValues).to.deep.equal([]);
+    });
+
+    it('should return unique values for each filterable list attribute', function () {
+      importFormat.config.headers = [
+        ...importFormat.config.headers,
+        {
+          name: 'group',
+          config: {
+            displayable: { position: 1, name: 'division', filterable: { type: 'list' } },
+          },
+        },
+      ];
+      const learnerSet = ImportOrganizationLearnerSet.buildSet({ organizationId, importFormat });
+      learnerSet.addLearners([
+        { ...learnerAttributes, group: 'A' },
+        { ...learnerAttributes, prénom: 'Mieto', group: 'B' },
+        { ...learnerAttributes, prénom: 'Taro', group: 'A' },
+      ]);
+
+      expect(learnerSet.filtersAvailableValues).to.deep.equal([
+        { organizationId: 123, attributeName: 'group', values: ['A', 'B'] },
+      ]);
+    });
+
+    it('should return values for each filterable list attribute independently', function () {
+      importFormat.config.headers = [
+        ...importFormat.config.headers,
+        {
+          name: 'group',
+          config: {
+            displayable: { position: 1, name: 'division', filterable: { type: 'list' } },
+          },
+        },
+        {
+          name: 'status',
+          config: {
+            displayable: { position: 2, name: 'statut', filterable: { type: 'list' } },
+          },
+        },
+      ];
+      const learnerSet = ImportOrganizationLearnerSet.buildSet({ organizationId, importFormat });
+      learnerSet.addLearners([
+        { ...learnerAttributes, group: 'A', status: 'active' },
+        { ...learnerAttributes, prénom: 'Mieto', group: 'B', status: 'active' },
+        { ...learnerAttributes, prénom: 'Taro', group: 'A', status: 'inactive' },
+      ]);
+
+      expect(learnerSet.filtersAvailableValues).to.deep.equal([
+        { organizationId: 123, attributeName: 'group', values: ['A', 'B'] },
+        { organizationId: 123, attributeName: 'status', values: ['active', 'inactive'] },
+      ]);
+    });
+
+    it('should use mappingColumn as attributeName when defined', function () {
+      importFormat.config.headers = [
+        ...importFormat.config.headers,
+        {
+          name: 'CATEGORY',
+          config: {
+            mappingColumn: 'catégorie',
+            displayable: { position: 1, name: 'division', filterable: { type: 'list' } },
+          },
+        },
+      ];
+      const learnerSet = ImportOrganizationLearnerSet.buildSet({ organizationId, importFormat });
+      learnerSet.addLearners([{ ...learnerAttributes, CATEGORY: 'Solo' }]);
+
+      expect(learnerSet.filtersAvailableValues).to.deep.equal([
+        { organizationId: 123, attributeName: 'catégorie', values: ['Solo'] },
+      ]);
+    });
+
+    it('should use property as attributeName and read from learner directly when config.property is defined', function () {
+      importFormat.config.headers = [
+        {
+          name: 'prénom',
+          config: {
+            property: 'firstName',
+            displayable: { position: 1, name: 'Prénom', filterable: { type: 'list' } },
+          },
+        },
+        { name: 'nom', config: { property: 'lastName' } },
+      ];
+      const learnerSet = ImportOrganizationLearnerSet.buildSet({ organizationId, importFormat });
+      learnerSet.addLearners([
+        { prénom: 'Tomie', nom: 'Katana' },
+        { prénom: 'Mieto', nom: 'Nataka' },
+      ]);
+
+      expect(learnerSet.filtersAvailableValues).to.deep.equal([
+        { organizationId: 123, attributeName: 'firstName', values: ['Tomie', 'Mieto'] },
+      ]);
+    });
+  });
 });

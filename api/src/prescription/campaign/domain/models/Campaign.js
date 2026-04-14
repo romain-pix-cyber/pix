@@ -7,6 +7,7 @@ import {
   IsForAbsoluteNoviceUpdateError,
   MultipleSendingsUpdateError,
 } from '../errors.js';
+import * as campaignUpdateValidator from '../validators/campaign-update-validator.js';
 
 class Campaign {
   constructor({
@@ -36,6 +37,7 @@ class Campaign {
     deletedAt = null,
     deletedBy = null,
     participationCount,
+    recommendationEngine = false,
   } = {}) {
     this.id = id;
     this.isForAbsoluteNovice = isForAbsoluteNovice;
@@ -64,6 +66,7 @@ class Campaign {
     this.deletedAt = deletedAt;
     this.deletedBy = deletedBy;
     this.hasParticipation = participationCount > 0;
+    this.recommendationEngine = recommendationEngine;
   }
 
   get isAssessment() {
@@ -145,7 +148,7 @@ class Campaign {
     if (
       fields.multipleSendings !== undefined &&
       fields.multipleSendings !== this.multipleSendings &&
-      this.hasParticipation > 0
+      this.hasParticipation
     ) {
       throw new MultipleSendingsUpdateError();
     }
@@ -165,6 +168,8 @@ class Campaign {
         this[key] = value;
       }
     });
+
+    campaignUpdateValidator.validate(this);
   }
 }
 

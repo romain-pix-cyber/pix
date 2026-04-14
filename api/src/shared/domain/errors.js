@@ -684,6 +684,12 @@ class AccountRecoveryUserAlreadyConfirmEmail extends DomainError {
   }
 }
 
+class UnicityConstraintError extends DomainError {
+  constructor(message = 'unicity constraint occured', meta) {
+    super(message, null, meta);
+  }
+}
+
 class OrganizationLearnersCouldNotBeSavedError extends DomainError {
   constructor(message = 'An error occurred during process') {
     super(message);
@@ -1160,6 +1166,7 @@ export {
   TargetProfileInvalidError,
   TargetProfileRequiresToBeLinkedToAutonomousCourseOrganization,
   UnexpectedUserAccountError,
+  UnicityConstraintError,
   UserAlreadyExistsWithAuthenticationMethodError,
   UserAlreadyLinkedToCandidateInSessionError,
   UserCouldNotBeReconciledError,

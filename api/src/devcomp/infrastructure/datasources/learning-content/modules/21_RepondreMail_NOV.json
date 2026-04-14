@@ -33,7 +33,7 @@
                 "id": "c98b3261-a4a0-408b-9b6c-95248f95aed1",
                 "type": "text",
                 "tag": " ",
-                "content": "<p>Vous avez envoyé votre candidature pour un stage de «&nbsp;Responsable de vente&nbsp;» chez BioChoux 🥬. Quelques jours plus tard, le recruteur vous laisse un message vocal.</p><br><p><strong>Écoutez le message vocal.</strong></p>"
+                "content": "<p>Vous avez postulé pour un stage de «&nbsp;Responsable de vente&nbsp;» chez BioChoux 🥬. Quelques jours plus tard, le recruteur vous laisse un message vocal.</p><br><p><strong>Écoutez le message vocal.</strong></p>"
               }
             },
             {
@@ -102,7 +102,7 @@
                       "response": ""
                     },
                     {
-                      "name": "Pronton Mail",
+                      "name": "Proton Mail",
                       "image": {
                         "src": "https://assets.pix.org/draft/modules/RepondreMail_NOV/protonmail-2.jpg"
                       },
@@ -132,7 +132,7 @@
                 "id": "f522ab24-0d04-4548-9dc7-6b82acc5cf87",
                 "type": "text",
                 "tag": " ",
-                "content": "<p><strong>[Feedbacks du qcu image]</strong></p><ul><li>Bien vu ! Pour consulter ses mails, il faut d’abord <strong>ouvrir sa messagerie électronique</strong>. Elle est souvent représentée par une icône en forme d’enveloppe. <br>Il en existe plusieurs, par exemple&nbsp;: Gmail, Outlook, Mail, Proton Mail, etc.<br><br></li><li>Eh non. Cette application ne permet pas de consulter ses mails. [...]</li></ul>"
+                "content": "<p><strong>[Feedbacks du qcu image]</strong></p><ul><li>Bien vu ! Pour consulter ses mails, il faut d’abord <strong>ouvrir sa messagerie électronique</strong>. Elle est souvent représentée par <strong>une icône en forme d’enveloppe&nbsp;✉️</strong>. <br>Il en existe plusieurs, par exemple&nbsp;: Gmail, Outlook, Mail, Proton Mail, etc.<br><br></li><li>Eh non. Cette application ne permet pas de consulter ses mails. [...]</li></ul>"
               }
             }
           ]
@@ -203,7 +203,7 @@
                     {
                       "id": "5822bd3a-f762-43ad-a847-e3192e5170ea",
                       "type": "qcu-discovery",
-                      "instruction": "<p>La nom de la personne qui a envoyé le mail.</p>",
+                      "instruction": "<p>Je peux lire qui a envoyé le mail.</p>",
                       "hasShortProposals": true,
                       "proposals": [
                         {
@@ -230,21 +230,21 @@
                     {
                       "id": "8d7a1bd4-90a3-4711-a5ec-afaa227eeaac",
                       "type": "qcu-discovery",
-                      "instruction": "<p>Le titre du mail.</p>",
+                      "instruction": "<p>Je peux lire le titre (objet) du mail.</p>",
                       "hasShortProposals": true,
                       "proposals": [
                         {
                           "id": "1",
                           "content": "Oui",
                           "feedback": {
-                            "diagnosis": "<p>Eh oui. Le titre indique de <strong>quoi va parler le mail</strong>&nbsp;: ici, «&nbsp;Réponse à votre candidature de stage&nbsp;».</p>"
+                            "diagnosis": "<p>Eh oui. Le titre (objet) indique de <strong>quoi va parler le mail</strong>&nbsp;: ici, «&nbsp;Réponse à votre candidature de stage&nbsp;».</p>"
                           }
                         },
                         {
                           "id": "2",
                           "content": "Non",
                           "feedback": {
-                            "diagnosis": "<p>Eh si. Le titre du mail est affiché sans avoir besoin d’ouvrir le mail. Il indique de <strong>quoi va parler le mail</strong>&nbsp;: ici, «&nbsp;Réponse à votre candidature de stage&nbsp;».</p>"
+                            "diagnosis": "<p>Eh si. Le titre (objet) du mail est affiché sans avoir besoin d’ouvrir le mail. Il indique de <strong>quoi va parler le mail</strong>&nbsp;: ici, «&nbsp;Réponse à votre candidature de stage&nbsp;».</p>"
                           }
                         }
                       ],
@@ -257,7 +257,7 @@
                     {
                       "id": "69412583-b708-4397-bd5d-fc6f7c221bf3",
                       "type": "qcu-discovery",
-                      "instruction": "<p>Le contenu complet du mail.</p>",
+                      "instruction": "<p>Je peux lire le contenu complet du mail.</p>",
                       "hasShortProposals": true,
                       "proposals": [
                         {
@@ -284,14 +284,14 @@
                     {
                       "id": "1ff3fb4c-8748-425f-9a3f-415eccde37ab",
                       "type": "qcu-discovery",
-                      "instruction": "<p>La date de réception du mail.</p>",
+                      "instruction": "<p>Je peux lire la date de réception du mail.</p>",
                       "hasShortProposals": true,
                       "proposals": [
                         {
                           "id": "1",
                           "content": "Oui",
                           "feedback": {
-                            "diagnosis": "<p>Eh oui. La date indique <strong>quand le mail a été reçu</strong>&nbsp;: ici, le 22 janvier.</p>"
+                            "diagnosis": "<p>Eh oui. La date de réception indique <strong>quand le mail a été reçu</strong>&nbsp;: ici, le 22 janvier.</p>"
                           }
                         },
                         {
@@ -459,7 +459,7 @@
                 "id": "05113e75-4a2e-4207-aaff-f528da503ab9",
                 "type": "text",
                 "tag": " ",
-                "content": "<p>Quand vous ouvrez un mail, l’objet du mail, la date et l’expéditeur sont encore affichés. De nouvelles informations s’affichent également&nbsp;:<br></p>    <ol><li>Le <strong>destinataire</strong> (À)&nbsp;: indique que&nbsp;c’est vous qui recevez le mail,</li><li>Le<strong> texte complet</strong> du mail.</li></ol>"
+                "content": "<p>Quand vous ouvrez un mail, l’objet du mail, la date et l’expéditeur sont encore affichés. De nouvelles informations s’affichent également&nbsp;:<br></p>    <ol><li>Le <strong>destinataire</strong> (À)&nbsp;: indique la personne qui reçoit le mail. Ici, c’est vous,</li><li>Le<strong> texte complet</strong> du mail.</li></ol><p>D’autres informations peuvent également être affichées selon l’outil de messagerie électronique utilisée.</p>"
               }
             },
             {
@@ -512,7 +512,7 @@
                 "id": "7ed9ce41-7f5c-4ba2-bdfa-1fb524bbad9c",
                 "type": "text",
                 "tag": " ",
-                "content": "<p><strong>Pour cela, suivez les instructions suivantes&nbsp;:&nbsp; </strong></p><ul>    <li><strong>cliquez sur le bouton qui permet de répondre au mail,&nbsp;</strong></li>    <li><strong>écrivez la réponse suivante&nbsp;:&nbsp;</strong></li></ul><blockquote><em>Bonjour, <br>Je vous remercie de votre proposition. <br>Je vous confirme ma présence à l’entretien. <br>Cordialement</em></blockquote><ul>    <li><strong>puis cliquez sur le bouton pour envoyer votre réponse.</strong></li></ul>"
+                "content": "<p><strong>Pour cela, suivez les instructions suivantes&nbsp;:&nbsp; </strong></p><ul>    <li><strong>cliquez sur le bouton qui permet de répondre au mail,&nbsp;</strong></li>    <li><strong>écrivez la réponse suivante&nbsp;:&nbsp;</strong></li></ul><blockquote><em>Bonjour,  <br>Je vous confirme ma présence à l’entretien. <br>Cordialement</em></blockquote><ul>    <li><strong>puis cliquez sur le bouton pour envoyer votre réponse.</strong></li></ul>"
               }
             },
             {
@@ -588,7 +588,7 @@
                 "id": "5685f6f3-363f-4750-a963-b0af0ac6b07f",
                 "type": "text",
                 "tag": " ",
-                "content": "<p>🤔<strong>Bon à savoir</strong> </p><p>Le «&nbsp;Re&nbsp;:&nbsp;» qui précède l’objet, indique que c’est une réponse à mail. Il est ajouté automatiquement.</p>"
+                "content": "<p>🤔<strong>Bon à savoir</strong> </p><p>Le «&nbsp;Re&nbsp;:&nbsp;», pour «&nbsp;Réponse&nbsp;:&nbsp;», qui précède l’objet, indique que c’est une réponse à mail. Il est ajouté automatiquement.</p>"
               }
             }
           ]
@@ -748,7 +748,7 @@
                 "id": "e122bb57-c302-476c-b15e-7c58d95bd953",
                 "type": "text",
                 "tag": " ",
-                "content": "<p>Une fois lus (et donc ouverts), les mails ne sont plus en gras mais restent présents dans la boite de réception. <br>Les mails sont rangés du plus récent (en haut de la liste) au plus ancien (en bas de la liste).<br><br></p><p>🤔<strong>Bon à savoir</strong><br>Il existe de nombreux services de messagerie électronique. Leur apparence peut varier, mais <strong>l’organisation des mails reste la même</strong> dans la boite de réception.</p>"
+                "content": "<p>Une fois lus ouverts, les mails ne sont plus en gras. Ils  restent présents dans la boite de réception. <br>Les mails sont rangés en général du plus récent (en haut de la liste) au plus ancien (en bas de la liste).<br><br></p><p>🤔<strong>Bon à savoir</strong><br>Il existe de nombreux services de messagerie électronique. Leur apparence peut varier, mais <strong>l’organisation des mails reste la même</strong> dans la boite de réception.</p>"
               }
             }
           ]
@@ -853,7 +853,7 @@
                     {
                       "id": "59b8abc5-20ce-4cd6-ab47-05c6c825d2a8",
                       "type": "qcu",
-                      "instruction": "<p>Combien de mails ont été reçus le 05 novembre ?</p>",
+                      "instruction": "<p>Combien de mails ont été reçus le 5 novembre ?</p>",
                       "hasShortProposals": true,
                       "proposals": [
                         {
@@ -861,7 +861,7 @@
                           "content": "Un mail",
                           "feedback": {
                             "state": "<p>Mauvaise réponse</p>",
-                            "diagnosis": "<p>Observez attentivement les dates. Quels mails ont pour date, le 05 novembre ?</p>"
+                            "diagnosis": "<p>Observez attentivement les dates. Quels mails ont pour date, le 5 novembre ?</p>"
                           }
                         },
                         {
@@ -869,7 +869,7 @@
                           "content": "Deux mails",
                           "feedback": {
                             "state": "<p>Bonne réponse ! 🎉</p>",
-                            "diagnosis": "<p>Deux mails ont été reçus le 05 novembre&nbsp;: celui de Naïma et celui de Espaces verts.</p>"
+                            "diagnosis": "<p>Deux mails ont été reçus le 5 novembre&nbsp;: celui de Naïma et celui de Espaces verts.</p>"
                           }
                         },
                         {
@@ -877,7 +877,7 @@
                           "content": "Trois mails",
                           "feedback": {
                             "state": "<p>Mauvaise réponse.</p>",
-                            "diagnosis": "<p>Observez attentivement les dates. Quels mails ont pour date, le 05 novembre ?</p>"
+                            "diagnosis": "<p>Observez attentivement les dates. Quels mails ont pour date, le 5 novembre ?</p>"
                           }
                         }
                       ],
@@ -898,7 +898,7 @@
                           "content": "Un mail",
                           "feedback": {
                             "state": "<p>Bonne réponse ! 🎉</p>",
-                            "diagnosis": "<p>Les mails déjà lus n’apparaissent plus en gras&nbsp;: ici un seul mail n'est pas en gras.</p>"
+                            "diagnosis": "<p>Les mails déjà lus n’apparaissent plus en gras&nbsp;: ici un seul mail n’est pas en gras.</p>"
                           }
                         },
                         {
@@ -980,7 +980,7 @@
                 "id": "56fe3307-eaa6-483f-a181-6e310af5b2b1",
                 "type": "text",
                 "tag": " ",
-                "content": "<p>On ne rédige pas un mail comme on rédige un message instantané ou un SMS. Pour rédiger un mail, il est recommandé de respecter quelques règles de politesse et de conduite sur internet.</p>"
+                "content": "<p> Pour rédiger un mail, il est recommandé de respecter quelques règles de politesse et de conduite sur internet. C’est ce qu’on appelle la <strong>netiquette</strong>.</p>"
               }
             },
             {
@@ -990,10 +990,24 @@
                 {
                   "elements": [
                     {
-                      "id": "6ff6b7ef-a4f1-46df-8282-c69e095f8b0a",
-                      "type": "text",
-                      "tag": " ",
-                      "content": "<blockquote>Coucou Mr Flament&nbsp; </blockquote><blockquote>JE NE SUIS PAS DISPONIBLE !!! DÉSOLÉ 😬 </blockquote><blockquote>Flora</blockquote>"
+                      "id": "2f52ccc6-a0ab-41e6-84ce-a3b6bebe4db9",
+                      "type": "custom",
+                      "title": "",
+                      "instruction": "",
+                      "functionalInstruction": "",
+                      "tagName": "template-mail",
+                      "props": {
+                        "titleLevel": 0,
+                        "subject": "Re : Convocation à la réunion ",
+                        "mailAddress": "flora1024@pix.net",
+                        "avatarColor": "",
+                        "expeditor": "Flora",
+                        "content": "Coucou M. Flament<br>JE NE SUIS PAS DISPONIBLE !!! DÉSOLÉE 😬<br>Flora",
+                        "time": {
+                          "days": -1,
+                          "minutes": -10
+                        }
+                      }
                     },
                     {
                       "id": "afc4e202-48a7-45a1-970f-3978af70b845",
@@ -1023,10 +1037,24 @@
                 {
                   "elements": [
                     {
-                      "id": "c9b63ec6-d1c3-4a78-a93f-f7380df2a284",
-                      "type": "text",
-                      "tag": " ",
-                      "content": "<blockquote>Malheureusement, je ne pourrai pas assister à cette réu.</blockquote>"
+                      "id": "d281a4c1-aa61-447c-be45-09f32f21e025",
+                      "type": "custom",
+                      "title": "",
+                      "instruction": "",
+                      "functionalInstruction": "",
+                      "tagName": "template-mail",
+                      "props": {
+                        "titleLevel": 0,
+                        "subject": "Re : Convocation à la réunion",
+                        "mailAddress": "flora1024@pix.net",
+                        "avatarColor": "",
+                        "expeditor": "Flora",
+                        "content": "Malheureusement, je ne pourrai pas assister à cette réu.",
+                        "time": {
+                          "days": -1,
+                          "minutes": -10
+                        }
+                      }
                     },
                     {
                       "id": "30df510a-1460-4b74-8270-c5030b6bee99",
@@ -1056,10 +1084,24 @@
                 {
                   "elements": [
                     {
-                      "id": "ebe01e69-3ab7-4684-add2-aeb2b4923ce7",
-                      "type": "text",
-                      "tag": " ",
-                      "content": "<blockquote>Bonjour Monsieur Flament, </blockquote><blockquote>Je vous remercie pour votre invitation, mais je ne pourrai pas y participer.&nbsp; </blockquote><blockquote>Je vous prie de m’excuser.&nbsp;</blockquote><blockquote> Cordialement, </blockquote><blockquote>Flora</blockquote>"
+                      "id": "04f7ecf8-08ff-4f3a-9f14-9f1832478c4b",
+                      "type": "custom",
+                      "title": "",
+                      "instruction": "",
+                      "functionalInstruction": "",
+                      "tagName": "template-mail",
+                      "props": {
+                        "titleLevel": 0,
+                        "subject": "Re : Convocation à la réunion",
+                        "mailAddress": "flora1024@pix.net",
+                        "avatarColor": "",
+                        "expeditor": "Flora",
+                        "content": "Bonjour Monsieur Flament,<br>Je vous remercie pour votre invitation, mais je ne pourrai pas y participer.<br>Je vous prie de m’excuser.<br>Cordialement,<br>Flora",
+                        "time": {
+                          "days": -1,
+                          "minutes": -10
+                        }
+                      }
                     },
                     {
                       "id": "7b5e2a1c-020b-4cf8-ad61-51b3a60fa587",

@@ -1,3 +1,4 @@
+import { UserIsBlocked, UserIsTemporaryBlocked } from '../../../shared/domain/errors.js';
 import { cryptoService } from '../../../shared/domain/services/crypto-service.js';
 import * as userLoginRepository from '../../../shared/infrastructure/repositories/user-login-repository.js';
 import { PasswordNotMatching } from '../errors.js';
@@ -39,9 +40,20 @@ async function getUserByUsernameAndPassword({
 
       await dependencies.userLoginRepository.update(userLogin);
 
+      const isLoginFailureWithUsername = username === foundUser.username;
+
+      if (userLogin.isUserMarkedAsBlocked()) {
+        throw new UserIsBlocked({ isLoginFailureWithUsername });
+      } else if (userLogin.isUserMarkedAsTemporaryBlocked()) {
+        throw new UserIsTemporaryBlocked({
+          isLoginFailureWithUsername,
+          blockingDurationMs: userLogin.computeBlockingDurationMs(),
+        });
+      }
+
       throw new PasswordNotMatching({
-        remainingAttempts: userLogin.shouldWarnRemainingAttempts ? userLogin.remainingAttempts : null,
-        isLoginFailureWithUsername: username === foundUser.username,
+        remainingAttempts: userLogin.shouldWarnRemainingAttempts && userLogin.remainingAttempts,
+        isLoginFailureWithUsername,
       });
     }
 

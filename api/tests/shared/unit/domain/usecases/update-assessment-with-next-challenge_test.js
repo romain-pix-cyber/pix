@@ -1,3 +1,4 @@
+import { CampaignParticipationDeletedError } from '../../../../../src/prescription/campaign-participation/domain/errors.js';
 import { CampaignTypes } from '../../../../../src/prescription/shared/domain/constants.js';
 import {
   AssessmentEndedError,
@@ -266,6 +267,7 @@ describe('Shared | Unit | Domain | Use Cases | get-next-challenge', function () 
           assessment = domainBuilder.buildAssessment({
             state: Assessment.states.STARTED,
             type: Assessment.types.CAMPAIGN,
+            campaignParticipationId: 165465,
             answers: [],
           });
           assessmentRepository_getWithAnswersStub.withArgs(assessmentId).resolves(assessment);
@@ -283,6 +285,23 @@ describe('Shared | Unit | Domain | Use Cases | get-next-challenge', function () 
 
           expect(assessmentWithNextChallenge.nextChallenge).to.deepEqualInstance(challenge);
           expect(globalProgression).to.be.null;
+        });
+
+        it('throw an error when campaignParticipationId is missing', async function () {
+          const deletedParticipationAssessment = domainBuilder.buildAssessment({
+            state: Assessment.states.STARTED,
+            type: Assessment.types.CAMPAIGN,
+            campaignParticipationId: null,
+            answers: [],
+          });
+          assessmentRepository_updateLastQuestionDateStub.resolves();
+          assessmentRepository_updateWhenNewChallengeIsAskedStub.resolves();
+          assessmentRepository_getWithAnswersStub.withArgs(assessmentId).resolves(deletedParticipationAssessment);
+          const error = await catchErr(updateAssessmentWithNextChallenge)(dependencies);
+
+          expect(error).instanceOf(CampaignParticipationDeletedError);
+          expect(evaluationUsecases_getProgressionStub.called).false;
+          expect(evaluationUsecases_getNextChallengeForCampaignAssessmentStub.called).false;
         });
 
         context('when there is no more challenge', function () {
@@ -305,6 +324,7 @@ describe('Shared | Unit | Domain | Use Cases | get-next-challenge', function () 
               id: 1234,
               state: Assessment.states.STARTED,
               type: Assessment.types.CAMPAIGN,
+              campaignParticipationId: 165465,
               campaign: domainBuilder.buildCampaign({
                 type: CampaignTypes.EXAM,
               }),

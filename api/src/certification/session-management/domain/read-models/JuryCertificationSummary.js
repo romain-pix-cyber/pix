@@ -1,4 +1,5 @@
 import { status as assessmentResultStatuses } from '../../../../shared/domain/models/AssessmentResult.js';
+import { AlgorithmEngineVersion } from '../../../shared/domain/models/AlgorithmEngineVersion.js';
 const STARTED = 'started';
 const ENDED_BY_INVIGILATOR = 'endedByInvigilator';
 const CORE_CERTIFICATION = 'CORE';
@@ -18,6 +19,7 @@ export class JuryCertificationSummary {
     abortReason,
     isPublished,
     isEndedByInvigilator,
+    eduV3ExternalJuryResult,
     certificationFramework,
     certificationIssueReports,
   } = {}) {
@@ -28,12 +30,23 @@ export class JuryCertificationSummary {
     this.algorithmVersion = algorithmVersion;
     this.pixScore = pixScore;
     this.reachedMeshIndex = reachedMeshIndex;
+    this.eduV3ExternalJuryResult = eduV3ExternalJuryResult;
     this.isFlaggedAborted = Boolean(abortReason) && !completedAt;
     this.certificationFramework = certificationFramework;
     this.createdAt = createdAt;
     this.completedAt = completedAt;
     this.isPublished = isPublished;
     this.certificationIssueReports = certificationIssueReports;
+  }
+
+  get reachedResultKey() {
+    if (this.algorithmVersion !== AlgorithmEngineVersion.V3) {
+      return `${this.certificationFramework}.NONE`;
+    }
+
+    const resultKey = this.eduV3ExternalJuryResult || (this.reachedMeshIndex ?? 'BELOW_MINIMUM');
+
+    return `${this.certificationFramework}.${resultKey}`;
   }
 
   isActionRequired() {

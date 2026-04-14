@@ -336,10 +336,6 @@ describe('Unit | Identity Access Management | Application | Controller | User', 
       dependencies = { userSerializer, localeService };
     });
 
-    afterEach(function () {
-      sinon.restore();
-    });
-
     it('calls usecase and serializes upgraded user ', async function () {
       // when
       const response = await userController.upgradeToRealUser(

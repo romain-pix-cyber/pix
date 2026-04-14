@@ -56,7 +56,7 @@ export const addOidcProvider = withTransaction(async function ({
   shouldCloseSession,
   slug,
   source,
-  isVisible = true,
+  isVisible,
   oidcProviderRepository,
   cryptoService,
   addOidcProviderValidator,

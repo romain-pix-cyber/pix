@@ -26,24 +26,20 @@ export async function updateCombinedCourseProgress({
     combinedCourseDetails,
   });
 
-  const moduleToSynchronizeIds = combinedCourseDetailsBeforeUpdate.items
-    .filter((item) => item.type === COMBINED_COURSE_ITEM_TYPES.MODULE)
-    .map((item) => item.id);
-
   if (!combinedCourseDetailsBeforeUpdate.participation) {
     return null;
   }
 
-  await organizationLearnerParticipationRepository.synchronize({
+  const moduleToSynchronizeIds = combinedCourseDetailsBeforeUpdate.items
+    .filter((item) => item.type === COMBINED_COURSE_ITEM_TYPES.MODULE)
+    .map((item) => item.id);
+
+  const updatedPassages = await organizationLearnerParticipationRepository.synchronize({
     organizationLearnerId,
     moduleIds: moduleToSynchronizeIds,
   });
 
-  // TODO: remove this when we have a better way to handle this . it makes my hair stand on end
-  const updatedCombinedCourseDetails = await combinedCourseDetailsService.getCombinedCourseDetails({
-    organizationLearnerId,
-    combinedCourseDetails,
-  });
+  const updatedCombinedCourseDetails = combinedCourseDetailsBeforeUpdate.updateItemsFromPassages(updatedPassages);
 
   const isCombinedCourseCompleted = await updatedCombinedCourseDetails.items.every((item) => item.isCompleted);
 

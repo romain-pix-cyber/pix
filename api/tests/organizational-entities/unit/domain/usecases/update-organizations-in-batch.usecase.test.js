@@ -44,8 +44,6 @@ describe('Unit | Organizational Entities | Domain | UseCase | update-organizatio
   });
 
   afterEach(async function () {
-    sinon.restore();
-
     if (filePath) {
       await removeTempFile(filePath);
     }

@@ -1,11 +1,12 @@
 import stream from 'node:stream';
+import { text } from 'node:stream/consumers';
 
 import dayjs from 'dayjs';
 import timezone from 'dayjs/plugin/timezone.js';
 import utc from 'dayjs/plugin/utc.js';
 
 import * as cpfCertificationXmlExportService from '../../../../../src/certification/session-management/domain/services/cpf-certification-xml-export-service.js';
-import { domainBuilder, expect, sinon, streamToPromise } from '../../../../test-helper.js';
+import { domainBuilder, expect, sinon } from '../../../../test-helper.js';
 
 const { PassThrough } = stream;
 
@@ -78,7 +79,7 @@ describe('Unit | Services | cpf-certification-xml-export-service', function () {
 
       //then
       const expectedXmlExport = _getExpectedXmlExport();
-      const xmlExport = await streamToPromise(writableStream);
+      const xmlExport = await text(writableStream);
       expect(xmlExport).to.equal(expectedXmlExport.replace(/\n| {2}/g, ''));
     });
   });

@@ -19,7 +19,6 @@ describe('Unit | Identity Access Management | Domain | Email | create-self-delet
     expect(email.template).to.equal(mailer.selfAccountDeletionTemplateId);
 
     const variables = email.variables;
-    expect(variables).to.have.property('displayNationalLogo').that.is.a('boolean');
     expect(variables).to.have.property('doNotAnswer').that.is.a('string');
     expect(variables).to.have.property('helpdeskUrl').that.is.a('string');
     expect(variables).to.have.property('homeName').that.is.a('string');

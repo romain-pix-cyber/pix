@@ -196,7 +196,7 @@ describe('Acceptance | Identity Access Management | Route | Token', function () 
 
     context('User blocking', function () {
       context('when user fails to authenticate for the threshold failure count', function () {
-        it('replies an unauthorized error and blocks the user for the blocking time', async function () {
+        it('replies a forbidden error and blocks the user for the blocking time', async function () {
           // given
           const userId = databaseBuilder.factory.buildUser.withRawPassword({
             email: 'email@without.mb',
@@ -218,14 +218,14 @@ describe('Acceptance | Identity Access Management | Route | Token', function () 
           const { statusCode } = await server.inject(options);
 
           // then
-          expect(statusCode).to.equal(401);
+          expect(statusCode).to.equal(403);
           const userLogin = await knex('user-logins').where({ userId }).first();
           expect(userLogin.failureCount).to.equal(10);
           expect(userLogin.temporaryBlockedUntil).to.exist;
         });
       });
 
-      context('when user successfully authenticate but still blocked', function () {
+      context('when user successfully authenticates but is still blocked', function () {
         it('replies a forbidden error and keep on blocking the user for the blocking time', async function () {
           // given
           const userId = databaseBuilder.factory.buildUser.withRawPassword({

@@ -191,11 +191,13 @@ module('Integration | Component | OrganizationParticipant | List', function (hoo
         {
           lastName: 'La Terreur',
           firstName: 'Gigi',
+          lastParticipationDate: null,
           id: 34,
         },
         {
           lastName: "L'asticot",
           firstName: 'Gogo',
+          lastParticipationDate: new Date('2024-01-05'),
           id: 56,
         },
       ];
@@ -216,6 +218,37 @@ module('Integration | Component | OrganizationParticipant | List', function (hoo
       // then
       // row include heading line
       assert.strictEqual(screen.getAllByRole('row').length, 3);
+    });
+
+    module('lastParticipationDate', function () {
+      test('it should display participation date', async function (assert) {
+        // given
+        const intl = this.owner.lookup('service:intl');
+        const participants = [
+          {
+            lastName: 'La Terreur',
+            firstName: 'Gigi',
+            lastParticipationDate: '2024-01-04',
+            id: 34,
+          },
+        ];
+
+        // when
+        const screen = await render(
+          <template>
+            <List
+              @participants={{participants}}
+              @triggerFiltering={{noop}}
+              @onClickLearner={{noop}}
+              @fullName={{fullNameFilter}}
+              @certificabilityFilter={{certificabilityFilter}}
+            />
+          </template>,
+        );
+
+        // then
+        assert.ok(screen.getByRole('cell', { name: intl.formatDate('2024-01-04') }));
+      });
     });
 
     module('custom row', function () {

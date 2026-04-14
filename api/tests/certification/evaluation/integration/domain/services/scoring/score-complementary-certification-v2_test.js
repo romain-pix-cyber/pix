@@ -326,11 +326,16 @@ function _buildComplementaryCertificationCourse({
 }) {
   databaseBuilder.factory.buildUser({ id: userId });
   const sessionId = databaseBuilder.factory.buildSession().id;
+  const { id: certificationCandidateId } = databaseBuilder.factory.buildCertificationCandidate({
+    userId,
+    sessionId,
+  });
   databaseBuilder.factory.buildCertificationCourse({
     id: certificationCourseId,
     userId,
     sessionId,
     isRejectedForFraud,
+    candidateId: certificationCandidateId,
   });
   databaseBuilder.factory.buildComplementaryCertificationCourse({
     id: complementaryCertificationCourseId,
@@ -356,10 +361,6 @@ function _buildComplementaryCertificationCourse({
     reproducibilityRate,
     assessmentId: resultAssessmentId,
     status: 'validated',
-  });
-  const { id: certificationCandidateId } = databaseBuilder.factory.buildCertificationCandidate({
-    userId,
-    sessionId,
   });
   databaseBuilder.factory.buildComplementaryCertificationSubscription({
     certificationCandidateId,

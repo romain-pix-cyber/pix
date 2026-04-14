@@ -25,6 +25,8 @@ describe('Unit | Identity Access Management | Domain | Validator | AddOidcProvid
         enabledForPixAdmin: true,
         openidConfigurationUrl: 'https://accounts.google.com/.well-known/openid-configuration',
         redirectUri: 'https://admin.dev.pix.fr/connexion/google',
+        application: 'admin',
+        applicationTld: '.fr',
       };
 
       // when
@@ -45,6 +47,22 @@ describe('Unit | Identity Access Management | Domain | Validator | AddOidcProvid
 
       // then
       expect(error).to.be.instanceOf(EntityValidationError);
+    });
+  });
+
+  describe('getImportTemplate', function () {
+    it('returns a JSON formatted string, containing an array with a single oidc-provider configuration', function () {
+      // when
+      const result = addOidcProviderValidator.getImportTemplate();
+
+      // then
+      expect(result).to.be.a.string;
+      expect(() => {
+        const data = JSON.parse(result);
+        expect(data).to.be.an('array');
+        expect(data).to.have.lengthOf(1);
+        expect(data[0]).to.be.an('object');
+      }).not.to.throw();
     });
   });
 });

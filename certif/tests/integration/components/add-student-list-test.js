@@ -415,6 +415,51 @@ module('Integration | Component | add-student-list', function (hooks) {
       });
     });
 
+    module('when the server successfully saves the session', function () {
+      test('it should call returnToSessionCandidates and send a success notification', async function (assert) {
+        // given
+        const sessionId = 123;
+        pixToast.sendSuccessNotification = sinon.spy();
+        const save = sinon.stub().resolves();
+        const returnToSessionCandidates = sinon.spy();
+
+        const session = _buildSession({ save });
+        session.id = sessionId;
+        this.set('session', session);
+        this.set('returnToSessionCandidates', returnToSessionCandidates);
+        const students = [_buildSelectedStudent()];
+        students.meta = {
+          page: 1,
+          pageSize: 25,
+          rowCount: 1,
+          pageCount: 1,
+        };
+        this.set('students', students);
+        sinon.stub(store, 'peekAll').withArgs('student').returns(students);
+
+        const screen = await render(
+          hbs`<AddStudentList
+  @studentList={{this.students}}
+  @session={{this.session}}
+  @certificationCenterDivisions={{this.divisions}}
+  @returnToSessionCandidates={{this.returnToSessionCandidates}}
+/>`,
+        );
+
+        // when
+        await click(screen.getByRole('button', { name: 'Inscrire' }));
+
+        // then
+        assert.ok(save.calledOnce);
+        assert.ok(returnToSessionCandidates.calledOnceWith(sessionId));
+        assert.ok(
+          pixToast.sendSuccessNotification.calledOnceWith({
+            message: 'Le(s) candidat(s) ont été inscrit(s) avec succès.',
+          }),
+        );
+      });
+    });
+
     module('when the server return an error on session save', function () {
       [400, 500].forEach(function (statusCode) {
         test(`it should notify a generic message for an error ${statusCode}`, async function (assert) {

@@ -48,6 +48,7 @@ export class GenerateDemoEpreuveComponentFile extends Script {
             .sort(byPOIName),
         },
       ],
+      glossary: [],
     };
 
     logger.info(`START: generate file demo-epreuve-component.json`);
@@ -81,6 +82,7 @@ function generateComponents(poiName, props, oldGrain) {
         id: oldGrain?.components[0].element.id ?? randomUUID(),
         type: 'text',
         content: `<p>${poiName}</p>`,
+        tag: ' ',
       },
     },
     {

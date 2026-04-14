@@ -944,7 +944,7 @@ function _noOrganizationFound(error) {
   return error instanceof NotFoundError;
 }
 
-const securityPreHandlers = {
+export const securityPreHandlers = {
   hasAtLeastOneAccessOf,
   validateAllAccess,
   checkAdminMemberHasRoleCertif,
@@ -988,5 +988,3 @@ const securityPreHandlers = {
   checkOrganizationAccess,
   checkParticipationBelongsToCombinedCourse,
 };
-
-export { securityPreHandlers };

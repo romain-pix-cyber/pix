@@ -15,10 +15,6 @@ describe('Integration | Application | Campaign-participation | learner-participa
     await httpTestServer.register(moduleUnderTest);
   });
 
-  afterEach(function () {
-    sinon.restore();
-  });
-
   describe('#getSharedCampaignParticipationProfile', function () {
     context('Error cases', function () {
       it('should return a 403 HTTP response', async function () {

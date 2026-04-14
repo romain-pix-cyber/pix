@@ -5,8 +5,6 @@ import {
   databaseBuilder,
   expect,
   generateAuthenticatedUserRequestHeaders,
-  insertUserWithRoleCertif,
-  insertUserWithRoleSuperAdmin,
 } from '../../../../test-helper.js';
 
 describe('Acceptance | Organizational Entities | Application | Route | Admin | Tag', function () {
@@ -16,14 +14,13 @@ describe('Acceptance | Organizational Entities | Application | Route | Admin | T
       const server = await createServer();
       const tag1 = databaseBuilder.factory.buildTag({ name: 'TAG1' });
       const tag2 = databaseBuilder.factory.buildTag({ name: 'TAG2' });
+      const superAdmin = databaseBuilder.factory.buildUser.withRoleSuperAdmin();
       await databaseBuilder.commit();
-
-      const userId = (await insertUserWithRoleSuperAdmin()).id;
 
       const options = {
         method: 'GET',
         url: '/api/admin/tags',
-        headers: generateAuthenticatedUserRequestHeaders({ userId }),
+        headers: generateAuthenticatedUserRequestHeaders({ userId: superAdmin.id }),
       };
 
       const expectedTags = [
@@ -77,9 +74,8 @@ describe('Acceptance | Organizational Entities | Application | Route | Admin | T
         // given
         const tagName = 'SUPER TAG';
         const server = await createServer();
+        const superAdmin = databaseBuilder.factory.buildUser.withRoleSuperAdmin();
         await databaseBuilder.commit();
-
-        const userId = (await insertUserWithRoleSuperAdmin()).id;
 
         // when
         const response = await server.inject({
@@ -93,7 +89,7 @@ describe('Acceptance | Organizational Entities | Application | Route | Admin | T
               },
             },
           },
-          headers: generateAuthenticatedUserRequestHeaders({ userId }),
+          headers: generateAuthenticatedUserRequestHeaders({ userId: superAdmin.id }),
         });
 
         // then
@@ -153,15 +149,14 @@ describe('Acceptance | Organizational Entities | Application | Route | Admin | T
           _buildOrganizationTags(organization.id, tagIds);
         }
 
+        const superAdmin = databaseBuilder.factory.buildUser.withRoleSuperAdmin();
         await databaseBuilder.commit();
-
-        const userId = (await insertUserWithRoleSuperAdmin()).id;
 
         // when
         const { statusCode, result } = await server.inject({
           method: 'GET',
           url: `/api/admin/tags/${basedTag.id}/recently-used`,
-          headers: generateAuthenticatedUserRequestHeaders({ userId }),
+          headers: generateAuthenticatedUserRequestHeaders({ userId: superAdmin.id }),
         });
 
         // then
@@ -189,15 +184,14 @@ describe('Acceptance | Organizational Entities | Application | Route | Admin | T
           _buildOrganizationTags(organization.id, tagIds);
         }
 
+        const adminCertif = databaseBuilder.factory.buildUser.withRoleCertif();
         await databaseBuilder.commit();
-
-        const userId = (await insertUserWithRoleCertif()).id;
 
         // when
         const { statusCode } = await server.inject({
           method: 'GET',
           url: `/api/admin/tags/${basedTag.id}/recently-used`,
-          headers: generateAuthenticatedUserRequestHeaders({ userId }),
+          headers: generateAuthenticatedUserRequestHeaders({ userId: adminCertif.id }),
         });
 
         // then

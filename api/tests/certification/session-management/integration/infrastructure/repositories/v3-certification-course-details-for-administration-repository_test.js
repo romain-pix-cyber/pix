@@ -110,6 +110,7 @@ describe('Integration | Infrastructure | Repository | v3-certification-course-de
         abortReason,
         pixScore,
         reachedMeshIndex,
+        eduV3ExternalJuryResult: null,
         numberOfChallenges: null,
         certificationFramework,
         certificationChallengesForAdministration: [certificationChallengeForAdministration],

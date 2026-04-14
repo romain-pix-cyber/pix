@@ -4,7 +4,6 @@ import {
   databaseBuilder,
   expect,
   generateAuthenticatedUserRequestHeaders,
-  insertUserWithRoleSuperAdmin,
 } from '../../../../test-helper.js';
 
 const { ROLES } = PIX_ADMIN;
@@ -13,14 +12,13 @@ describe('Acceptance | Team | Route | Admin-member', function () {
   describe('GET /api/admin/admin-members/me', function () {
     it('should return 200 http status code', async function () {
       // given
-      databaseBuilder.factory.buildUser.withRole();
-      const admin = await insertUserWithRoleSuperAdmin();
+      const superAdmin = databaseBuilder.factory.buildUser.withRoleSuperAdmin();
       await databaseBuilder.commit();
       const server = await createServer();
 
       // when
       const response = await server.inject({
-        headers: generateAuthenticatedUserRequestHeaders({ userId: admin.id }),
+        headers: generateAuthenticatedUserRequestHeaders({ userId: superAdmin.id }),
         method: 'GET',
         url: '/api/admin/admin-members/me',
       });

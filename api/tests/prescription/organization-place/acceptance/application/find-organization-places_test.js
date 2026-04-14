@@ -4,7 +4,6 @@ import {
   databaseBuilder,
   expect,
   generateAuthenticatedUserRequestHeaders,
-  insertUserWithRoleSuperAdmin,
 } from '../../../../test-helper.js';
 
 describe('Acceptance | Route | Find Organization Places', function () {
@@ -13,7 +12,7 @@ describe('Acceptance | Route | Find Organization Places', function () {
       // given
       const server = await createServer();
 
-      const adminUser = await insertUserWithRoleSuperAdmin();
+      const superAdmin = databaseBuilder.factory.buildUser.withRoleSuperAdmin();
       const organizationId = databaseBuilder.factory.buildOrganization().id;
       databaseBuilder.factory.buildOrganizationPlace({
         organizationId,
@@ -22,13 +21,13 @@ describe('Acceptance | Route | Find Organization Places', function () {
         expirationDate: new Date('2021-01-01'),
         reference: 'Godzilla',
         category: organizationPlacesLotCategories.FULL_RATE,
-        createdBy: adminUser.id,
+        createdBy: superAdmin.id,
       });
 
       const options = {
         method: 'GET',
         url: `/api/admin/organizations/${organizationId}/places`,
-        headers: generateAuthenticatedUserRequestHeaders({ userId: adminUser.id }),
+        headers: generateAuthenticatedUserRequestHeaders({ userId: superAdmin.id }),
       };
 
       await databaseBuilder.commit();
@@ -44,17 +43,17 @@ describe('Acceptance | Route | Find Organization Places', function () {
       // given
       const server = await createServer();
 
-      const adminUser = await insertUserWithRoleSuperAdmin();
+      const superAdmin = databaseBuilder.factory.buildUser.withRoleSuperAdmin();
       const organizationId = databaseBuilder.factory.buildOrganization().id;
       const place = databaseBuilder.factory.buildOrganizationPlace({
         organizationId,
-        createdBy: adminUser.id,
+        createdBy: superAdmin.id,
       });
 
       const options = {
         method: 'GET',
         url: `/api/admin/organizations/${organizationId}/places`,
-        headers: generateAuthenticatedUserRequestHeaders({ userId: adminUser.id }),
+        headers: generateAuthenticatedUserRequestHeaders({ userId: superAdmin.id }),
       };
 
       await databaseBuilder.commit();

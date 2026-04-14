@@ -5,7 +5,7 @@ const { minBy } = lodash;
 import { ChallengesReferential } from '../../../shared/domain/models/ChallengesReferential.js';
 import { juryOptions } from '../../../shared/domain/models/ComplementaryCertificationCourseResult.js';
 
-class ComplementaryCertificationCourseResultForJuryCertificationWithExternal {
+export class ComplementaryCertificationCourseResultForJuryCertificationWithExternal {
   constructor({
     complementaryCertificationCourseId,
     pixComplementaryCertificationBadgeId,
@@ -98,5 +98,3 @@ class Section {
     return Boolean(this.complementaryCertificationBadgeId);
   }
 }
-
-export { ComplementaryCertificationCourseResultForJuryCertificationWithExternal };

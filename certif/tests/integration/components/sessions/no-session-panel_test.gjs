@@ -1,7 +1,9 @@
 import { render } from '@1024pix/ember-testing-library';
 import Service from '@ember/service';
+import { t } from 'ember-intl/test-support';
 import NoSessionPanel from 'pix-certif/components/sessions/no-session-panel';
 import { module, test } from 'qunit';
+import sinon from 'sinon';
 
 import setupIntlRenderingTest from '../../../helpers/setup-intl-rendering';
 
@@ -77,6 +79,36 @@ module('Integration | Component | Sessions | no-session-panel', function (hooks)
         // then
         assert.dom(getByRole('link', { name: 'Créer plusieurs sessions' })).exists();
       });
+    });
+  });
+
+  module('when top level domain is org and current locale is english', function () {
+    test('it does not render a button link to the sessions import page', async function (assert) {
+      // given
+      const store = this.owner.lookup('service:store');
+      const currentAllowedCertificationCenterAccess = store.createRecord('allowed-certification-center-access', {
+        type: 'SUP',
+        isRelatedToManagingStudentsOrganization: false,
+      });
+
+      class CurrentUserStub extends Service {
+        currentAllowedCertificationCenterAccess = currentAllowedCertificationCenterAccess;
+      }
+      this.owner.register('service:current-user', CurrentUserStub);
+
+      const currentDomain = this.owner.lookup('service:current-domain');
+      sinon.stub(currentDomain, 'getExtension').returns('org');
+
+      const locale = this.owner.lookup('service:locale');
+      sinon.stub(locale, 'currentLocale').value('en');
+
+      // when
+      const { queryByRole } = await render(<template><NoSessionPanel /></template>);
+
+      // then
+      assert
+        .dom(queryByRole('link', { name: t('pages.sessions.list.actions.multiple-creation.label') }))
+        .doesNotExist();
     });
   });
 });

@@ -3,7 +3,6 @@ import {
   databaseBuilder,
   expect,
   generateAuthenticatedUserRequestHeaders,
-  insertUserWithRoleSuperAdmin,
   learningContentBuilder,
   mockLearningContent,
 } from '../../../../test-helper.js';
@@ -19,11 +18,13 @@ describe('Certification | Session Management | Acceptance | Application | Routes
     context('when certification match an existing scoring rule', function () {
       it('Should respond with a status 200', async function () {
         // given
-        await insertUserWithRoleSuperAdmin();
+        const superAdmin = databaseBuilder.factory.buildUser.withRoleSuperAdmin();
+        await databaseBuilder.commit();
+
         const options = {
           method: 'GET',
           url: '/api/admin/certifications/1234/details',
-          headers: generateAuthenticatedUserRequestHeaders(),
+          headers: generateAuthenticatedUserRequestHeaders({ userId: superAdmin.id }),
         };
 
         const learningContent = [

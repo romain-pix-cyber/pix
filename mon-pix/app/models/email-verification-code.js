@@ -5,6 +5,7 @@ export default class EmailVerificationCode extends Model {
   @attr('string') newEmail;
   @attr('string') password;
   @attr('string') code;
+  @attr('string') action;
 
   sendNewEmail = memberAction({
     path: 'email/verification-code',

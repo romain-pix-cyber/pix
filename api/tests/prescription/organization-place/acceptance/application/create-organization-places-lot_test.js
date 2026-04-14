@@ -5,7 +5,6 @@ import {
   databaseBuilder,
   expect,
   generateAuthenticatedUserRequestHeaders,
-  insertUserWithRoleSuperAdmin,
 } from '../../../../test-helper.js';
 
 describe('Acceptance | Route | Create Organization Places Lot', function () {
@@ -14,7 +13,7 @@ describe('Acceptance | Route | Create Organization Places Lot', function () {
       // given
       const server = await createServer();
 
-      const adminUser = await insertUserWithRoleSuperAdmin();
+      const superAdmin = databaseBuilder.factory.buildUser.withRoleSuperAdmin();
       const placeManagementFeature = databaseBuilder.factory.buildFeature({
         key: ORGANIZATION_FEATURE.PLACES_MANAGEMENT.key,
       });
@@ -31,7 +30,7 @@ describe('Acceptance | Route | Create Organization Places Lot', function () {
       const options = {
         method: 'POST',
         url: `/api/admin/organizations/${organizationId}/places`,
-        headers: generateAuthenticatedUserRequestHeaders({ userId: adminUser.id }),
+        headers: generateAuthenticatedUserRequestHeaders({ userId: superAdmin.id }),
         payload: {
           data: {
             attributes: {

@@ -3,15 +3,11 @@ import { constants } from '../../../../../src/shared/domain/constants.js';
 import { domainBuilder, expect, sinon } from '../../../../test-helper.js';
 
 describe('Unit | Service | ImprovementService', function () {
-  let originalConstantValueRetrying, originalConstantValueImproving;
   let assessmentDate, oldKnowledgeElementsValidated, oldKnowledgeElementsInvalidated, recentKnowledgeElements;
   let knowledgeElements;
 
   beforeEach(function () {
     assessmentDate = '2020-07-30';
-    originalConstantValueRetrying = constants.MINIMUM_DELAY_IN_DAYS_BEFORE_RETRYING;
-    originalConstantValueImproving = constants.MINIMUM_DELAY_IN_DAYS_BEFORE_IMPROVING;
-
     sinon.stub(constants, 'MINIMUM_DELAY_IN_DAYS_BEFORE_RETRYING').value(3);
     sinon.stub(constants, 'MINIMUM_DELAY_IN_DAYS_BEFORE_IMPROVING').value(4);
 
@@ -75,11 +71,6 @@ describe('Unit | Service | ImprovementService', function () {
       ...oldKnowledgeElementsInvalidated,
       ...recentKnowledgeElements,
     );
-  });
-
-  afterEach(function () {
-    sinon.stub(constants, 'MINIMUM_DELAY_IN_DAYS_BEFORE_RETRYING').value(originalConstantValueRetrying);
-    sinon.stub(constants, 'MINIMUM_DELAY_IN_DAYS_BEFORE_IMPROVING').value(originalConstantValueImproving);
   });
 
   describe('#filterKnowledgeElements', function () {

@@ -85,8 +85,11 @@ const findExistingIds = async function ({ ids } = {}) {
 const findChildrenByParentOrganizationId = async function ({ parentOrganizationId }) {
   const knexConnection = DomainTransaction.getConnection();
   const children = await knexConnection(ORGANIZATIONS_TABLE_NAME)
-    .where({ parentOrganizationId })
-    .orderBy('name', 'ASC');
+    .join('fct_structures AS child_fs', 'child_fs.organization_id', `${ORGANIZATIONS_TABLE_NAME}.id`)
+    .join('fct_structures AS parent_fs', 'parent_fs.structure_id', 'child_fs.parent_structure_id')
+    .where('parent_fs.organization_id', parentOrganizationId)
+    .select(`${ORGANIZATIONS_TABLE_NAME}.*`)
+    .orderBy(`${ORGANIZATIONS_TABLE_NAME}.name`, 'ASC');
   return children.map(_toDomain);
 };
 
@@ -124,7 +127,7 @@ const get = async function ({ organizationId }) {
       creatorFirstName: 'creators.firstName',
       creatorLastName: 'creators.lastName',
       identityProviderForCampaigns: 'organizations.identityProviderForCampaigns',
-      parentOrganizationId: 'organizations.parentOrganizationId',
+      parentOrganizationId: 'parentOrganizations.id',
       parentOrganizationName: 'parentOrganizations.name',
       administrationTeamId: 'organizations.administrationTeamId',
       administrationTeamName: 'administrationTeams.name',
@@ -149,8 +152,13 @@ const get = async function ({ organizationId }) {
       'dataProtectionOfficers.organizationId',
       'organizations.id',
     )
-    .leftJoin('organizations AS parentOrganizations', 'parentOrganizations.id', 'organizations.parentOrganizationId')
     .leftJoin('fct_structures', 'fct_structures.organization_id', 'organizations.id')
+    .leftJoin(
+      'fct_structures AS parentFctStructures',
+      'parentFctStructures.structure_id',
+      'fct_structures.parent_structure_id',
+    )
+    .leftJoin('organizations AS parentOrganizations', 'parentOrganizations.id', 'parentFctStructures.organization_id')
     .leftJoin('networks', 'networks.id', 'fct_structures.network_id')
     .leftJoin('fct_structures as headFctStructures', function () {
       this.on('headFctStructures.network_id', 'networks.id').andOnNull('headFctStructures.parent_structure_id');
@@ -236,7 +244,6 @@ const save = async function ({ organization }) {
     'createdBy',
     'documentationUrl',
     'administrationTeamId',
-    'parentOrganizationId',
     'countryCode',
   ]);
 
@@ -250,10 +257,24 @@ const save = async function ({ organization }) {
 
   const [structure] = await knexConn('structures').returning('*').insert({});
 
-  await knexConn('fct_structures').insert({
-    structure_id: structure.id,
-    organization_id: savedOrganization.id,
-  });
+  if (organization.parentOrganizationId) {
+    const parentFctStructure = await knexConn('fct_structures')
+      .select('structure_id', 'network_id')
+      .where({ organization_id: organization.parentOrganizationId })
+      .first();
+
+    await knexConn('fct_structures').insert({
+      structure_id: structure.id,
+      organization_id: savedOrganization.id,
+      parent_structure_id: parentFctStructure.structure_id,
+      network_id: parentFctStructure.network_id,
+    });
+  } else {
+    await knexConn('fct_structures').insert({
+      structure_id: structure.id,
+      organization_id: savedOrganization.id,
+    });
+  }
 
   if (!_.isEmpty(savedOrganization.features)) {
     await _enableFeatures(knexConn, savedOrganization.features, savedOrganization.id);

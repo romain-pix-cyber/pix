@@ -2,7 +2,6 @@ import { clickByName, render } from '@1024pix/ember-testing-library';
 import EmberObject from '@ember/object';
 import Service from '@ember/service';
 import { faker } from '@faker-js/faker';
-import { triggerCopySuccess } from 'ember-cli-clipboard/test-support';
 import { t } from 'ember-intl/test-support';
 import ScoOrganizationParticipantManageAuthenticationMethodModal from 'pix-orga/components/sco-organization-participant/manage-authentication-method-modal';
 import { module, test } from 'qunit';
@@ -12,6 +11,14 @@ import setupIntlRenderingTest from '../../../helpers/setup-intl-rendering';
 
 module('Integration | Component | ScoOrganizationParticipant::ManageAuthenticationMethodModal', function (hooks) {
   setupIntlRenderingTest(hooks);
+
+  hooks.beforeEach(function () {
+    Object.defineProperty(window.navigator, 'clipboard', {
+      value: { writeText: async () => {} },
+      writable: true,
+      configurable: true,
+    });
+  });
 
   module('When Student is not connected with GAR method', function () {
     const username = 'john.doe0112';
@@ -64,7 +71,12 @@ module('Integration | Component | ScoOrganizationParticipant::ManageAuthenticati
       });
 
       test('should render clipboard to copy username', async function (assert) {
-        // when
+        // given
+        let copiedText;
+        window.navigator.clipboard.writeText = async (text) => {
+          copiedText = text;
+        };
+
         const screen = await render(
           <template>
             <ScoOrganizationParticipantManageAuthenticationMethodModal
@@ -74,14 +86,18 @@ module('Integration | Component | ScoOrganizationParticipant::ManageAuthenticati
           </template>,
         );
 
+        // when
+        await clickByName(
+          t('pages.sco-organization-participants.manage-authentication-method-modal.section.username.copy'),
+        );
+
         // then
         assert.ok(
-          screen
-            .getByRole('button', {
-              name: t('pages.sco-organization-participants.manage-authentication-method-modal.section.username.copy'),
-            })
-            .hasAttribute('data-clipboard-text', username),
+          screen.getByRole('button', {
+            name: t('pages.sco-organization-participants.manage-authentication-method-modal.section.username.copy'),
+          }),
         );
+        assert.strictEqual(copiedText, username);
       });
 
       test('should display tooltip when username copy button is clicked', async function (assert) {
@@ -96,10 +112,8 @@ module('Integration | Component | ScoOrganizationParticipant::ManageAuthenticati
         );
 
         // when
-        await triggerCopySuccess(
-          `button[aria-label="${t(
-            'pages.sco-organization-participants.manage-authentication-method-modal.section.username.copy',
-          )}"]`,
+        await clickByName(
+          t('pages.sco-organization-participants.manage-authentication-method-modal.section.username.copy'),
         );
 
         // then
@@ -129,7 +143,12 @@ module('Integration | Component | ScoOrganizationParticipant::ManageAuthenticati
       });
 
       test('should render clipboard to copy email', async function (assert) {
-        // when
+        // given
+        let copiedText;
+        window.navigator.clipboard.writeText = async (text) => {
+          copiedText = text;
+        };
+
         const screen = await render(
           <template>
             <ScoOrganizationParticipantManageAuthenticationMethodModal
@@ -139,14 +158,18 @@ module('Integration | Component | ScoOrganizationParticipant::ManageAuthenticati
           </template>,
         );
 
+        // when
+        await clickByName(
+          t('pages.sco-organization-participants.manage-authentication-method-modal.section.email.copy'),
+        );
+
         // then
         assert.ok(
-          screen
-            .getByRole('button', {
-              name: t('pages.sco-organization-participants.manage-authentication-method-modal.section.email.copy'),
-            })
-            .hasAttribute('data-clipboard-text', email),
+          screen.getByRole('button', {
+            name: t('pages.sco-organization-participants.manage-authentication-method-modal.section.email.copy'),
+          }),
         );
+        assert.strictEqual(copiedText, email);
       });
 
       test('should display tooltip when email copy button is clicked', async function (assert) {
@@ -161,10 +184,8 @@ module('Integration | Component | ScoOrganizationParticipant::ManageAuthenticati
         );
 
         // when
-        await triggerCopySuccess(
-          `button[aria-label="${t(
-            'pages.sco-organization-participants.manage-authentication-method-modal.section.email.copy',
-          )}"]`,
+        await clickByName(
+          t('pages.sco-organization-participants.manage-authentication-method-modal.section.email.copy'),
         );
 
         // then
@@ -248,6 +269,11 @@ module('Integration | Component | ScoOrganizationParticipant::ManageAuthenticati
 
       test('should render clipboard to copy unique password', async function (assert) {
         // given
+        let copiedText;
+        window.navigator.clipboard.writeText = async (text) => {
+          copiedText = text;
+        };
+
         const screen = await render(
           <template>
             <ScoOrganizationParticipantManageAuthenticationMethodModal
@@ -261,15 +287,17 @@ module('Integration | Component | ScoOrganizationParticipant::ManageAuthenticati
         await clickByName(
           t('pages.sco-organization-participants.manage-authentication-method-modal.section.reset-password.button'),
         );
+        await clickByName(
+          t('pages.sco-organization-participants.manage-authentication-method-modal.section.password.copy'),
+        );
 
         // then
         assert.ok(
-          screen
-            .getByRole('button', {
-              name: t('pages.sco-organization-participants.manage-authentication-method-modal.section.password.copy'),
-            })
-            .hasAttribute('data-clipboard-text', generatedPassword),
+          screen.getByRole('button', {
+            name: t('pages.sco-organization-participants.manage-authentication-method-modal.section.password.copy'),
+          }),
         );
+        assert.strictEqual(copiedText, generatedPassword);
       });
 
       test('should display tooltip when generated password copy button is clicked', async function (assert) {
@@ -287,10 +315,8 @@ module('Integration | Component | ScoOrganizationParticipant::ManageAuthenticati
         await clickByName(
           t('pages.sco-organization-participants.manage-authentication-method-modal.section.reset-password.button'),
         );
-        await triggerCopySuccess(
-          `button[aria-label="${t(
-            'pages.sco-organization-participants.manage-authentication-method-modal.section.password.copy',
-          )}"]`,
+        await clickByName(
+          t('pages.sco-organization-participants.manage-authentication-method-modal.section.password.copy'),
         );
 
         // then

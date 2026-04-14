@@ -49,13 +49,6 @@ export function handleV3CertificationScoring({
   cleaScoringCriteria,
   scoringDegradationService,
 }) {
-  if (!candidate.isScorable) {
-    return {
-      coreAssessmentResult: null,
-      doubleCertificationScoring: null,
-    };
-  }
-
   const scoringV3Algorithm = new ScoringV3Algorithm({
     algorithm,
     allAnswers: [...assessmentSheet.answers],

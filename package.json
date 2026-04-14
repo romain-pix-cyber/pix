@@ -1,6 +1,6 @@
 {
   "name": "pix",
-  "version": "5.379.0",
+  "version": "5.386.0",
   "private": false,
   "description": "Plateforme d'évaluation et de certification des compétences numériques",
   "license": "AGPL-3.0",
@@ -38,7 +38,6 @@
     "ci:mon-pix": "cd mon-pix && npm ci",
     "ci:orga": "cd orga && npm ci",
     "ci:junior": "cd junior && npm ci",
-    "compute-lead-times": "node ./scripts/compute-lead-times",
     "clean": "run-p --print-label clean:api clean:audit-logger clean:mon-pix clean:orga clean:certif clean:admin clean:junior && npm run clean:root",
     "clean:admin": "cd admin && npm run clean",
     "clean:api": "cd api && npm run clean",
@@ -49,8 +48,6 @@
     "clean:junior": "cd junior && npm run clean",
     "clean:root": "rm -rf node_modules && rm -rf tmp",
     "configure": "./scripts/configure.sh",
-    "install:components": "cd api && npm i @1024pix/epreuves-components@latest && cd ../mon-pix && npm i @1024pix/epreuves-components@latest && cd ../junior && npm i @1024pix/epreuves-components@latest",
-    "postinstall:components": "node api/scripts/modulix/generate-demo-epreuve-component.js",
     "lint": "run-p --print-label lint:*",
     "lint:admin": "cd admin && npm run lint",
     "lint:api": "cd api && npm run lint",
@@ -89,7 +86,8 @@
     "domains:start": "cd ./scripts/local-domains/ && docker compose up -d",
     "domains:stop": "cd ./scripts/local-domains/ && docker compose down",
     "domains:trust-self-signed-certificate:mac": "cd ./scripts/local-domains/ && docker compose cp caddy:/data/caddy/pki/authorities/local/root.crt /tmp/root.crt && sudo security add-trusted-cert -d -r trustRoot -k /Library/Keychains/System.keychain /tmp/root.crt",
-    "domains:trust-self-signed-certificate:linux": "cd ./scripts/local-domains/ && sudo docker cp caddy:/data/caddy/pki/authorities/local/root.crt /usr/local/share/ca-certificates/root.crt && sudo update-ca-certificates --fresh"
+    "domains:trust-self-signed-certificate:linux": "cd ./scripts/local-domains/ && sudo docker cp caddy:/data/caddy/pki/authorities/local/root.crt /usr/local/share/ca-certificates/root.crt && sudo update-ca-certificates --fresh",
+    "demo-epreuves:update": "./scripts/update-demo-epreuves.sh"
   },
   "dependencies": {
     "npm-run-all2": "^8.0.0"

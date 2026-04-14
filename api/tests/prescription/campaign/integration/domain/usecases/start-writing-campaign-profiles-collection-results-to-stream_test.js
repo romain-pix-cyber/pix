@@ -1,4 +1,6 @@
 import stream from 'node:stream';
+import { text } from 'node:stream/consumers';
+
 const { PassThrough } = stream;
 
 import * as userRepository from '../../../../../../src/identity-access-management/infrastructure/repositories/user.repository.js';
@@ -22,7 +24,7 @@ import * as placementProfileService from '../../../../../../src/shared/domain/se
 import { getI18n } from '../../../../../../src/shared/infrastructure/i18n/i18n.js';
 import * as competenceRepository from '../../../../../../src/shared/infrastructure/repositories/competence-repository.js';
 import * as organizationRepository from '../../../../../../src/shared/infrastructure/repositories/organization-repository.js';
-import { databaseBuilder, expect, streamToPromise } from '../../../../../test-helper.js';
+import { databaseBuilder, expect } from '../../../../../test-helper.js';
 
 describe('Integration | Domain | Use Cases | start-writing-profiles-collection-campaign-results-to-stream', function () {
   describe('#startWritingCampaignProfilesCollectionResultsToStream', function () {
@@ -31,7 +33,6 @@ describe('Integration | Domain | Use Cases | start-writing-profiles-collection-c
     let organizationLearner;
     let campaign;
     let writableStream;
-    let csvPromise;
     let i18n;
     let ke1, ke2, ke3, ke4, ke5;
 
@@ -135,7 +136,6 @@ describe('Integration | Domain | Use Cases | start-writing-profiles-collection-c
       await databaseBuilder.commit();
 
       writableStream = new PassThrough();
-      csvPromise = streamToPromise(writableStream);
     });
 
     context('common cases', function () {
@@ -197,11 +197,11 @@ describe('Integration | Domain | Use Cases | start-writing-profiles-collection-c
           organizationFeatureApi,
         });
 
-        const csv = await csvPromise;
+        const csv = await text(writableStream);
         const cells = csv.split('\n');
 
         expect(cells[0]).to.be.equals(
-          '\uFEFF"Nom de l\'organisation";"ID Campagne";"Code";"Nom de la campagne";"Nom du Participant";"Prénom du Participant";"Envoi (O/N)";"Date et heure de l\'envoi (Europe/Paris)";"Nombre de pix total";"Certifiable (O/N)";"Nombre de compétences certifiables";"Niveau pour la compétence nom en français recCompetence1";"Nombre de pix pour la compétence nom en français recCompetence1";"Niveau pour la compétence nom en français recCompetence2";"Nombre de pix pour la compétence nom en français recCompetence2"',
+          '"Nom de l\'organisation";"ID Campagne";"Code";"Nom de la campagne";"Nom du Participant";"Prénom du Participant";"Envoi (O/N)";"Date et heure de l\'envoi (Europe/Paris)";"Nombre de pix total";"Certifiable (O/N)";"Nombre de compétences certifiables";"Niveau pour la compétence nom en français recCompetence1";"Nombre de pix pour la compétence nom en français recCompetence1";"Niveau pour la compétence nom en français recCompetence2";"Nombre de pix pour la compétence nom en français recCompetence2"',
         );
         expect(cells[1]).to.be.equals(
           `"Observatoire de Pix";${campaign.id};"QWERTY456";"'@Campagne de Test N°2";"'=Bono";"'@Jean";"Oui";"${sharedAtFormated}";52;"Non";2;1;12;5;40`,
@@ -318,11 +318,11 @@ describe('Integration | Domain | Use Cases | start-writing-profiles-collection-c
           organizationFeatureApi,
         });
 
-        const csv = await csvPromise;
+        const csv = await text(writableStream);
         const cells = csv.split('\n');
 
         expect(cells[0]).to.be.equals(
-          '\uFEFF"Nom de l\'organisation";"ID Campagne";"Code";"Nom de la campagne";"Nom du Participant";"Prénom du Participant";"Mail Perso";"Envoi (O/N)";"Date et heure de l\'envoi (Europe/Paris)";"Nombre de pix total";"Certifiable (O/N)";"Nombre de compétences certifiables";"Niveau pour la compétence nom en français recCompetence1";"Nombre de pix pour la compétence nom en français recCompetence1";"Niveau pour la compétence nom en français recCompetence2";"Nombre de pix pour la compétence nom en français recCompetence2"',
+          '"Nom de l\'organisation";"ID Campagne";"Code";"Nom de la campagne";"Nom du Participant";"Prénom du Participant";"Mail Perso";"Envoi (O/N)";"Date et heure de l\'envoi (Europe/Paris)";"Nombre de pix total";"Certifiable (O/N)";"Nombre de compétences certifiables";"Niveau pour la compétence nom en français recCompetence1";"Nombre de pix pour la compétence nom en français recCompetence1";"Niveau pour la compétence nom en français recCompetence2";"Nombre de pix pour la compétence nom en français recCompetence2"',
         );
         expect(cells[1]).to.be.equals(
           `"Observatoire de Pix";${campaign.id};"QWERTY456";"'@Campagne de Test N°2";"'=Bono";"'@Jean";"'+Mon mail pro";"Oui";"${sharedAtFormated}";52;"Non";2;1;12;5;40`,
@@ -411,7 +411,7 @@ describe('Integration | Domain | Use Cases | start-writing-profiles-collection-c
           organizationLearnerImportFormatRepository,
         });
 
-        const csv = await csvPromise;
+        const csv = await text(writableStream);
         const cells = csv.split('\n');
 
         expect(cells[0], 'hobby header').to.be.include('"hobby"');
@@ -453,7 +453,7 @@ describe('Integration | Domain | Use Cases | start-writing-profiles-collection-c
 
       it('should return the complete line', async function () {
         // given
-        const expectedCsvFirstCell = '\uFEFF"Nom de l\'organisation"';
+        const expectedCsvFirstCell = '"Nom de l\'organisation"';
         const expectedCsvSecondLine =
           `"${organization.name}";` +
           `${campaign.id};` +
@@ -485,7 +485,7 @@ describe('Integration | Domain | Use Cases | start-writing-profiles-collection-c
           organizationFeatureApi,
         });
 
-        const csv = await csvPromise;
+        const csv = await text(writableStream);
         const csvLines = csv.split('\n');
         const csvFirstLineCells = csvLines[0].split(';');
 
@@ -535,7 +535,7 @@ describe('Integration | Domain | Use Cases | start-writing-profiles-collection-c
 
       it('should return the complete line', async function () {
         // given
-        const expectedCsvFirstCell = '\uFEFF"Nom de l\'organisation"';
+        const expectedCsvFirstCell = '"Nom de l\'organisation"';
         const expectedCsvSecondLine =
           `"${organization.name}";` +
           `${campaign.id};` +
@@ -568,7 +568,7 @@ describe('Integration | Domain | Use Cases | start-writing-profiles-collection-c
           organizationFeatureApi,
         });
 
-        const csv = await csvPromise;
+        const csv = await text(writableStream);
         const csvLines = csv.split('\n');
         const csvFirstLineCells = csvLines[0].split(';');
 
@@ -619,7 +619,7 @@ describe('Integration | Domain | Use Cases | start-writing-profiles-collection-c
 
       it('should return the complete line for a SUP organisation that manages students', async function () {
         // given
-        const expectedCsvFirstCell = '\uFEFF"Nom de l\'organisation"';
+        const expectedCsvFirstCell = '"Nom de l\'organisation"';
         const expectedCsvSecondLine =
           `"${organization.name}";` +
           `${campaign.id};` +
@@ -653,7 +653,7 @@ describe('Integration | Domain | Use Cases | start-writing-profiles-collection-c
           organizationFeatureApi,
         });
 
-        const csv = await csvPromise;
+        const csv = await text(writableStream);
         const csvLines = csv.split('\n');
         const csvFirstLineCells = csvLines[0].split(';');
 

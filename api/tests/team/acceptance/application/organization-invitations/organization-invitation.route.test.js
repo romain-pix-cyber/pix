@@ -8,7 +8,6 @@ import {
   expect,
   generateAuthenticatedUserRequestHeaders,
   generateInjectOptions,
-  insertOrganizationUserWithRoleAdmin,
   knex,
   sinon,
 } from '../../../../../tests/test-helper.js';
@@ -600,19 +599,24 @@ describe('Acceptance | Team | Application | Controller | organization-invitation
       // given
       const server = await createServer();
 
-      const { adminUser, organization } = await insertOrganizationUserWithRoleAdmin();
+      const adminUser = databaseBuilder.factory.buildUser();
+      const organization = databaseBuilder.factory.buildOrganization();
+      databaseBuilder.factory.buildMembership({
+        userId: adminUser.id,
+        organizationId: organization.id,
+        organizationRole: Membership.roles.ADMIN,
+      });
       const invitation = databaseBuilder.factory.buildOrganizationInvitation({
         organizationId: organization.id,
         status: OrganizationInvitation.StatusType.PENDING,
       });
+      await databaseBuilder.commit();
 
       const options = {
         method: 'DELETE',
         url: `/api/organizations/${organization.id}/invitations/${invitation.id}`,
         headers: generateAuthenticatedUserRequestHeaders({ userId: adminUser.id }),
       };
-
-      await databaseBuilder.commit();
 
       // when
       const response = await server.inject(options);

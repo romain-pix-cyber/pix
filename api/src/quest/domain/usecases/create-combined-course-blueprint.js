@@ -1,32 +1,33 @@
 import _ from 'lodash';
 
-import { COMBINED_COURSE_BLUEPRINT_ITEMS, CombinedCourseBlueprint } from '../models/CombinedCourseBlueprint.js';
+import { ADMIN_COMBINED_COURSE_BLUEPRINT_ITEMS } from '../models/AdminCombinedCourseBlueprint.js';
+import { CombinedCourseBlueprint } from '../models/CombinedCourseBlueprint.js';
 
 export const createCombinedCourseBlueprint = async ({
-  attestationKey,
-  combinedCourseBlueprint,
+  adminCombinedCourseBlueprint,
   combinedCourseBlueprintRepository,
   targetProfileRepository,
   moduleRepository,
   rewardRepository,
 }) => {
-  // We are using content from the front-end before building quests
-  const targetProfileIds = combinedCourseBlueprint.content
-    .filter((item) => item.type === COMBINED_COURSE_BLUEPRINT_ITEMS.EVALUATION)
+  const targetProfileIds = adminCombinedCourseBlueprint.content
+    .filter((item) => item.type === ADMIN_COMBINED_COURSE_BLUEPRINT_ITEMS.EVALUATION)
     .map(({ value }) => value);
   await targetProfileRepository.findByIds({ ids: targetProfileIds });
 
-  const moduleShortIds = combinedCourseBlueprint.content
-    .filter((item) => item.type === COMBINED_COURSE_BLUEPRINT_ITEMS.MODULE)
+  const moduleShortIds = adminCombinedCourseBlueprint.content
+    .filter((item) => item.type === ADMIN_COMBINED_COURSE_BLUEPRINT_ITEMS.MODULE)
     .map(({ value }) => value);
   const modules = await moduleRepository.getByShortIds({ moduleShortIds });
   const modulesByShortId = _.groupBy(modules, 'shortId');
 
-  const reward = attestationKey ? await rewardRepository.getByAttestationKey({ key: attestationKey }) : null;
+  const reward = adminCombinedCourseBlueprint.attestationKey
+    ? await rewardRepository.getByAttestationKey({ key: adminCombinedCourseBlueprint.attestationKey })
+    : null;
 
   return combinedCourseBlueprintRepository.save({
     combinedCourseBlueprint: CombinedCourseBlueprint.buildWithQuest({
-      combinedCourseBlueprint,
+      adminCombinedCourseBlueprint,
       modulesByShortId,
       rewardId: reward?.id,
       rewardType: reward?.type,

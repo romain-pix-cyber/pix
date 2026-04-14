@@ -122,11 +122,17 @@ export default class OrganizationFeaturesSection extends Component {
         this.displayLearnerImportActivationDialog = true;
         this.learnerImportActivationConfirmed = false;
       }
-    } else {
-      this.form = lodashSet(this.form, key, !lodashGet(this.form, key));
-      if (key === 'features.PLACES_MANAGEMENT.active' && !this.form.features?.PLACES_MANAGEMENT?.active) {
-        this.form = lodashSet(this.form, 'features.PLACES_MANAGEMENT.params.enableMaximumPlacesLimit', false);
-      }
+      return;
+    }
+    this.form = lodashSet(this.form, key, !lodashGet(this.form, key));
+
+    if (key === 'features.PLACES_MANAGEMENT.active') {
+      const shouldPlacesLimitBeChecked = Boolean(this.form.features?.PLACES_MANAGEMENT?.active);
+      this.form = lodashSet(
+        this.form,
+        'features.PLACES_MANAGEMENT.params.enableMaximumPlacesLimit',
+        shouldPlacesLimitBeChecked,
+      );
     }
   }
 

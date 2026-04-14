@@ -1,7 +1,9 @@
 import { assert, Assertion } from 'chai';
 import sinon from 'sinon';
 
-export const jobChai = (knex) => (_chai, utils) => {
+import { JobClient } from '../../../src/shared/infrastructure/jobs/JobClient.js';
+
+export const jobChai = () => (_chai, utils) => {
   utils.addProperty(Assertion.prototype, 'performed', function () {
     return this;
   });
@@ -12,48 +14,65 @@ export const jobChai = (knex) => (_chai, utils) => {
 
   Assertion.addMethod('withJobsCount', async function (expectedCount) {
     const jobName = this._obj;
-    const jobs = await knex('pgboss.job').where({ name: jobName });
+    const jobs = await JobClient.instance.fetch(jobName, expectedCount + 1, { includeMetadata: true });
+    const actualCount = jobs?.length ?? 0;
     assert.strictEqual(
-      jobs.length,
+      actualCount,
       expectedCount,
-      `expected ${jobName} to have been performed ${expectedCount} times, but it was performed ${jobs.length} times`,
+      `expected ${jobName} to have been performed ${expectedCount} times, but it was performed ${actualCount} times`,
+    );
+    return (jobs ?? []).map(
+      ({ id, name, data, retrylimit, retrydelay, retrybackoff, expire_in_seconds, priority }) => ({
+        id,
+        name,
+        data,
+        retryLimit: retrylimit,
+        retryDelay: retrydelay,
+        retryBackoff: retrybackoff,
+        expireIn: Math.round(expire_in_seconds),
+        priority,
+      }),
     );
   });
 
   Assertion.addMethod('withJob', async function (jobData) {
-    await this.withJobsCount(1);
+    const jobs = await this.withJobsCount(1);
 
     const jobName = this._obj;
-    const jobs = await knex('pgboss.job').select(knex.raw(`*, expirein::varchar`)).where({ name: jobName });
-    assert.deepInclude(jobs[0], jobData, `Job '${jobName}' was performed with a different payload`);
+    assert.deepOwnInclude(
+      jobs[0],
+      jobData,
+      `Job '${jobName}' was performed with a different payload (${JSON.stringify(jobData)} was expected but performed with ${JSON.stringify(jobs[0])})`,
+    );
   });
 
   Assertion.addMethod('withCronJobsCount', async function (expectedCount) {
     const jobName = this._obj;
-    const jobs = await knex('pgboss.schedule').where({ name: jobName });
+    const allJobs = (await JobClient.instance.getSchedules()) ?? [];
+    const jobs = allJobs.filter(({ name }) => name === jobName);
     assert.strictEqual(
       jobs.length,
       expectedCount,
       `expected ${jobName} to have been performed ${expectedCount} times, but it was performed ${jobs.length} times`,
     );
+    return jobs;
   });
 
   Assertion.addMethod('withCronJob', async function (jobData) {
-    await this.withCronJobsCount(1);
+    const jobs = await this.withCronJobsCount(1);
 
     const jobName = this._obj;
-    const job = await knex('pgboss.schedule')
-      .select('name', 'cron', 'data', 'options')
-      .where({ name: jobName })
-      .first();
-    assert.deepInclude(job, jobData, `Job '${jobName}' was schedule with a different payload`);
+    assert.deepOwnInclude(
+      jobs[0],
+      jobData,
+      `Job '${jobName}' was schedule with a different payload (${JSON.stringify(jobData)} was expected but performed with ${JSON.stringify(jobs[0])})`,
+    );
   });
 
   Assertion.addMethod('withJobPayloads', async function (payloads) {
-    await this.withJobsCount(payloads.length);
+    const jobs = await this.withJobsCount(payloads.length);
 
     const jobName = this._obj;
-    const jobs = await knex('pgboss.job').where({ name: jobName });
     const actualPayloads = jobs.map((job) => job.data);
 
     try {

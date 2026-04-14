@@ -23,6 +23,7 @@ function buildAssessmentResult({
   certificationCourseId,
   capacity,
   reachedMeshIndex = null,
+  eduV3ExternalJuryResult = null,
   versionId,
 } = {}) {
   assessmentId = _.isUndefined(assessmentId) ? buildAssessment({ certificationCourseId }).id : assessmentId;
@@ -44,6 +45,7 @@ function buildAssessmentResult({
     createdAt,
     capacity,
     reachedMeshIndex,
+    eduV3ExternalJuryResult,
     versionId,
   };
   return databaseBuffer.pushInsertable({
@@ -71,6 +73,7 @@ buildAssessmentResult.last = function ({
   createdAt,
   capacity,
   reachedMeshIndex,
+  eduV3ExternalJuryResult,
   versionId,
 }) {
   const assessmentResult = buildAssessmentResult({
@@ -90,6 +93,7 @@ buildAssessmentResult.last = function ({
     certificationCourseId,
     capacity,
     reachedMeshIndex,
+    eduV3ExternalJuryResult,
     versionId,
   });
 

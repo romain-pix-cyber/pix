@@ -4,9 +4,9 @@ import * as url from 'node:url';
 
 import {
   createServer,
+  databaseBuilder,
   expect,
   generateAuthenticatedUserRequestHeaders,
-  insertUserWithRoleSuperAdmin,
   nock,
 } from '../../../../test-helper.js';
 
@@ -37,14 +37,12 @@ describe('Acceptance | Controller | Session | update-cpf-import-status-controlle
       .reply(200);
   });
 
-  afterEach(async function () {
-    nock.cleanAll();
-  });
-
   describe('PUT /api/admin/cpf/receipts', function () {
     it('should return an OK (200) status', async function () {
       // given
-      const superAdmin = await insertUserWithRoleSuperAdmin();
+      const superAdmin = databaseBuilder.factory.buildUser.withRoleSuperAdmin();
+      await databaseBuilder.commit();
+
       const options = {
         method: 'PUT',
         url: '/api/admin/cpf/receipts',

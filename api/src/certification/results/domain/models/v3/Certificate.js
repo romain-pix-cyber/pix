@@ -2,7 +2,7 @@
  * @typedef {import ('../../read-models/CertifiedBadge.js').CertifiedBadge} CertifiedBadge
  */
 import { MAX_REACHABLE_SCORE } from '../../../../../shared/domain/constants.js';
-import { CERTIFICATE_LEVELS } from '../../../../shared/domain/constants/mesh-configuration.js';
+import { CORE_CERTIFICATE_LEVELS } from '../../../../shared/domain/constants/mesh-configuration.js';
 import { GlobalCertificationLevel } from './GlobalCertificationLevel.js';
 
 export class Certificate {
@@ -60,6 +60,6 @@ export class Certificate {
   #findLevel(reachedMeshIndex, certificationFramework) {
     const globalCertificationLevel = new GlobalCertificationLevel({ reachedMeshIndex, certificationFramework });
 
-    return globalCertificationLevel.meshLevel === CERTIFICATE_LEVELS.preBeginner ? null : globalCertificationLevel;
+    return globalCertificationLevel.meshLevel === CORE_CERTIFICATE_LEVELS.preBeginner ? null : globalCertificationLevel;
   }
 }

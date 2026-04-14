@@ -13,13 +13,10 @@ describe('Integration | Prescription | Infrastructure | Repository | Jobs | part
 
       await expect(ParticipationSharedJob.name).to.have.been.performed.withJob({
         name: ParticipationSharedJob.name,
-        retrylimit: 0,
-        retrydelay: 0,
-        retrybackoff: false,
-        data: {
-          campaignParticipationId: 2,
-          correlationContext: EMPTY_CORRELATION_INFO,
-        },
+        retryLimit: 0,
+        retryDelay: 0,
+        retryBackoff: false,
+        data: { campaignParticipationId: 2, correlationContext: EMPTY_CORRELATION_INFO },
       });
     });
   });

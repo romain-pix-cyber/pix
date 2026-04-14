@@ -3,7 +3,6 @@ import {
   databaseBuilder,
   expect,
   generateAuthenticatedUserRequestHeaders,
-  insertUserWithRoleSuperAdmin,
 } from '../../../test-helper.js';
 
 describe('Acceptance | Identity Access Management | Application | Route | Admin | Anonymization', function () {
@@ -17,7 +16,7 @@ describe('Acceptance | Identity Access Management | Application | Route | Admin 
     context('when a CSV file is loaded', function () {
       it('responds with a 200 and serialized payload', async function () {
         // given
-        const user = await insertUserWithRoleSuperAdmin();
+        const superAdmin = databaseBuilder.factory.buildUser.withRoleSuperAdmin();
 
         const userId1 = databaseBuilder.factory.buildUser().id;
         const userId2 = databaseBuilder.factory.buildUser().id;
@@ -45,7 +44,7 @@ describe('Acceptance | Identity Access Management | Application | Route | Admin 
 
         const options = {
           method: 'POST',
-          headers: generateAuthenticatedUserRequestHeaders({ userId: user.id }),
+          headers: generateAuthenticatedUserRequestHeaders({ userId: superAdmin.id }),
           url: '/api/admin/anonymize/gar',
           payload: input,
         };
@@ -69,13 +68,12 @@ describe('Acceptance | Identity Access Management | Application | Route | Admin 
   describe('GET /api/admin/anonymize/gar/template', function () {
     it('responds with a 200 and serialized payload', async function () {
       // given
-      const user = await insertUserWithRoleSuperAdmin();
-
+      const superAdmin = databaseBuilder.factory.buildUser.withRoleSuperAdmin();
       await databaseBuilder.commit();
 
       const options = {
         method: 'GET',
-        headers: generateAuthenticatedUserRequestHeaders({ userId: user.id }),
+        headers: generateAuthenticatedUserRequestHeaders({ userId: superAdmin.id }),
         url: '/api/admin/anonymize/gar/template',
       };
 

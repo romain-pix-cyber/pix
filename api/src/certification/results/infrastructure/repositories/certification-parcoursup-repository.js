@@ -1,7 +1,7 @@
 import { knex as datamartKnex } from '../../../../../datamart/knex-database-connection.js';
 import { NotFoundError } from '../../../../shared/domain/errors.js';
 import { logger } from '../../../../shared/infrastructure/utils/logger.js';
-import { MESH_CONFIGURATION } from '../../../shared/domain/constants/mesh-configuration.js';
+import { CORE_MESH_CONFIGURATION } from '../../../shared/domain/constants/mesh-configuration.js';
 import { CertificationResult } from '../../domain/read-models/parcoursup/CertificationResult.js';
 import { Competence } from '../../domain/read-models/parcoursup/Competence.js';
 
@@ -134,7 +134,7 @@ const _getMaxReachableLevel = (scoringConfiguration, ine) => {
       { ine },
       'Missing scoring_configuration in certification result, using MESH_CONFIGURATION as fallback',
     );
-    const lastMesh = [...MESH_CONFIGURATION.values()].at(-1);
+    const lastMesh = [...CORE_MESH_CONFIGURATION.values()].at(-1);
     return lastMesh.coefficient;
   }
   return scoringConfiguration.length - 1;

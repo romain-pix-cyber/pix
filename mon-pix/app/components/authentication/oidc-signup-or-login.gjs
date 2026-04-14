@@ -201,7 +201,7 @@ export default class OidcSignupOrLoginComponent extends Component {
       const errors = get(responseError, 'errors');
       const error = Array.isArray(errors) && errors.length > 0 ? errors[0] : null;
 
-      if (['MISSING_OR_INVALID_CREDENTIALS', 'USER_IS_TEMPORARY_BLOCKED'].includes(error?.code)) {
+      if (['MISSING_OR_INVALID_CREDENTIALS', 'USER_IS_TEMPORARY_BLOCKED', 'USER_IS_BLOCKED'].includes(error?.code)) {
         this.password = null;
       }
 

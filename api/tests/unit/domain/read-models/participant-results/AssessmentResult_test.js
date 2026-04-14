@@ -377,10 +377,9 @@ describe('Unit | Domain | Read-Models | ParticipantResult | AssessmentResult', f
   });
 
   describe('#remainingSecondsBeforeRetrying', function () {
-    let clock, originalConstantValue, now;
+    let clock, now;
 
     beforeEach(function () {
-      originalConstantValue = constants.MINIMUM_DELAY_IN_DAYS_BEFORE_RETRYING;
       now = new Date('2020-01-05T05:06:07Z');
       clock = sinon.useFakeTimers({ now, toFake: ['Date'] });
       sinon.stub(constants, 'MINIMUM_DELAY_IN_DAYS_BEFORE_RETRYING').value(4);
@@ -388,7 +387,6 @@ describe('Unit | Domain | Read-Models | ParticipantResult | AssessmentResult', f
 
     afterEach(function () {
       clock.restore();
-      sinon.stub(constants, 'MINIMUM_DELAY_IN_DAYS_BEFORE_RETRYING').value(originalConstantValue);
     });
 
     context('when participation is not shared', function () {
@@ -759,10 +757,9 @@ describe('Unit | Domain | Read-Models | ParticipantResult | AssessmentResult', f
   });
 
   describe('#canReset', function () {
-    let clock, originalConstantValue, now;
+    let clock, now;
 
     beforeEach(function () {
-      originalConstantValue = constants.MINIMUM_DELAY_IN_DAYS_BEFORE_RETRYING;
       now = new Date('2020-01-05T05:06:07Z');
       clock = sinon.useFakeTimers({ now, toFake: ['Date'] });
       sinon.stub(constants, 'MINIMUM_DELAY_IN_DAYS_BEFORE_RETRYING').value(4);
@@ -770,7 +767,6 @@ describe('Unit | Domain | Read-Models | ParticipantResult | AssessmentResult', f
 
     afterEach(function () {
       clock.restore();
-      sinon.stub(constants, 'MINIMUM_DELAY_IN_DAYS_BEFORE_RETRYING').value(originalConstantValue);
     });
 
     context('when the campaign does not allow multiple sendings', function () {

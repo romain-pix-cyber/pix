@@ -1,23 +1,12 @@
-import PgBoss from 'pg-boss';
-
-import { databaseConnections } from '../../db/database-connections.js';
+import { JobClient } from '../../src/shared/infrastructure/jobs/JobClient.js';
 import { logger } from '../../src/shared/infrastructure/utils/logger.js';
 
-async function main() {
+try {
   console.log('run pgboss migrations');
-  const databaseUrl = process.env.NODE_ENV === 'test' ? process.env.TEST_DATABASE_URL : process.env.DATABASE_URL;
-  const boss = new PgBoss(databaseUrl);
-  await boss.start();
-  await boss.stop({ destroy: true });
+  await JobClient.instance.initialize();
+} catch (error) {
+  logger.error(error);
+  process.exitCode = 1;
+} finally {
+  await JobClient.instance.stop();
 }
-
-(async () => {
-  try {
-    await main();
-  } catch (error) {
-    logger.error(error);
-    process.exitCode = 1;
-  } finally {
-    await databaseConnections.disconnect();
-  }
-})();

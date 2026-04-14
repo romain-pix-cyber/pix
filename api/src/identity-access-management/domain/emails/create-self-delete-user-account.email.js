@@ -1,4 +1,3 @@
-import { isFranceLocale } from '../../../shared/domain/services/locale-service.js';
 import { getPixWebsiteDomain, getPixWebsiteUrl, getSupportUrl } from '../../../shared/domain/services/url-service.js';
 import { EmailFactory } from '../../../shared/mail/domain/models/EmailFactory.js';
 import { mailer } from '../../../shared/mail/infrastructure/services/mailer.js';
@@ -25,7 +24,6 @@ export function createSelfDeleteUserAccountEmail({ locale, email, firstName }) {
       homeName: getPixWebsiteDomain(locale),
       homeUrl: getPixWebsiteUrl(locale),
       helpdeskUrl: getSupportUrl(locale),
-      displayNationalLogo: isFranceLocale(locale),
       doNotAnswer: i18n.__('common.email.doNotAnswer'),
       moreOn: i18n.__('common.email.moreOn'),
       pixPresentation: i18n.__('common.email.pixPresentation'),

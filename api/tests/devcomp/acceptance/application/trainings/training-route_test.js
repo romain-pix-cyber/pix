@@ -3,7 +3,6 @@ import {
   databaseBuilder,
   expect,
   generateAuthenticatedUserRequestHeaders,
-  insertUserWithRoleSuperAdmin,
   knex,
   learningContentBuilder,
   mockLearningContent,
@@ -72,7 +71,7 @@ describe('Acceptance | Controller | training-controller', function () {
 
     it('should get a training with the specific id', async function () {
       // given
-      const superAdmin = await insertUserWithRoleSuperAdmin();
+      const superAdmin = databaseBuilder.factory.buildUser.withRoleSuperAdmin();
       databaseBuilder.factory.buildTraining();
       const { id: trainingId, ...trainingAttributes } = databaseBuilder.factory.buildTraining();
       const trainingTrigger = databaseBuilder.factory.buildTrainingTrigger({ trainingId });
@@ -148,7 +147,8 @@ describe('Acceptance | Controller | training-controller', function () {
   describe('POST /api/admin/trainings', function () {
     it('should create a new training and response with a 201', async function () {
       // given
-      const superAdmin = await insertUserWithRoleSuperAdmin();
+      const superAdmin = databaseBuilder.factory.buildUser.withRoleSuperAdmin();
+      await databaseBuilder.commit();
 
       const expectedResponse = {
         type: 'trainings',
@@ -204,7 +204,7 @@ describe('Acceptance | Controller | training-controller', function () {
   describe('POST /api/admin/trainings/{trainingId}/duplicate', function () {
     it('should duplicate an existing training and response with a 201', async function () {
       // given
-      const superAdmin = await insertUserWithRoleSuperAdmin();
+      const superAdmin = databaseBuilder.factory.buildUser.withRoleSuperAdmin();
       const training = databaseBuilder.factory.buildTraining();
       await databaseBuilder.commit();
 
@@ -227,7 +227,7 @@ describe('Acceptance | Controller | training-controller', function () {
     describe('nominal case', function () {
       it('should update training and response with a 200', async function () {
         // given
-        const superAdmin = await insertUserWithRoleSuperAdmin();
+        const superAdmin = databaseBuilder.factory.buildUser.withRoleSuperAdmin();
         const training = databaseBuilder.factory.buildTraining();
         await databaseBuilder.commit();
         const locales = ['fr', 'fr-fr'];
@@ -314,7 +314,7 @@ describe('Acceptance | Controller | training-controller', function () {
 
     it('should delete trigger related to training', async function () {
       // given
-      const superAdmin = await insertUserWithRoleSuperAdmin();
+      const superAdmin = databaseBuilder.factory.buildUser.withRoleSuperAdmin();
       const training = databaseBuilder.factory.buildTraining();
       const trainingTrigger = databaseBuilder.factory.buildTrainingTrigger({
         trainingId: training.id,
@@ -352,7 +352,7 @@ describe('Acceptance | Controller | training-controller', function () {
     describe('nominal case', function () {
       it('should find training summaries and respond with a 200', async function () {
         // given
-        const superAdmin = await insertUserWithRoleSuperAdmin();
+        const superAdmin = databaseBuilder.factory.buildUser.withRoleSuperAdmin();
         const training = databaseBuilder.factory.buildTraining();
         await databaseBuilder.commit();
 
@@ -445,7 +445,7 @@ describe('Acceptance | Controller | training-controller', function () {
 
     it('should update training trigger', async function () {
       // given
-      const superAdmin = await insertUserWithRoleSuperAdmin();
+      const superAdmin = databaseBuilder.factory.buildUser.withRoleSuperAdmin();
       const trainingId = databaseBuilder.factory.buildTraining().id;
       const tube = { tubeId: 'recTube0_0', level: 2 };
       await databaseBuilder.commit();
@@ -500,7 +500,7 @@ describe('Acceptance | Controller | training-controller', function () {
   describe('GET /api/admin/trainings/{trainingId}/target-profile-summaries', function () {
     it('should get target-profile-summaries related to training id', async function () {
       // given
-      const superAdmin = await insertUserWithRoleSuperAdmin();
+      const superAdmin = databaseBuilder.factory.buildUser.withRoleSuperAdmin();
       const training = databaseBuilder.factory.buildTraining();
       const targetProfile = databaseBuilder.factory.buildTargetProfile({
         id: 1,
@@ -543,14 +543,13 @@ describe('Acceptance | Controller | training-controller', function () {
   });
 
   describe('POST /api/admin/trainings/{id}/attach-target-profiles', function () {
-    let userId;
+    let superAdmin;
     let trainingId;
     let alreadyAttachedTargetProfileId;
     let toAttachTargetProfileId;
 
     beforeEach(async function () {
-      const adminUser = await insertUserWithRoleSuperAdmin();
-      userId = adminUser.id;
+      superAdmin = databaseBuilder.factory.buildUser.withRoleSuperAdmin();
       trainingId = databaseBuilder.factory.buildTraining().id;
       alreadyAttachedTargetProfileId = databaseBuilder.factory.buildTargetProfile().id;
       toAttachTargetProfileId = databaseBuilder.factory.buildTargetProfile().id;
@@ -567,7 +566,7 @@ describe('Acceptance | Controller | training-controller', function () {
         const options = {
           method: 'POST',
           url: `/api/admin/trainings/${trainingId}/attach-target-profiles`,
-          headers: generateAuthenticatedUserRequestHeaders({ userId }),
+          headers: generateAuthenticatedUserRequestHeaders({ userId: superAdmin.id }),
           payload: {
             'target-profile-ids': [alreadyAttachedTargetProfileId, toAttachTargetProfileId],
           },
@@ -590,8 +589,7 @@ describe('Acceptance | Controller | training-controller', function () {
   describe('DELETE /api/admin/trainings/{trainingId}/target-profiles/{targetProfileId}', function () {
     it('should detach target profile from given training', async function () {
       // given
-      const adminUser = await insertUserWithRoleSuperAdmin();
-      const userId = adminUser.id;
+      const superAdmin = databaseBuilder.factory.buildUser.withRoleSuperAdmin();
       const trainingId = databaseBuilder.factory.buildTraining().id;
       const targetProfileId = databaseBuilder.factory.buildTargetProfile().id;
       databaseBuilder.factory.buildTargetProfileTraining({
@@ -603,7 +601,7 @@ describe('Acceptance | Controller | training-controller', function () {
       const options = {
         method: 'DELETE',
         url: `/api/admin/trainings/${trainingId}/target-profiles/${targetProfileId}`,
-        headers: generateAuthenticatedUserRequestHeaders({ userId }),
+        headers: generateAuthenticatedUserRequestHeaders({ userId: superAdmin.id }),
       };
 
       // when

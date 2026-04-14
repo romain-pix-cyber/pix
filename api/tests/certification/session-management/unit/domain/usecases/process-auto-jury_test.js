@@ -303,6 +303,7 @@ describe('Unit | UseCase | process-auto-jury', function () {
           createdAt: new Date('2020-01-02'),
         });
         const answeredChallenge = domainBuilder.buildAnswer({
+          createdAt: new Date('2020-01-01'),
           challengeId: challengeNotToBeConsideredAsSkipped.challengeId,
         });
         const certificationAssessment = domainBuilder.buildCertificationAssessment({
@@ -350,6 +351,7 @@ describe('Unit | UseCase | process-auto-jury', function () {
           certificationAnswersByDate: [
             domainBuilder.buildAnswer({
               id: 123,
+              createdAt: new Date('2020-01-01'),
               result: 'ok',
               resultDetails: null,
               timeout: null,

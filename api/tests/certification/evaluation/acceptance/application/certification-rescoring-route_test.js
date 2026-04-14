@@ -94,6 +94,7 @@ describe('Certification | Evaluation | Acceptance | Application |  certification
           userId: candidate.id,
           version: AlgorithmEngineVersion.V3,
           createdAt: new Date('2025-01-01'),
+          candidateId: certificationCandidate.id,
         });
 
         const assessment = databaseBuilder.factory.buildAssessment({
@@ -240,6 +241,7 @@ describe('Certification | Evaluation | Acceptance | Application |  certification
           userId: candidate.id,
           version: AlgorithmEngineVersion.V3,
           createdAt: new Date('2024-01-01'),
+          candidateId: certificationCandidate.id,
         });
 
         const assessment = databaseBuilder.factory.buildAssessment({

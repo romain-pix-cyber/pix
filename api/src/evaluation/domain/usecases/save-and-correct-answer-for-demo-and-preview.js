@@ -23,13 +23,12 @@ export async function saveAndCorrectAnswerForDemoAndPreview({
   const correctedAnswer = correctionService.evaluateAnswer({
     challenge,
     answer,
-    assessment,
+    challengeSubmittedAt: assessment.lastQuestionDate,
+    hasChallengeBeenFocusedOut: assessment.hasLastQuestionBeenFocusedOut,
+    isCertificationEvaluation: false,
     accessibilityAdjustmentNeeded: false,
     forceOKAnswer,
   });
-  const now = new Date();
-  const lastQuestionDate = assessment.lastQuestionDate || now;
-  correctedAnswer.setTimeSpentFrom({ now, lastQuestionDate });
 
   const answerSaved = await answerRepository.save({ answer: correctedAnswer });
   answerSaved.levelup = {};

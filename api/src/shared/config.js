@@ -326,7 +326,7 @@ const configuration = (function () {
     infra: {
       appName: process.env.APP,
       containerName: process.env.CONTAINER,
-      hostname: process.env.HOSTNAME,
+      hostname: process.env.HOSTNAME || 'pix-api',
       concurrencyForHeavyOperations: _getNumber(process.env.INFRA_CONCURRENCY_HEAVY_OPERATIONS, 2),
       chunkSizeForCampaignResultProcessing: _getNumber(process.env.INFRA_CHUNK_SIZE_CAMPAIGN_RESULT_PROCESSING, 10),
       chunkSizeForOrganizationLearnerDataProcessing: _getNumber(
@@ -457,7 +457,8 @@ const configuration = (function () {
       fetchTimeOut: ms(process.env.FETCH_TIMEOUT_MILLISECONDS || '20s'),
     },
     pgBoss: {
-      connexionPoolMaxSize: _getNumber(process.env.PGBOSS_CONNECTION_POOL_MAX_SIZE, 2),
+      clientConnexionPoolMaxSize: _getNumber(process.env.PGBOSS_CLIENT_CONNECTION_POOL_MAX_SIZE, 2),
+      workerConnexionPoolMaxSize: _getNumber(process.env.PGBOSS_WORKER_CONNECTION_POOL_MAX_SIZE, 15),
       teamSize: _getNumber(process.env.PG_BOSS_TEAM_SIZE, 1),
       teamConcurrency: _getNumber(process.env.PG_BOSS_TEAM_CONCURRENCY, 1),
       monitorStateIntervalSeconds: _getNumber(process.env.PGBOSS_MONITOR_STATE_INTERVAL_SECONDS, undefined),
@@ -544,6 +545,13 @@ const configuration = (function () {
     config.auditLogger.clientSecret = 'client-super-secret';
 
     config.baseUrl = 'https://api.test.pix.fr';
+
+    config.login = {
+      temporaryBlockingThresholdFailureCount: 10,
+      temporaryBlockingBaseTimeMs: ms('2m'),
+      blockingLimitFailureCount: 30,
+      emailConnectionWarningPeriod: ms('1y'),
+    };
 
     config.oidcExampleNet = {
       clientId: 'client',

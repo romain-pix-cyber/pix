@@ -3,7 +3,6 @@ import {
   databaseBuilder,
   expect,
   generateAuthenticatedUserRequestHeaders,
-  insertUserWithRoleSuperAdmin,
   knex,
 } from '../../../../test-helper.js';
 
@@ -39,7 +38,7 @@ describe('Acceptance | Controller | certification-issue-report-controller', func
       // given
       const server = await createServer();
       const certificationCenterId = databaseBuilder.factory.buildCertificationCenter().id;
-      const superAdmin = await insertUserWithRoleSuperAdmin();
+      const superAdmin = databaseBuilder.factory.buildUser.withRoleSuperAdmin();
       const sessionId = databaseBuilder.factory.buildSession({ certificationCenterId }).id;
       const certificationCourseId = databaseBuilder.factory.buildCertificationCourse({ sessionId }).id;
       const certificationIssueReportId = databaseBuilder.factory.buildCertificationIssueReport({

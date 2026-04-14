@@ -8,7 +8,6 @@ import {
   databaseBuilder,
   expect,
   generateAuthenticatedUserRequestHeaders,
-  insertUserWithRoleSuperAdmin,
   knex,
   learningContentBuilder,
   mockLearningContent,
@@ -78,7 +77,7 @@ describe('Acceptance | Campaign Participation | Application | Route', function (
   describe('DELETE /api/admin/campaigns/{campaignId}/campaign-participations/{campaignParticipationId}', function () {
     it('should return 204 HTTP status code', async function () {
       // given
-      const superAdmin = await insertUserWithRoleSuperAdmin();
+      const superAdmin = databaseBuilder.factory.buildUser.withRoleSuperAdmin();
       const campaignParticipation = databaseBuilder.factory.buildCampaignParticipation();
       await databaseBuilder.commit();
 
@@ -314,8 +313,7 @@ describe('Acceptance | Campaign Participation | Application | Route', function (
 
   describe('PATCH /api/admin/campaign-participations/{id}', function () {
     it('should update the participant external id', async function () {
-      const superAdmin = await insertUserWithRoleSuperAdmin();
-
+      const superAdmin = databaseBuilder.factory.buildUser.withRoleSuperAdmin();
       const campaignParticipation = databaseBuilder.factory.buildCampaignParticipation({
         participantExternalId: 'Maitre Yoda',
         campaignId,

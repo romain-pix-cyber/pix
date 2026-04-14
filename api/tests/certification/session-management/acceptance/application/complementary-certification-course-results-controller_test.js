@@ -4,7 +4,6 @@ import {
   databaseBuilder,
   expect,
   generateAuthenticatedUserRequestHeaders,
-  insertUserWithRoleSuperAdmin,
 } from '../../../../test-helper.js';
 
 describe('Certification | Session-management | Acceptance | complementary-certification-course-results-controller', function () {
@@ -53,13 +52,13 @@ describe('Certification | Session-management | Acceptance | complementary-certif
         source: ComplementaryCertificationCourseResult.sources.PIX,
       });
 
+      const superAdmin = databaseBuilder.factory.buildUser.withRoleSuperAdmin();
       await databaseBuilder.commit();
 
-      const userId = (await insertUserWithRoleSuperAdmin()).id;
       const options = {
         method: 'POST',
         url: '/api/admin/complementary-certification-course-results',
-        headers: generateAuthenticatedUserRequestHeaders({ userId }),
+        headers: generateAuthenticatedUserRequestHeaders({ userId: superAdmin.id }),
         payload: {
           data: {
             attributes: {

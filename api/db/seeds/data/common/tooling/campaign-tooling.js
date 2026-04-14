@@ -10,7 +10,7 @@ import { KnowledgeElementCollection } from '../../../../../src/prescription/shar
 import { Assessment } from '../../../../../src/shared/domain/models/Assessment.js';
 import { KnowledgeElement } from '../../../../../src/shared/domain/models/KnowledgeElement.js';
 import { getPlacementProfile } from '../../../../../src/shared/domain/services/placement-profile-service.js';
-import { FEATURE_CAMPAIGN_EXTERNAL_ID } from '../constants.js';
+import { FEATURE_CAMPAIGN_EXTERNAL_ID, FEATURE_CAMPAIGN_RECOMMENDATION_ENGINE_ID } from '../constants.js';
 import * as generic from './generic.js';
 import * as learningContent from './learning-content.js';
 import * as profileTooling from './profile-tooling.js';
@@ -83,6 +83,7 @@ async function createAssessmentCampaign({
   multipleSendings,
   assessmentMethod,
   configCampaign,
+  recommendationEngine,
 }) {
   const { realCampaignId, realOrganizationId, realCreatedAt } = _buildCampaign({
     databaseBuilder,
@@ -109,6 +110,7 @@ async function createAssessmentCampaign({
     customResultPageButtonUrl,
     multipleSendings,
     assessmentMethod,
+    recommendationEngine,
   });
 
   const campaignSkills = await _buildCampaignSkills({
@@ -456,6 +458,7 @@ function _buildCampaign({
   customResultPageButtonUrl,
   multipleSendings,
   assessmentMethod,
+  recommendationEngine,
 }) {
   const {
     id: realCampaignId,
@@ -493,6 +496,12 @@ function _buildCampaign({
       campaignId: realCampaignId,
       featureId: FEATURE_CAMPAIGN_EXTERNAL_ID,
       params: { type, label: externalIdLabel },
+    });
+  }
+  if (recommendationEngine) {
+    databaseBuilder.factory.buildCampaignFeature({
+      campaignId: realCampaignId,
+      featureId: FEATURE_CAMPAIGN_RECOMMENDATION_ENGINE_ID,
     });
   }
   return { realCampaignId, realOrganizationId, realCreatedAt };

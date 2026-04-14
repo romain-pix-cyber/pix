@@ -200,7 +200,7 @@
                 "type": "custom",
                 "title": "",
                 "instruction": "Voici plusieurs prompts. Certains donnent des informations privées ou secrètes. Repérez-les et sélectionnez-les.",
-                "functionalInstruction": "",
+                "functionalInstruction": "Cliquez sur les morceaux de phrase contenant des données qu’il ne faut pas donner à une IA. Une fois toutes ces données sélectionnées, cliquez sur \"Suivant\" pour vérifier votre réponse.",
                 "tagName": "pix-anonymisation",
                 "props": {
                   "titleLevel": 2,
@@ -439,7 +439,7 @@
                 "id": "d0544bda-383f-4f85-9780-388b2a1c9d47",
                 "type": "text",
                 "tag": " ",
-                "content": "<p>Des informations personnelles (nom, adresse, etc.) peuvent réapparaître dans des réponses générées pour d’autres utilisateurs.<br><br></p><h5>🤔 L’IA copie-t-elle exactement vos données ?</h5><p>Dans la majorité des cas, l’IA ne recopie pas mot pour mot vos données. Mais certaines réponses peuvent s’appuyer sur des données réelles.</p><br>"
+                "content": "<p>Des informations personnelles (nom, adresse, etc.) peuvent réapparaître dans des réponses générées pour d’autres utilisateurs.</p><h5>🤔 L’IA copie-t-elle exactement vos données ?</h5><p>Dans la majorité des cas, l’IA ne recopie pas mot pour mot vos données. Mais certaines réponses peuvent s’appuyer sur des données réelles.</p>"
               }
             }
           ]

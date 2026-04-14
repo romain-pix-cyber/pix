@@ -23,24 +23,30 @@ const findById = async ({ questId }) => {
   return new Quest(quest);
 };
 
-// envisager de mettre tableau vide en valeur par défaut des requirements si pas renseigné pour pas péter le code
-// ensuite
 const saveInBatch = async ({ quests }) => {
   const knexConn = DomainTransaction.getConnection();
 
   const chunks = chunk(quests, 10);
   const questIds = [];
   for (const chunk of chunks) {
-    const dtoToSaveInDB = chunk.map((quest) => {
-      const dto = quest.toDTO();
+    const questsToSave = chunk.map((quest) => {
       return {
-        ...dto,
-        eligibilityRequirements: quest.eligibilityRequirements ? JSON.stringify(dto.eligibilityRequirements) : [],
-        successRequirements: quest.successRequirements ? JSON.stringify(dto.successRequirements) : [],
-        updatedAt: new Date(),
+        id: quest.id,
+        updatedAt: knexConn.fn.now(),
+        rewardId: quest.rewardId,
+        rewardType: quest.rewardType,
+        eligibilityRequirements: quest.eligibilityRequirements
+          ? JSON.stringify(quest.toDTO().eligibilityRequirements)
+          : [],
+        successRequirements: quest.successRequirements ? JSON.stringify(quest.toDTO().successRequirements) : [],
       };
     });
-    const questsInserted = await knexConn('quests').insert(dtoToSaveInDB).onConflict('id').merge().returning('id');
+    const questsInserted = await knexConn('quests')
+      .insert(questsToSave)
+      .onConflict('id')
+      .merge(['updatedAt', 'rewardId', 'rewardType', 'eligibilityRequirements', 'successRequirements'])
+      .returning('id');
+
     questsInserted.map((quest) => questIds.push(quest.id));
   }
   return questIds;
@@ -48,15 +54,22 @@ const saveInBatch = async ({ quests }) => {
 
 const save = async ({ quest }) => {
   const knexConn = DomainTransaction.getConnection();
-  const dto = quest.toDTO();
 
-  const dtoToSaveInDB = {
-    ...dto,
-    eligibilityRequirements: quest.eligibilityRequirements ? JSON.stringify(dto.eligibilityRequirements) : [],
-    successRequirements: quest.successRequirements ? JSON.stringify(dto.successRequirements) : [],
-    updatedAt: new Date(),
+  const questToSave = {
+    id: quest.id,
+    updatedAt: knexConn.fn.now(),
+    rewardId: quest.rewardId,
+    rewardType: quest.rewardType,
+    eligibilityRequirements: quest.eligibilityRequirements ? JSON.stringify(quest.toDTO().eligibilityRequirements) : [],
+    successRequirements: quest.successRequirements ? JSON.stringify(quest.toDTO().successRequirements) : [],
   };
-  const result = await knexConn('quests').insert(dtoToSaveInDB).onConflict('id').merge().returning('id');
+
+  const result = await knexConn('quests')
+    .insert(questToSave)
+    .onConflict('id')
+    .merge(['updatedAt', 'rewardId', 'rewardType', 'eligibilityRequirements', 'successRequirements'])
+    .returning('id');
+
   return result[0].id;
 };
 

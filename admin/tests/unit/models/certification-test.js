@@ -133,60 +133,6 @@ module('Unit | Model | certification', function (hooks) {
     });
   });
 
-  module('#hasComplementaryCertifications', function () {
-    module('when there are no complementary certification results', function () {
-      test('should return false', function (assert) {
-        // given
-        const complementaryCertificationCourseResultWithExternal = null;
-        const commonComplementaryCertificationCourseResult = null;
-        const certification = store.createRecord('certification', {
-          complementaryCertificationCourseResultWithExternal,
-          commonComplementaryCertificationCourseResult,
-        });
-
-        //when / then
-        assert.false(certification.hasComplementaryCertifications);
-      });
-    });
-
-    module('when there is only an external complementary certification result', function () {
-      test('should return true', function (assert) {
-        // given
-        const complementaryCertificationCourseResultWithExternal = store.createRecord(
-          'complementary-certification-course-result-with-external',
-          {
-            pixResult: 'TOTO',
-          },
-        );
-        const commonComplementaryCertificationCourseResult = null;
-        const certification = store.createRecord('certification', {
-          complementaryCertificationCourseResultWithExternal,
-          commonComplementaryCertificationCourseResult,
-        });
-
-        //when / then
-        assert.true(certification.hasComplementaryCertifications);
-      });
-    });
-  });
-
-  module('when there is only a common complementary certification result', function () {
-    test('should return true', function (assert) {
-      // given
-      const complementaryCertificationCourseResultWithExternal = null;
-      const commonComplementaryCertificationCourseResult = store.createRecord(
-        'common-complementary-certification-course-result',
-      );
-      const certification = store.createRecord('certification', {
-        complementaryCertificationCourseResultWithExternal,
-        commonComplementaryCertificationCourseResult,
-      });
-
-      //when / then
-      assert.true(certification.hasComplementaryCertifications);
-    });
-  });
-
   module('#statusLabelAndValue', function () {
     [
       { value: assessmentStates.STARTED, label: 'Démarrée' },
@@ -320,52 +266,25 @@ module('Unit | Model | certification', function (hooks) {
   });
 
   module('#result', function () {
-    test('it should return "Non admissible" for a v3 EDU certification without reachedMeshIndex', function (assert) {
-      // given
+    test('it should return the translated result for a given reachedResultKey', function (assert) {
+      // given & when
       const certification = store.createRecord('certification', {
-        version: 3,
-        certificationFramework: 'EDU_1ER_DEGRE',
-        reachedMeshIndex: null,
-        pixScore: 0,
+        reachedResultKey: 'EDU_1ER_DEGRE.0',
       });
 
-      // when
-      const result = certification.result;
-
       // then
-      assert.strictEqual(result, 'Non admissible');
+      assert.strictEqual(certification.result, intl.t('common.certification.meshLevels.EDU_1ER_DEGRE.0'));
     });
 
-    test('it should return "Admissible" for a v3 EDU certification with a reachedMeshIndex', function (assert) {
-      // given
+    test('it should pass pixScore to the translation', function (assert) {
+      // given & when
       const certification = store.createRecord('certification', {
-        version: 3,
-        certificationFramework: 'EDU_1ER_DEGRE',
-        reachedMeshIndex: 0,
-        pixScore: 100,
-      });
-
-      // when
-      const result = certification.result;
-
-      // then
-      assert.strictEqual(result, 'Admissible');
-    });
-
-    test('it should return pixScore for a v2 certification', function (assert) {
-      // given
-      const certification = store.createRecord('certification', {
-        version: 2,
-        certificationFramework: 'CORE',
-        reachedMeshIndex: null,
+        reachedResultKey: 'CORE.NONE',
         pixScore: 450,
       });
 
-      // when
-      const result = certification.result;
-
       // then
-      assert.strictEqual(result, '450 Pix');
+      assert.strictEqual(certification.result, intl.t('common.certification.meshLevels.CORE.NONE', { pixScore: 450 }));
     });
   });
 

@@ -2298,42 +2298,24 @@
       "validation": "La password è stata aggiornata."
     },
     "user-account": {
-      "account-update-email": {
-        "email-information": "Questo indirizzo e-mail deve essere valido nel caso in cui si dimentichi la password. Questo sarà il vostro nuovo indirizzo di accesso.",
+      "account-add-or-update-email-with-validation": {
+        "code-reception-information": "Confermando la richiesta di aggiunta dell'indirizzo e-mail, riceverai un codice via e-mail.",
         "fields": {
-          "errors": {
-            "empty-password": "La password non può essere vuota.",
-            "invalid-password": "La password inserita non è valida.",
-            "mismatching-email": "I due indirizzi e-mail non sono identici. Si prega di controllare la propria iscrizione.",
-            "new-email-already-exist": "Questo indirizzo e-mail è già in uso.",
-            "unknown-error": "Si è verificato un errore. Riprovare o contattare l'assistenza.",
-            "wrong-email-format": "L'indirizzo e-mail non è valido."
+          "email": {
+            "add-email": {
+              "label": "Indirizzo e-mail"
+            },
+            "update-email": {
+              "label": "Nuovo indirizzo e-mail"
+            }
           },
-          "new-email": {
-            "label": "Nuovo indirizzo e-mail"
-          },
-          "new-email-confirmation": {
-            "label": "Conferma dell'indirizzo e-mail"
-          },
-          "password": {
-            "label": "Password"
-          }
-        },
-        "password-information": "Inserire la password per confermare",
-        "save-button": "Confermare",
-        "title": "Modifica dell'indirizzo e-mail"
-      },
-      "account-update-email-with-validation": {
-        "fields": {
           "errors": {
             "empty-password": "La password non può essere vuota.",
             "invalid-email": "L'indirizzo e-mail non è valido.",
             "invalid-or-already-used-email": "Indirizzo e-mail non valido o già utilizzato",
             "invalid-password": "La password inserita non è valida.",
-            "new-email-already-exist": "Questo indirizzo e-mail è già in uso."
-          },
-          "new-email": {
-            "label": "Nuovo indirizzo e-mail"
+            "new-email-already-exist": "Questo indirizzo e-mail è già in uso.",
+            "unknown-error": "Si è verificato un errore. Riprovare o contattare l'assistenza."
           },
           "password": {
             "label": "Password",
@@ -2341,10 +2323,12 @@
           }
         },
         "save-button": "Ricevere un codice di verifica",
-        "title": "Modifica dell'indirizzo e-mail"
+        "title": {
+          "add-email": "Aggiungi un indirizzo e-mail",
+          "update-email":"Modifica del tuo indirizzo e-mail"
+        }
       },
       "connexion-methods": {
-        "add-email": "Aggiungi un indirizzo e-mail",
         "authentication-methods": {
           "connection-via": "Connessione tramite {identityProviderOrganizationName}",
           "gar": "Connessione tramite ENT/Mediacentre",
@@ -2386,12 +2370,14 @@
           "email-modification-demand-expired": "Questo codice è scaduto. Si prega di rinnovare la richiesta.",
           "incorrect-code": "Il codice inserito non è corretto.",
           "new-email-already-exist": "Questo indirizzo e-mail è già in uso.",
+          "no-code": "Inserisci il codice a {numInputs} cifre ricevuto via e-mail.",
           "unknown-error": "Si è verificato un errore. Riprovare o contattare l'assistenza."
         },
         "send-back-the-code": "inviami il codice",
         "time-code-validation": "Il codice ricevuto è valido per 10 minuti",
         "title": "Controllo dell'indirizzo e-mail",
-        "update-successful": "Il tuo indirizzo e-mail è stato modificato!"
+        "update-successful": "Il tuo indirizzo e-mail è stato modificato!",
+        "validate-new-email": "Conferma nuovo indirizzo e-mail"
       },
       "language": {
         "lang": "Lingua",

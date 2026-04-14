@@ -5,8 +5,6 @@ import {
   databaseBuilder,
   expect,
   generateAuthenticatedUserRequestHeaders,
-  insertOrganizationUserWithRoleAdmin,
-  insertUserWithRoleSuperAdmin,
 } from '../../../../../tests/test-helper.js';
 
 describe('Acceptance | Team | Route | Admin | organization-invitation', function () {
@@ -15,7 +13,7 @@ describe('Acceptance | Team | Route | Admin | organization-invitation', function
       it('returns the matching organization-invitations as JSON API', async function () {
         // given
         const server = await createServer();
-        const adminMember = await insertUserWithRoleSuperAdmin();
+        const superAdmin = databaseBuilder.factory.buildUser.withRoleSuperAdmin();
         const organizationId = databaseBuilder.factory.buildOrganization().id;
         databaseBuilder.factory.buildOrganizationInvitation({
           organizationId,
@@ -27,7 +25,7 @@ describe('Acceptance | Team | Route | Admin | organization-invitation', function
         const response = await server.inject({
           method: 'GET',
           url: `/api/admin/organizations/${organizationId}/invitations`,
-          headers: generateAuthenticatedUserRequestHeaders({ userId: adminMember.id }),
+          headers: generateAuthenticatedUserRequestHeaders({ userId: superAdmin.id }),
         });
 
         // then
@@ -78,8 +76,8 @@ describe('Acceptance | Team | Route | Admin | organization-invitation', function
       // given
       const server = await createServer();
 
-      const adminMember = await insertUserWithRoleSuperAdmin();
-      const { organization } = await insertOrganizationUserWithRoleAdmin();
+      const superAdmin = databaseBuilder.factory.buildUser.withRoleSuperAdmin();
+      const organization = databaseBuilder.factory.buildOrganization();
       const invitation = databaseBuilder.factory.buildOrganizationInvitation({
         organizationId: organization.id,
         status: OrganizationInvitation.StatusType.PENDING,
@@ -88,7 +86,7 @@ describe('Acceptance | Team | Route | Admin | organization-invitation', function
       const options = {
         method: 'DELETE',
         url: `/api/admin/organizations/${organization.id}/invitations/${invitation.id}`,
-        headers: generateAuthenticatedUserRequestHeaders({ userId: adminMember.id }),
+        headers: generateAuthenticatedUserRequestHeaders({ userId: superAdmin.id }),
       };
 
       await databaseBuilder.commit();
@@ -106,7 +104,7 @@ describe('Acceptance | Team | Route | Admin | organization-invitation', function
       // given
       const server = await createServer();
 
-      const superAdmin = await insertUserWithRoleSuperAdmin();
+      const superAdmin = databaseBuilder.factory.buildUser.withRoleSuperAdmin();
       const organization = databaseBuilder.factory.buildOrganization();
 
       const payload = {

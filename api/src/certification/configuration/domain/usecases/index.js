@@ -72,7 +72,6 @@ import { getScoBlockedAccessDates } from './get-sco-blocked-access-dates.js';
 import { importScoWhitelist } from './import-sco-whitelist.js';
 import { searchAttachableTargetProfiles } from './search-attachable-target-profiles.js';
 import { sendTargetProfileNotifications } from './send-target-profile-notifications.js';
-import { updateCertificationVersion } from './update-certification-version.js';
 import { updateScoBlockedAccessDate } from './update-sco-blocked-access-date.js';
 
 const usecasesWithoutInjectedDependencies = {
@@ -91,7 +90,6 @@ const usecasesWithoutInjectedDependencies = {
   importScoWhitelist,
   searchAttachableTargetProfiles,
   sendTargetProfileNotifications,
-  updateCertificationVersion,
   updateScoBlockedAccessDate,
 };
 

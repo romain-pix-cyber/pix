@@ -30,6 +30,7 @@ export function buildCampaignToJoin({
   targetProfileImageUrl = 'targetProfileImageUrl',
   multipleSendings = false,
   assessmentMethod = 'SMART_RANDOM',
+  recommendationEngine = false,
 } = {}) {
   return new CampaignToJoin({
     id,
@@ -59,5 +60,6 @@ export function buildCampaignToJoin({
     targetProfileImageUrl,
     multipleSendings,
     assessmentMethod,
+    recommendationEngine,
   });
 }

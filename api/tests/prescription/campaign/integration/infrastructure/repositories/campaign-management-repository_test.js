@@ -446,6 +446,7 @@ describe('Integration | Repository | Campaign-Management', function () {
             totalParticipationsCount: NaN,
             type: 'ASSESSMENT',
             isPartOfCombinedCourse: false,
+            recommendationEngine: false,
           },
         ]);
       });

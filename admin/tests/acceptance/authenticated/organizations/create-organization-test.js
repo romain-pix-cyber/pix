@@ -55,9 +55,11 @@ module('Acceptance | Organizations | Create', function (hooks) {
     let parentOrganization;
 
     hooks.beforeEach(function () {
+      const network = server.create('network', { name: 'My Network', id: '11' });
       parentOrganization = server.create('organization', {
         name: 'Wayne Enterprises',
         features: { PLACES_MANAGEMENT: { active: true } },
+        network,
       });
     });
 
@@ -94,7 +96,7 @@ module('Acceptance | Organizations | Create', function (hooks) {
       await click(cancelButton);
 
       // then
-      assert.strictEqual(currentURL(), `/organizations/${parentOrganization.id}/children`);
+      assert.strictEqual(currentURL(), `/organizations/${parentOrganization.id}/network`);
     });
   });
 

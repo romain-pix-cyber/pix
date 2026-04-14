@@ -1,9 +1,11 @@
 import { ABORT_REASONS } from '../../../../../../src/certification/shared/domain/constants/abort-reasons.js';
-import { Assessment } from '../../../../../../src/shared/domain/models/Assessment.js';
 import { domainBuilder, expect, sinon } from '../../../../../test-helper.js';
 
-describe('Unit | Certification | Evaluation | Domain | Models | AssessmentSheet', function () {
-  context('get isAbortReasonTechnical', function () {
+describe('Certification | Evaluation | Unit | Domain | Models | AssessmentSheet', function () {
+  const STATES = domainBuilder.certification.evaluation.buildAssessmentSheet.STATES;
+  const STATES_OF_LAST_QUESTION = domainBuilder.certification.evaluation.buildAssessmentSheet.STATES_OF_LAST_QUESTION;
+
+  context('#get isAbortReasonTechnical', function () {
     it('should return false when abort reason is null', function () {
       const assessmentSheet = domainBuilder.certification.evaluation.buildAssessmentSheet({
         abortReason: null,
@@ -24,7 +26,7 @@ describe('Unit | Certification | Evaluation | Domain | Models | AssessmentSheet'
     });
   });
 
-  context('complete', function () {
+  context('#complete', function () {
     let clock, assessmentSheetBaseData;
     const now = new Date();
 
@@ -43,31 +45,31 @@ describe('Unit | Certification | Evaluation | Domain | Models | AssessmentSheet'
       clock.restore();
     });
 
-    it(`should update state and updatedAt when assessment sheet is in state ${Assessment.states.STARTED}`, function () {
+    it(`should update state and assessmentUpdatedAt when assessment sheet is in state ${STATES.STARTED}`, function () {
       const assessmentSheet = domainBuilder.certification.evaluation.buildAssessmentSheet({
         ...assessmentSheetBaseData,
-        state: Assessment.states.STARTED,
-        updatedAt: new Date('2021-10-29'),
+        state: STATES.STARTED,
+        assessmentUpdatedAt: new Date('2021-10-29'),
       });
       assessmentSheet.complete();
 
       expect(assessmentSheet).to.deepEqualInstance(
         domainBuilder.certification.evaluation.buildAssessmentSheet({
           ...assessmentSheetBaseData,
-          state: Assessment.states.COMPLETED,
-          updatedAt: now,
+          state: STATES.COMPLETED,
+          assessmentUpdatedAt: now,
         }),
       );
     });
 
-    Object.values(Assessment.states)
-      .filter((state) => state !== Assessment.states.STARTED)
+    Object.values(STATES)
+      .filter((state) => state !== STATES.STARTED)
       .forEach((state) => {
         it(`should do nothing state is ${state}`, async function () {
           const assessmentSheet = domainBuilder.certification.evaluation.buildAssessmentSheet({
             ...assessmentSheetBaseData,
             state,
-            updatedAt: new Date('2021-10-29'),
+            assessmentUpdatedAt: new Date('2021-10-29'),
           });
           assessmentSheet.complete();
 
@@ -75,24 +77,24 @@ describe('Unit | Certification | Evaluation | Domain | Models | AssessmentSheet'
             domainBuilder.certification.evaluation.buildAssessmentSheet({
               ...assessmentSheetBaseData,
               state,
-              updatedAt: new Date('2021-10-29'),
+              assessmentUpdatedAt: new Date('2021-10-29'),
             }),
           );
         });
       });
   });
 
-  context('get isStarted', function () {
-    it(`returns true when state is ${Assessment.states.STARTED}`, function () {
+  context('#get isStarted', function () {
+    it(`returns true when state is ${STATES.STARTED}`, function () {
       const assessmentSheet = domainBuilder.certification.evaluation.buildAssessmentSheet({
-        state: Assessment.states.STARTED,
+        state: STATES.STARTED,
       });
 
       expect(assessmentSheet.isStarted).to.be.true;
     });
 
-    Object.values(Assessment.states)
-      .filter((state) => state !== Assessment.states.STARTED)
+    Object.values(STATES)
+      .filter((state) => state !== STATES.STARTED)
       .forEach((state) => {
         it(`return false when state is ${state}`, async function () {
           const assessmentSheet = domainBuilder.certification.evaluation.buildAssessmentSheet({
@@ -102,5 +104,157 @@ describe('Unit | Certification | Evaluation | Domain | Models | AssessmentSheet'
           expect(assessmentSheet.isStarted).to.be.false;
         });
       });
+  });
+
+  context('#isEndedByInvigilator', function () {
+    it(`returns true when state is ${STATES.ENDED_BY_INVIGILATOR}`, function () {
+      const assessmentSheet = domainBuilder.certification.evaluation.buildAssessmentSheet({
+        state: STATES.ENDED_BY_INVIGILATOR,
+      });
+
+      expect(assessmentSheet.isEndedByInvigilator()).to.be.true;
+    });
+
+    Object.values(STATES)
+      .filter((state) => state !== STATES.ENDED_BY_INVIGILATOR)
+      .forEach((state) => {
+        it(`return false when state is ${state}`, async function () {
+          const assessmentSheet = domainBuilder.certification.evaluation.buildAssessmentSheet({
+            state,
+          });
+
+          expect(assessmentSheet.isEndedByInvigilator()).to.be.false;
+        });
+      });
+  });
+
+  context('#hasBeenEndedDueToFinalization', function () {
+    it(`returns true when state is ${STATES.ENDED_DUE_TO_FINALIZATION}`, function () {
+      const assessmentSheet = domainBuilder.certification.evaluation.buildAssessmentSheet({
+        state: STATES.ENDED_DUE_TO_FINALIZATION,
+      });
+
+      expect(assessmentSheet.hasBeenEndedDueToFinalization()).to.be.true;
+    });
+
+    Object.values(STATES)
+      .filter((state) => state !== STATES.ENDED_DUE_TO_FINALIZATION)
+      .forEach((state) => {
+        it(`return false when state is ${state}`, async function () {
+          const assessmentSheet = domainBuilder.certification.evaluation.buildAssessmentSheet({
+            state,
+          });
+
+          expect(assessmentSheet.hasBeenEndedDueToFinalization()).to.be.false;
+        });
+      });
+  });
+
+  context('#hasAnsweredChallenge', function () {
+    it('returns false when no answers yet', function () {
+      const assessmentSheet = domainBuilder.certification.evaluation.buildAssessmentSheet({
+        answers: [],
+      });
+
+      expect(assessmentSheet.hasAnsweredChallenge('myFavoriteChallengeId')).to.be.false;
+    });
+
+    it('returns false when no answers on the provided challenge exist', function () {
+      const assessmentSheet = domainBuilder.certification.evaluation.buildAssessmentSheet({
+        answers: [domainBuilder.buildAnswer({ challengeId: 'someOtherChallengeId' })],
+      });
+
+      expect(assessmentSheet.hasAnsweredChallenge('myFavoriteChallengeId')).to.be.false;
+    });
+
+    it('returns true when an answer has been submitted with provided challenge', function () {
+      const assessmentSheet = domainBuilder.certification.evaluation.buildAssessmentSheet({
+        answers: [domainBuilder.buildAnswer({ challengeId: 'myFavoriteChallengeId' })],
+      });
+
+      expect(assessmentSheet.hasAnsweredChallenge('myFavoriteChallengeId')).to.be.true;
+    });
+  });
+
+  context('#isChallengeExpectedToBeAnswered', function () {
+    it('returns true when no lastChallengeId in assessment sheet', function () {
+      const assessmentSheet = domainBuilder.certification.evaluation.buildAssessmentSheet({
+        lastChallengeId: null,
+      });
+
+      expect(assessmentSheet.isChallengeExpectedToBeAnswered('myFavoriteChallengeId')).to.be.true;
+    });
+
+    it('returns true when submitted challengeId is the one expected to be answered next', function () {
+      const assessmentSheet = domainBuilder.certification.evaluation.buildAssessmentSheet({
+        lastChallengeId: 'myFavoriteChallengeId',
+      });
+
+      expect(assessmentSheet.isChallengeExpectedToBeAnswered('myFavoriteChallengeId')).to.be.true;
+    });
+
+    it('returns false when submitted challengeId is not the one expected to be answered next', function () {
+      const assessmentSheet = domainBuilder.certification.evaluation.buildAssessmentSheet({
+        lastChallengeId: 'someOtherChallengeId',
+      });
+
+      expect(assessmentSheet.isChallengeExpectedToBeAnswered('myFavoriteChallengeId')).to.be.false;
+    });
+  });
+
+  context('#hasLastQuestionBeenFocusedOut', function () {
+    it(`returns true when state of last question is ${STATES_OF_LAST_QUESTION.FOCUSEDOUT}`, function () {
+      const assessmentSheet = domainBuilder.certification.evaluation.buildAssessmentSheet({
+        lastQuestionState: STATES_OF_LAST_QUESTION.FOCUSEDOUT,
+      });
+
+      expect(assessmentSheet.hasLastQuestionBeenFocusedOut()).to.be.true;
+    });
+
+    Object.values(STATES_OF_LAST_QUESTION)
+      .filter((lastQuestionState) => lastQuestionState !== STATES_OF_LAST_QUESTION.FOCUSEDOUT)
+      .forEach((lastQuestionState) => {
+        it(`return false when state of last question is ${lastQuestionState}`, async function () {
+          const assessmentSheet = domainBuilder.certification.evaluation.buildAssessmentSheet({
+            lastQuestionState,
+          });
+
+          expect(assessmentSheet.hasLastQuestionBeenFocusedOut()).to.be.false;
+        });
+      });
+  });
+
+  context('#refreshLastAnswerTimestamp', function () {
+    let assessmentSheetBaseData;
+
+    beforeEach(function () {
+      assessmentSheetBaseData = {
+        certificationCourseId: 123,
+        assessmentId: 456,
+        abortReason: 'candidate',
+        isRejectedForFraud: true,
+        answers: [domainBuilder.buildAnswer()],
+        assessmentUpdatedAt: new Date('2022-01-01'),
+        lastQuestionDate: new Date('2021-09-09'),
+      };
+    });
+
+    it('should update lastAnswerAt and certificationCourseUpdatedAt to provided date', function () {
+      const someDate = new Date('2044-05-05');
+      const assessmentSheet = domainBuilder.certification.evaluation.buildAssessmentSheet({
+        ...assessmentSheetBaseData,
+        lastAnswerAt: new Date('2023-03-03'),
+        certificationCourseUpdatedAt: new Date('2024-04-04'),
+      });
+      assessmentSheet.refreshLastAnswerTimestamp(someDate);
+
+      expect(assessmentSheet).to.deepEqualInstance(
+        domainBuilder.certification.evaluation.buildAssessmentSheet({
+          ...assessmentSheetBaseData,
+          lastAnswerAt: someDate,
+          certificationCourseUpdatedAt: someDate,
+        }),
+      );
+    });
   });
 });

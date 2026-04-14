@@ -51,49 +51,46 @@
   &__container {
     display: flex;
     gap: var(--pix-spacing-4x);
-    margin-top: var(--pix-spacing-4x);
+    margin-top: var(--pix-spacing-6x);
   }
 
   &__card {
-    display: flex;
     flex: 1;
-    flex-direction: column;
-    gap: var(--pix-spacing-2x);
-    padding: var(--pix-spacing-4x) 0;
+    padding: var(--pix-spacing-6x) var(--pix-spacing-2x);
     font-weight: 500;
     text-align: center;
     background-color: var(--pix-neutral-20);
     border-radius: var(--pix-spacing-2x);
 
-    h3 {
-      @extend %pix-title-xs;
+    .title {
+      @extend %pix-title-xxs;
 
+      margin-bottom: var(--pix-spacing-2x);
       color: var(--pix-neutral-500);
-      text-transform: uppercase;
+    }
+
+    .level {
+      @extend %pix-body-m;
+
+      color: var(--pix-neutral-900);
+      font-weight: bold;
     }
   }
 
   &__jury-level {
     display: flex;
-    align-items: start;
+    gap: var(--pix-spacing-2x);
+    align-items: center;
     justify-content: center;
   }
 
   &__jury-level-editor {
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    max-width: 100%;
-    padding: 0 8px;
-
-    section:nth-of-type(2) {
+    .actions {
       display: flex;
-      gap: 1rem;
-      margin: 8px 0;
-
-      button:last-child {
-        flex: 2;
-      }
+      gap: var(--pix-spacing-2x);
+      align-items: center;
+      justify-content: center;
+      margin-top: var(--pix-spacing-4x);
     }
   }
 }

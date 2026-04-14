@@ -95,15 +95,16 @@ describe('Certification | Session Management | Acceptance | Application | Route 
           // given
           const userId = databaseBuilder.factory.buildUser().id;
           const session = databaseBuilder.factory.buildSession();
-          const certificationCourseId = databaseBuilder.factory.buildCertificationCourse({
-            userId,
-            sessionId: session.id,
-          }).id;
           const candidate = databaseBuilder.factory.buildCertificationCandidate({
             sessionId: session.id,
             userId,
             reconciledAt: new Date('2020-01-01'),
           });
+          const certificationCourseId = databaseBuilder.factory.buildCertificationCourse({
+            userId,
+            sessionId: session.id,
+            candidateId: candidate.id,
+          }).id;
           databaseBuilder.factory.buildCoreSubscription({ certificationCandidateId: candidate.id });
 
           databaseBuilder.factory.buildCertificationCenterMembership({
@@ -200,16 +201,17 @@ describe('Certification | Session Management | Acceptance | Application | Route 
           // given
           const userId = databaseBuilder.factory.buildUser().id;
           const session = databaseBuilder.factory.buildSession();
-          const certificationCourseId = databaseBuilder.factory.buildCertificationCourse({
-            userId,
-            sessionId: session.id,
-            completedAt: new Date(),
-          }).id;
           const candidate = databaseBuilder.factory.buildCertificationCandidate({
             sessionId: session.id,
             userId,
             reconciledAt: new Date('2020-01-01'),
           });
+          const certificationCourseId = databaseBuilder.factory.buildCertificationCourse({
+            userId,
+            sessionId: session.id,
+            completedAt: new Date(),
+            candidateId: candidate.id,
+          }).id;
           databaseBuilder.factory.buildCoreSubscription({ certificationCandidateId: candidate.id });
           databaseBuilder.factory.buildCertificationCenterMembership({
             userId,
@@ -287,16 +289,17 @@ describe('Certification | Session Management | Acceptance | Application | Route 
           // given
           const userId = databaseBuilder.factory.buildUser().id;
           const session = databaseBuilder.factory.buildSession();
-          const certificationCourseId = databaseBuilder.factory.buildCertificationCourse({
-            sessionId: session.id,
-            userId,
-            createdAt: new Date(),
-          }).id;
           const candidate = databaseBuilder.factory.buildCertificationCandidate({
             sessionId: session.id,
             userId,
             reconciledAt: new Date('2020-01-01'),
           });
+          const certificationCourseId = databaseBuilder.factory.buildCertificationCourse({
+            sessionId: session.id,
+            userId,
+            createdAt: new Date(),
+            candidateId: candidate.id,
+          }).id;
           databaseBuilder.factory.buildCoreSubscription({ certificationCandidateId: candidate.id });
           databaseBuilder.factory.buildCertificationCenterMembership({
             userId,
@@ -514,17 +517,18 @@ describe('Certification | Session Management | Acceptance | Application | Route 
           const abortReason = 'candidate';
           const userId = databaseBuilder.factory.buildUser().id;
           const session = databaseBuilder.factory.buildSession({ version: AlgorithmEngineVersion.V3 });
+          const candidateId = databaseBuilder.factory.buildCertificationCandidate({
+            sessionId: session.id,
+            userId,
+            reconciledAt: new Date('2020-01-01'),
+          }).id;
           const certificationCourseId = databaseBuilder.factory.buildCertificationCourse({
             userId,
             sessionId: session.id,
             completedAt: null,
             version: AlgorithmEngineVersion.V3,
+            candidateId,
           }).id;
-          databaseBuilder.factory.buildCertificationCandidate({
-            sessionId: session.id,
-            userId,
-            reconciledAt: new Date('2020-01-01'),
-          });
           databaseBuilder.factory.buildCertificationCenterMembership({
             userId,
             certificationCenterId: session.certificationCenterId,
@@ -632,15 +636,16 @@ describe('Certification | Session Management | Acceptance | Application | Route 
             });
 
             const session = databaseBuilder.factory.buildSession({ version: AlgorithmEngineVersion.V3 });
-            databaseBuilder.factory.buildCertificationCandidate({
+            const candidateId = databaseBuilder.factory.buildCertificationCandidate({
               userId,
               sessionId: session.id,
-            });
+            }).id;
             const certificationCourseId = databaseBuilder.factory.buildCertificationCourse({
               userId,
               sessionId: session.id,
               completedAt: new Date(),
               version: AlgorithmEngineVersion.V3,
+              candidateId,
             }).id;
 
             const complementaryCertificationCourseId = databaseBuilder.factory.buildComplementaryCertificationCourse({
@@ -803,13 +808,19 @@ describe('Certification | Session Management | Acceptance | Application | Route 
 });
 
 const _createSession = async ({ version = 2 } = {}) => {
+  const userId = databaseBuilder.factory.buildUser().id;
   const session = databaseBuilder.factory.buildSession({ version });
-  const certificationCourse = databaseBuilder.factory.buildCertificationCourse({ sessionId: session.id, version });
-  const certificationCourseId = certificationCourse.id;
   const candidate = databaseBuilder.factory.buildCertificationCandidate({
-    userId: certificationCourse.userId,
-    sessionId: certificationCourse.sessionId,
+    sessionId: session.id,
+    userId,
   });
+  const certificationCourse = databaseBuilder.factory.buildCertificationCourse({
+    sessionId: session.id,
+    version,
+    userId,
+    candidateId: candidate.id,
+  });
+  const certificationCourseId = certificationCourse.id;
   databaseBuilder.factory.buildCoreSubscription({ certificationCandidateId: candidate.id });
   const report1 = databaseBuilder.factory.buildCertificationReport({
     sessionId: session.id,
@@ -935,7 +946,7 @@ const _createSessionWithoutChallenge = async () => {
   await mockLearningContent(learningContentObjects);
 
   const userId = databaseBuilder.factory.buildUser().id;
-  const candidateId = databaseBuilder.factory.buildUser().id;
+  const candidateUserId = databaseBuilder.factory.buildUser().id;
   const session = databaseBuilder.factory.buildSession({ version });
   databaseBuilder.factory.buildCertificationVersion({
     startDate: new Date('2024-01-01'),
@@ -944,18 +955,19 @@ const _createSessionWithoutChallenge = async () => {
     userId,
     certificationCenterId: session.certificationCenterId,
   });
-  databaseBuilder.factory.buildCertificationCandidate({
+  const candidateId = databaseBuilder.factory.buildCertificationCandidate({
     sessionId: session.id,
-    userId: candidateId,
+    userId: candidateUserId,
     reconciledAt: new Date('2024-01-01'),
-  });
+  }).id;
   const certificationCourseId = databaseBuilder.factory.buildCertificationCourse({
     sessionId: session.id,
     completedAt: null,
     version,
     abortReason: 'technical',
-    userId: candidateId,
+    userId: candidateUserId,
     createdAt: new Date('2025-01-01'),
+    candidateId,
   }).id;
   const assessmentId = databaseBuilder.factory.buildAssessment({
     certificationCourseId,

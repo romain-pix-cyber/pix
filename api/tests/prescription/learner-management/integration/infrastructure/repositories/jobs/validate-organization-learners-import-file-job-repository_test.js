@@ -14,13 +14,10 @@ describe('Integration | Prescription | Infrastructure | Repository | Jobs | vali
 
       // then
       await expect(ValidateOrganizationImportFileJob.name).to.have.been.performed.withJob({
-        retrylimit: JobRetry.FEW_RETRY.retryLimit,
-        retrydelay: JobRetry.FEW_RETRY.retryDelay,
-        retrybackoff: JobRetry.FEW_RETRY.retryBackoff,
-        data: {
-          organizationImportId: 4123132,
-          correlationContext: EMPTY_CORRELATION_INFO,
-        },
+        retryLimit: JobRetry.FEW_RETRY.retryLimit,
+        retryDelay: JobRetry.FEW_RETRY.retryDelay,
+        retryBackoff: JobRetry.FEW_RETRY.retryBackoff,
+        data: { organizationImportId: 4123132, correlationContext: EMPTY_CORRELATION_INFO },
       });
     });
   });

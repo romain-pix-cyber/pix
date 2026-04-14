@@ -4,7 +4,6 @@ import {
   databaseBuilder,
   expect,
   generateAuthenticatedUserRequestHeaders,
-  insertUserWithRoleSuperAdmin,
   knex,
 } from '../../../test-helper.js';
 
@@ -47,8 +46,9 @@ describe('Acceptance | Router | announcement-route', function () {
       let headers;
 
       beforeEach(async function () {
-        await insertUserWithRoleSuperAdmin();
-        headers = generateAuthenticatedUserRequestHeaders({ userId: 1234 });
+        const superAdminUser = databaseBuilder.factory.buildUser.withRoleSuperAdmin();
+        await databaseBuilder.commit();
+        headers = generateAuthenticatedUserRequestHeaders({ userId: superAdminUser.id });
       });
 
       it('should return 400 when content contains an unsupported locale key', async function () {

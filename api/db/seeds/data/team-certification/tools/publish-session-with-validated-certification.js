@@ -68,6 +68,9 @@ export default async function publishSessionWithValidatedCertification({
       challengeDate = challengeDate.add(`${timePad++ % 60}`, 'seconds');
       return challengeDate;
     };
+
+    let lastAnswerCreatedAt;
+
     for (const simulatedChallenge of simulatedCertification) {
       databaseBuilder.factory.buildCertificationChallenge({
         associatedSkillName: simulatedChallenge.challenge.skill.name,
@@ -95,9 +98,15 @@ export default async function publishSessionWithValidatedCertification({
         resultDetails: 'dummy value',
         timeSpent: 10,
       });
+
+      lastAnswerCreatedAt = getNewSecondPad();
     }
 
     await databaseBuilder.commit();
+
+    await knex('certification-courses')
+      .where('id', certificationCourse._id)
+      .update({ lastAnswerAt: lastAnswerCreatedAt.toDate() });
 
     const report = new CertificationReport({
       certificationCourseId: certificationCourse._id,

@@ -9,10 +9,6 @@ describe('Unit | Identity Access Management | Domain | Model | UserReconciliatio
     sinon.stub(config.authentication, 'tokenForStudentReconciliationLifespan').value(1000);
   });
 
-  afterEach(function () {
-    sinon.restore();
-  });
-
   describe('UserReconciliationSamlIdToken.decode', function () {
     it('decodes a valid token', function () {
       // given

@@ -6,7 +6,6 @@ import {
   databaseBuilder,
   expect,
   generateAuthenticatedUserRequestHeaders,
-  insertUserWithRoleSuperAdmin,
   knex,
   learningContentBuilder,
   mockLearningContent,
@@ -232,11 +231,12 @@ describe('Acceptance | API | campaign-administration-route', function () {
   describe('GET /api/admin/campaigns/template', function () {
     it('responds with a 200', async function () {
       // given
-      const admin = await insertUserWithRoleSuperAdmin();
+      const superAdmin = databaseBuilder.factory.buildUser.withRoleSuperAdmin();
       await databaseBuilder.commit();
+
       const options = {
         method: 'GET',
-        headers: generateAuthenticatedUserRequestHeaders({ userId: admin.id }),
+        headers: generateAuthenticatedUserRequestHeaders({ userId: superAdmin.id }),
         url: '/api/admin/campaigns/template',
       };
 
@@ -253,7 +253,7 @@ describe('Acceptance | API | campaign-administration-route', function () {
       let userId;
 
       beforeEach(async function () {
-        userId = databaseBuilder.factory.buildUser.withRole({ role: ROLES.SUPER_ADMIN }).id;
+        userId = databaseBuilder.factory.buildUser.withRoleSuperAdmin().id;
         await databaseBuilder.commit();
       });
 
@@ -311,7 +311,7 @@ describe('Acceptance | API | campaign-administration-route', function () {
 
   describe('POST /api/admin/campaigns/swap-codes', function () {
     it('it swap campaign code', async function () {
-      const userId = databaseBuilder.factory.buildUser.withRole({ role: ROLES.SUPER_ADMIN }).id;
+      const userId = databaseBuilder.factory.buildUser.withRoleSuperAdmin().id;
       const organizationId = databaseBuilder.factory.buildOrganization().id;
       const firstCampaignId = databaseBuilder.factory.buildCampaign({ code: 'ABC', organizationId }).id;
       const secondCampaignId = databaseBuilder.factory.buildCampaign({ code: 'EFG', organizationId }).id;
@@ -338,7 +338,7 @@ describe('Acceptance | API | campaign-administration-route', function () {
     it('should return the updated campaign', async function () {
       // given
       const campaign = databaseBuilder.factory.buildCampaign({ name: 'odlName', multipleSendings: false });
-      const user = databaseBuilder.factory.buildUser.withRole({ role: ROLES.SUPER_ADMIN });
+      const user = databaseBuilder.factory.buildUser.withRoleSuperAdmin();
       await databaseBuilder.commit();
 
       // when
@@ -370,7 +370,7 @@ describe('Acceptance | API | campaign-administration-route', function () {
 
   describe('PATCH /api/admin/campaigns/{campaignId}/update-code', function () {
     it('it updates campaign code', async function () {
-      const userId = databaseBuilder.factory.buildUser.withRole({ role: ROLES.SUPER_ADMIN }).id;
+      const userId = databaseBuilder.factory.buildUser.withRoleSuperAdmin().id;
       const campaignId = databaseBuilder.factory.buildCampaign({ code: 'ABCEFG123' }).id;
       await databaseBuilder.commit();
       const payload = {
@@ -481,7 +481,7 @@ describe('Acceptance | API | campaign-administration-route', function () {
     let userId;
 
     beforeEach(async function () {
-      userId = databaseBuilder.factory.buildUser.withRole({ role: ROLES.SUPER_ADMIN }).id;
+      userId = databaseBuilder.factory.buildUser.withRoleSuperAdmin().id;
       await databaseBuilder.commit();
     });
 

@@ -5,7 +5,9 @@ import { ValidatorAlwaysOK } from '../models/ValidatorAlwaysOK.js';
 export function evaluateAnswer({
   challenge,
   answer,
-  assessment,
+  challengeSubmittedAt,
+  hasChallengeBeenFocusedOut,
+  isCertificationEvaluation,
   accessibilityAdjustmentNeeded,
   forceOKAnswer = false,
 }) {
@@ -18,14 +20,18 @@ export function evaluateAnswer({
   }
 
   try {
-    return examiner.evaluate({
+    const correctedAnswer = examiner.evaluate({
       answer,
       challengeFormat: challenge.format,
       isFocusedChallenge: challenge.focused,
-      hasLastQuestionBeenFocusedOut: assessment.hasLastQuestionBeenFocusedOut,
-      isCertificationEvaluation: assessment.isCertification(),
+      hasLastQuestionBeenFocusedOut: hasChallengeBeenFocusedOut,
+      isCertificationEvaluation,
       accessibilityAdjustmentNeeded,
     });
+
+    const now = new Date();
+    correctedAnswer.setTimeSpentFrom({ now, lastQuestionDate: challengeSubmittedAt || now });
+    return correctedAnswer;
   } catch {
     throw new AnswerEvaluationError(challenge);
   }

@@ -61,17 +61,23 @@
         },
         "EDU_1ER_DEGRE": {
           "0": "Admissible",
+          "ADVANCED": "Avancé",
           "BELOW_MINIMUM": "Non admissible",
+          "EXPERT": "Expert",
           "NONE": "{pixScore} Pix"
         },
         "EDU_2ND_DEGRE": {
           "0": "Admissible",
+          "ADVANCED": "Avancé",
           "BELOW_MINIMUM": "Non admissible",
+          "EXPERT": "Expert",
           "NONE": "{pixScore} Pix"
         },
         "EDU_CPE": {
           "0": "Admissible",
+          "ADVANCED": "Avancé",
           "BELOW_MINIMUM": "Non admissible",
+          "EXPERT": "Expert",
           "NONE": "{pixScore} Pix"
         },
         "PRO_SANTE": {
@@ -495,9 +501,30 @@
       "page-title": "Référentiels de certification"
     },
     "certifications": {
-      "external-jury-select-options": {
-        "REJECTED": "Rejetée",
-        "UNSET": "En attente"
+      "edu-results": {
+        "v2": {
+          "external-jury-select-options": {
+            "REJECTED": "Rejetée",
+            "UNSET": "En attente"
+          }
+        },
+        "v3": {
+          "admissible": "Admissible",
+          "edit-disabled": "Non modifiable car la session n'est pas publiée",
+          "edit-external-jury": "Modifier le volet jury",
+          "error": "Une erreur est survenue",
+          "external-jury": "Volet jury externe",
+          "external-jury-select-options": {
+            "ADVANCED": "Avancé",
+            "EXPERT": "Expert",
+            "UNSET": "En attente"
+          },
+          "internal-jury": "Volet Pix",
+          "select": "Sélectionner un niveau",
+          "success": "Le résultat du volet jury externe a bien été enregistré",
+          "title": "Résultats de la certification Pix+ Edu",
+          "waiting": "En attente"
+        }
       },
       "global-actions": {
         "cancel": {
@@ -563,6 +590,7 @@
         "targetProfile": "Profil Cible"
       },
       "labels": {
+        "attestation": "Attestation",
         "created-at": "Date de création",
         "description": "Description",
         "illustration": "Illustration",
@@ -777,30 +805,6 @@
     "organizations": {
       "all-tags": {
         "recently-used-tags": "Liste de tags récemment utilisés avec {tagName}"
-      },
-      "children": {
-        "attach-child-form": {
-          "input-information": "ID d'organisation(s) à ajouter",
-          "input-label": "Ajouter une ou plusieurs organisations filles",
-          "name": "Formulaire d'ajout d'organisation(s) fille(s)"
-        },
-        "create-child-organization-button": "Créer une organisation fille"
-      },
-      "children-list": {
-        "actions": {
-          "detach": {
-            "button": "Détacher",
-            "confirm-modal-message": "Êtes-vous sûr de vouloir détacher l'Orga ID {organizationId} ?",
-            "confirm-modal-title": "Détacher une organisation"
-          }
-        },
-        "table-headers": {
-          "actions": "Actions",
-          "external-id": "Identifiant externe",
-          "id": "ID",
-          "name": "Nom"
-        },
-        "table-name": "Liste des organisations filles"
       },
       "creation": {
         "actions": {
@@ -1550,41 +1554,21 @@
       "navbar": {
         "aria-label": "Navigation de la section organisation",
         "campaigns": "Campagnes",
-        "children": "Organisations filles",
         "details": "Détails",
         "features": "Fonctionnalités",
         "invitations": "Invitations",
-        "network": "Réseau {nbrOfChildren, plural, =1 {({nbrOfChildren} fille)} other {({nbrOfChildren} filles)}}",
+        "network": "Réseau {nbrOfChildren, plural, =0 {({nbrOfChildren} fille)} =1 {({nbrOfChildren} fille)} other {({nbrOfChildren} filles)}}",
         "places": "Places",
         "tags": "Tags",
         "target-profiles": "Profils cibles",
         "team": "Équipe"
       }
     },
-    "organization-children": {
-      "empty-table": "Aucune organisation fille",
-      "notifications": {
-        "error": {
-          "unable-to-attach-already-attached-child-organization": "L'organisation fille {childOrganizationId} appartient déjà à un réseau.",
-          "unable-to-attach-child-organization-to-another-child-organization": "Impossible d'attacher l'organisation fille à une autre organisation fille.",
-          "unable-to-attach-child-organization-to-itself": "Impossible d'attacher l'organisation {childOrganizationId} à elle-même",
-          "unable-to-attach-to-organization-not-in-network": "Impossible de rattacher l'organisation fille à une organisation hors réseau.",
-          "unable-to-detach-child-organization": "Une erreur est survenue lors du détachement de l'organisation fille."
-        },
-        "success": {
-          "attach-child-organization": "{count, plural, =1 {L'organisation fille a bien été liée à l'organisation mère} other {Les {count} organisations filles ont bien été liées à l'organisation mère}}",
-          "detach-child-organization": "L'organisation fille a été détachée avec succès."
-        }
-      },
-      "title": "Organisations filles"
-    },
     "organization-network": {
       "notifications": {
         "error": {
           "unable-to-attach-already-attached-child-organization": "L'organisation fille {childOrganizationId} appartient déjà à un réseau.",
-          "unable-to-attach-child-organization-to-another-child-organization": "Impossible d'attacher l'organisation fille à une autre organisation fille.",
           "unable-to-attach-child-organization-to-itself": "Impossible d'attacher l'organisation {childOrganizationId} à elle-même",
-          "unable-to-attach-to-organization-not-in-network": "Impossible de rattacher l'organisation fille à une organisation hors réseau.",
           "unable-to-detach-child-organization": "Une erreur est survenue lors du détachement de l'organisation fille."
         },
         "success": {
@@ -1844,8 +1828,7 @@
           "editorLogo": "Url du logo de l'éditeur",
           "editorName": "Nom d'éditeur",
           "internalTitle": "Titre interne",
-          "locales": "{ count, plural, one {Langue localisée} other {Langues localisées}}",
-          "localizedLanguage": "Langue localisée",
+          "locales": "{ count, plural, one {Locale} other {Locales}}",
           "publishedOn": "Publié sur",
           "status": "Statut",
           "status-label": {
@@ -1871,8 +1854,8 @@
         },
         "form": {
           "locales": {
-            "label": "Langues localisées",
-            "placeholder": "-- Sélectionnez une ou plusieurs langues --"
+            "label": "Locales",
+            "placeholder": "-- Sélectionnez une ou plusieurs locales --"
           }
         },
         "list": {

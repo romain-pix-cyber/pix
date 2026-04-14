@@ -2,20 +2,14 @@ import {
   AdministrationTeamNotFound,
   CountryNotFoundError,
   OrganizationLearnerTypeNotFound,
-  UnableToAttachChildOrganizationToParentOrganizationError,
 } from '../../../../../src/organizational-entities/domain/errors.js';
 import { Organization } from '../../../../../src/organizational-entities/domain/models/Organization.js';
 import { OrganizationForAdmin } from '../../../../../src/organizational-entities/domain/models/OrganizationForAdmin.js';
 import { OrganizationLearnerType } from '../../../../../src/organizational-entities/domain/models/OrganizationLearnerType.js';
 import { usecases } from '../../../../../src/organizational-entities/domain/usecases/index.js';
+import { ORGANIZATION_FEATURE } from '../../../../../src/shared/domain/constants.js';
 import { EntityValidationError, NotFoundError } from '../../../../../src/shared/domain/errors.js';
-import {
-  catchErr,
-  databaseBuilder,
-  expect,
-  insertMultipleSendingFeatureForNewOrganization,
-  insertPixJuniorFeatureForNewOrganization,
-} from '../../../../test-helper.js';
+import { catchErr, databaseBuilder, expect } from '../../../../test-helper.js';
 
 describe('Integration | UseCases | create-organization', function () {
   let superAdminUserId;
@@ -30,7 +24,7 @@ describe('Integration | UseCases | create-organization', function () {
       originalName: 'France',
     });
 
-    await insertMultipleSendingFeatureForNewOrganization();
+    databaseBuilder.factory.buildFeature(ORGANIZATION_FEATURE.MULTIPLE_SENDING_ASSESSMENT);
     await databaseBuilder.commit();
   });
 
@@ -87,46 +81,6 @@ describe('Integration | UseCases | create-organization', function () {
 
           // then
           expect(error).to.deep.equal(new NotFoundError('Not found organization for ID 9999'));
-        });
-      });
-
-      describe('when parent organization is a child organization', function () {
-        it('throws UnableToAttachChildOrganizationToParentOrganizationError', async function () {
-          // given
-          const parentOrganizationId = databaseBuilder.factory.buildOrganization().id;
-          const childOrganizationId = databaseBuilder.factory.buildOrganization({
-            id: 2000,
-            name: 'Parent Org',
-            type: Organization.types.SCO1D,
-            parentOrganizationId,
-          }).id;
-
-          await databaseBuilder.commit();
-
-          const organization = new OrganizationForAdmin({
-            name: 'ACME',
-            type: 'PRO',
-            documentationUrl: 'https://pix.fr',
-            createdBy: superAdminUserId,
-            administrationTeamId: 1234,
-            parentOrganizationId: childOrganizationId,
-            countryCode: 99100,
-          });
-
-          // when
-          const error = await catchErr(usecases.createOrganization)({ organization });
-
-          // then
-          expect(error).to.deep.equal(
-            new UnableToAttachChildOrganizationToParentOrganizationError({
-              code: 'UNABLE_TO_ATTACH_CHILD_ORGANIZATION_TO_ANOTHER_CHILD_ORGANIZATION',
-              message: 'Unable to attach child organization to parent organization which is also a child organization',
-              meta: {
-                grandParentOrganizationId: parentOrganizationId,
-                parentOrganizationId: childOrganizationId,
-              },
-            }),
-          );
         });
       });
     });
@@ -237,7 +191,8 @@ describe('Integration | UseCases | create-organization', function () {
   describe('junior organization', function () {
     it('returns newly created organization', async function () {
       // given
-      await insertPixJuniorFeatureForNewOrganization();
+      databaseBuilder.factory.buildFeature.pixJuniorFeatures();
+      await databaseBuilder.commit();
 
       const organization = new OrganizationForAdmin({
         name: 'ACME',

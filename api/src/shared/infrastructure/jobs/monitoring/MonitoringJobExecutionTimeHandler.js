@@ -12,13 +12,16 @@ class MonitoringJobExecutionTimeHandler {
     const totalTime = completedOn.diff(createdOn, 'second', true);
     const executionTime = completedOn.diff(startedOn, 'second', true);
 
-    this.logger.info({
-      event: 'pg-boss-execution-time',
-      type: 'JOB_LOG_EXEC_TIME',
-      handlerName: job.data.request.name,
-      executionTime,
-      totalTime,
-    });
+    this.logger.info(
+      {
+        event: 'pg-boss-execution-time',
+        type: 'JOB_LOG_EXEC_TIME',
+        handlerName: job.data.request.name,
+        executionTime,
+        totalTime,
+      },
+      'PGBOSS ONCOMPLETE',
+    );
   }
 }
 

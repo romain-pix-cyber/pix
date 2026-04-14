@@ -66,7 +66,7 @@ describe('Unit | Serializer | JSONAPI | v3-certification-details-for-administrat
             'assessment-result-status': assessmentResultStatus,
             'abort-reason': abortReason,
             'pix-score': pixScore,
-            'reached-mesh-index': reachedMeshIndex,
+            'reached-result-key': 'CORE.1',
             'number-of-challenges': 20,
             'certification-framework': certificationFramework,
           },

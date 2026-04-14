@@ -3,7 +3,6 @@ import {
   databaseBuilder,
   expect,
   generateAuthenticatedUserRequestHeaders,
-  insertUserWithRoleSuperAdmin,
 } from '../../../test-helper.js';
 
 describe('Acceptance | Application | sup-leaner-list-route', function () {
@@ -11,7 +10,6 @@ describe('Acceptance | Application | sup-leaner-list-route', function () {
 
   beforeEach(async function () {
     server = await createServer();
-    await insertUserWithRoleSuperAdmin();
   });
 
   describe('GET /api/organizations/{id}/sup-participants', function () {

@@ -8,10 +8,6 @@ describe('Unit | Identity Access Management | Domain | Model | PasswordExpiratio
     sinon.stub(config.authentication, 'passwordResetTokenLifespan').value(1000);
   });
 
-  afterEach(function () {
-    sinon.restore();
-  });
-
   describe('PasswordExpirationToken.decode', function () {
     it('decodes a valid token', function () {
       // given

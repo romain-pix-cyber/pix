@@ -9,10 +9,6 @@ describe('Unit | Certification | Results | Domain | Model | CertificationResults
     sinon.stub(config.authentication, 'secret').value('secret!');
   });
 
-  afterEach(function () {
-    sinon.restore();
-  });
-
   describe('CertificationResultsLinkByEmailToken.decode', function () {
     it('decodes a valid token', function () {
       // given

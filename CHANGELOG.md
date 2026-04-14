@@ -1,5 +1,160 @@
 # Pix Changelog
 
+# [5.386.0](https://github.com/1024pix/pix/compare/v5.385.0...v5.386.0) (2026-04-14)
+
+### :rocket: Amélioration
+
+- [#15806](https://github.com/1024pix/pix/pull/15806) Améliorer la sécurité de la gestion des OIDC Providers (PIX-22322) 
+- [#15813](https://github.com/1024pix/pix/pull/15813) Autoriser la création d'une organisation fille à partir d'une organisation fille (PIX-22047) 
+- [#15800](https://github.com/1024pix/pix/pull/15800) Créer un script pour activer la feature pour une liste de campagnes (PIX-22217) 
+- [#15752](https://github.com/1024pix/pix/pull/15752) Modif module Antivirus suite relecture exp 
+- [#15721](https://github.com/1024pix/pix/pull/15721) Module RangerFichier_NOV modifs relectures Eval et team modulix 
+- [#15801](https://github.com/1024pix/pix/pull/15801) Permettre un fallback au niveau des épreuves  (PIX-22277). 
+- [#15822](https://github.com/1024pix/pix/pull/15822) Remplir la colonne "lastAnswerAt" de la table "certification-courses" à chaque réponse apportée par le candidat 
+- [#15793](https://github.com/1024pix/pix/pull/15793) Rendre le contenu de l'e-mail de vérification de changement d’e-mail générique (PIX-21991) 
+
+### :bug: Correction
+
+- [#15770](https://github.com/1024pix/pix/pull/15770) Corriger les décalages entre les blocages effectifs de comptes et les informations affichées aux utilisateurs (PIX-18309) 
+
+### :building_construction: Tech
+
+- [#15821](https://github.com/1024pix/pix/pull/15821) Déplacer le code spécifique au fait d'apporter une réponse à une épreuve de certification dans le bounded context "certification/evaluation" 
+- [#15823](https://github.com/1024pix/pix/pull/15823) Extraire la lecture de fichiers utilisés dans les tests de test-helper.js 
+- [#15839](https://github.com/1024pix/pix/pull/15839) Modifier le lien de la documentation de certification sur la banner warning (PIX-22349). 
+- [#15831](https://github.com/1024pix/pix/pull/15831) Supprimer ember-cli-clipboard de pix-orga (PIX-22352). 
+
+### :arrow_up: Montée de version
+
+- [#15820](https://github.com/1024pix/pix/pull/15820) Update dependency @1024pix/pix-ui to ^60.4.0 (certif) 
+- [#15825](https://github.com/1024pix/pix/pull/15825) Update dependency @1024pix/pix-ui to ^60.4.0 (junior) 
+- [#15827](https://github.com/1024pix/pix/pull/15827) Update dependency @1024pix/pix-ui to ^60.4.0 (mon-pix) 
+- [#15757](https://github.com/1024pix/pix/pull/15757) Update dependency @glimmer/component to v2 (certif)
+
+# [5.385.0](https://github.com/1024pix/pix/compare/v5.384.0...v5.385.0) (2026-04-13)
+
+### :rocket: Amélioration
+
+- [#15775](https://github.com/1024pix/pix/pull/15775) Ajouter la feature "recommendation-engine" pour les campagnes (PIX-22148)(PIX-22219) 
+- [#15817](https://github.com/1024pix/pix/pull/15817) IA-droit-auteur-nouvelles-activites 
+- [#15805](https://github.com/1024pix/pix/pull/15805) Permettre à l'équipe métier de re-scorer une certification tant qu'elle n'est ni publiée ni dans une session non finalisée (PIX-22292) 
+- [#15725](https://github.com/1024pix/pix/pull/15725) Pouvoir donner une valeur au résultat du volet Externe pour les certifications Pix+ EDU (PIX-21820) 
+- [#15804](https://github.com/1024pix/pix/pull/15804) Relier les structures à la création d'organisation fille (PIX-22316) 
+- [#15810](https://github.com/1024pix/pix/pull/15810) Supprimer "points clés" des tags d'un text-element (pix-22247) 
+
+### :building_construction: Tech
+
+- [#15814](https://github.com/1024pix/pix/pull/15814) Ajoute une API interne pour corriger une réponse apportée par un utilisateur 
+- [#15811](https://github.com/1024pix/pix/pull/15811) Ajouter la colonne lastAnswerAt à la table certification-courses (PIX-22323). 
+- [#15809](https://github.com/1024pix/pix/pull/15809) Extraire les chai-custom-helpers de test-helper 
+- [#15819](https://github.com/1024pix/pix/pull/15819) Remplacer des test-helpers par des database-builder 
+
+### :arrow_up: Montée de version
+
+- [#15797](https://github.com/1024pix/pix/pull/15797) Update dependency @1024pix/pix-ui to ^60.3.0 (junior) 
+- [#15815](https://github.com/1024pix/pix/pull/15815) Update dependency @1024pix/pix-ui to ^60.3.0 (mon-pix) 
+- [#15818](https://github.com/1024pix/pix/pull/15818) Update dependency @1024pix/pix-ui to ^60.4.0 (admin)
+
+# [5.384.0](https://github.com/1024pix/pix/compare/v5.383.0...v5.384.0) (2026-04-10)
+
+### :rocket: Amélioration
+
+- [#15787](https://github.com/1024pix/pix/pull/15787) Ajoute une colonne "label" à la table attestations et la remplit (PIX-22280) 
+- [#15799](https://github.com/1024pix/pix/pull/15799) Cocher automatiquement le blocage lorsqu'on coche la gestion des places (PIX-22163) 
+- [#15792](https://github.com/1024pix/pix/pull/15792) Récupération des informations de l'organisation parente via le reseau (PIX-22115) 
+
+### :building_construction: Tech
+
+- [#15794](https://github.com/1024pix/pix/pull/15794) Ne plus remonter de 500 lors d'une réponse à un assessment sur une participation supprimée (PIX-22314).
+
+# [5.383.0](https://github.com/1024pix/pix/compare/v5.382.0...v5.383.0) (2026-04-10)
+
+### :rocket: Amélioration
+
+- [#15738](https://github.com/1024pix/pix/pull/15738) Ajouter la table organization_learner_filters (PIX-22220). 
+- [#15655](https://github.com/1024pix/pix/pull/15655) Ajouter un composant pour permettre à un utilisateur d'ajouter à son compte une connexion par email (PIX-21985) 
+- [#15796](https://github.com/1024pix/pix/pull/15796) Autoriser le scoring des certification Pix + Droit et Pro santé (PIX-22315) 
+- [#15652](https://github.com/1024pix/pix/pull/15652) Créer un script pour migrer les données des apprenants avec imports dans attributes (Pix-22015). 
+- [#15744](https://github.com/1024pix/pix/pull/15744) Insérer les configuration de filtres de l'organisation à l'insertion des learners en BDD (Pix-22222). 
+- [#15780](https://github.com/1024pix/pix/pull/15780) Récupération des organisations de niveau N-1 d'une organisation parent (PIX-22043) 
+- [#15760](https://github.com/1024pix/pix/pull/15760) Supprimer l'onglet Organisations filles sur la page d'une organisation 
+
+### :building_construction: Tech
+
+- [#15795](https://github.com/1024pix/pix/pull/15795) Ajouter un petit temps de pause entre chaque certification traitée dans le script de rescoring 
+- [#15791](https://github.com/1024pix/pix/pull/15791) Corriger le chargement des seeds 
+- [#15789](https://github.com/1024pix/pix/pull/15789) Suppression d'un script obsolète 
+- [#15807](https://github.com/1024pix/pix/pull/15807) Utilise un exécuteur sans infra pour les tests unitaires de la CI. 
+
+### :arrow_up: Montée de version
+
+- [#15781](https://github.com/1024pix/pix/pull/15781) Update dependency @1024pix/pix-ui to ^60.3.0 (certif)
+
+# [5.382.0](https://github.com/1024pix/pix/compare/v5.381.0...v5.382.0) (2026-04-09)
+
+### :rocket: Amélioration
+
+- [#15782](https://github.com/1024pix/pix/pull/15782) Ajutement de la longueur des input phrase (PIX-22051) 
+- [#15756](https://github.com/1024pix/pix/pull/15756) Renommer "langues localisées" en "locales" (PIX-22184) 
+- [#15777](https://github.com/1024pix/pix/pull/15777) RepondreMail_NOV Retours experts 
+- [#15784](https://github.com/1024pix/pix/pull/15784) WIP MiseEnFormeTxt_NOV 
+
+### :bug: Correction
+
+- [#15783](https://github.com/1024pix/pix/pull/15783) Corrige la mise à jour de campagnes dans le cadre des Parcours Apprenants (PIX-22033). 
+- [#15790](https://github.com/1024pix/pix/pull/15790) S'assurer qu'un score de 0 a bien pour conséquence une certification rejetée pour cause de score trop bas 
+
+### :building_construction: Tech
+
+- [#15765](https://github.com/1024pix/pix/pull/15765) Crée une nouvelle méthode sur CombinedCourseDetails pour éviter d'appeler deux fois les requêtes du CombinedCourseDetailsService 
+- [#15762](https://github.com/1024pix/pix/pull/15762) Désactiver les post-install npm
+
+# [5.381.0](https://github.com/1024pix/pix/compare/v5.380.0...v5.381.0) (2026-04-08)
+
+### :rocket: Amélioration
+
+- [#15768](https://github.com/1024pix/pix/pull/15768) Ajout du champ application_name dans le knexfile (PIX-22248) 
+
+### :bug: Correction
+
+- [#15779](https://github.com/1024pix/pix/pull/15779) Corriger l'affichage de la liste des participants pour les organisations non SUP/SCO (PIX-22275). 
+
+### :arrow_up: Montée de version
+
+- [#15778](https://github.com/1024pix/pix/pull/15778) Update dependency @1024pix/pix-ui to ^60.3.0 (admin)
+
+# [5.380.0](https://github.com/1024pix/pix/compare/v5.379.0...v5.380.0) (2026-04-08)
+
+### :rocket: Amélioration
+
+- [#15746](https://github.com/1024pix/pix/pull/15746) Afficher le résultat d'un volet jury externe dans PixAdmin (PIX-22240) 
+- [#14328](https://github.com/1024pix/pix/pull/14328) Ajout de la lecture du postMessage des embed coté junior(PIX-19497) 
+- [#15638](https://github.com/1024pix/pix/pull/15638) Custom 5 modules - Ajouts title, instruction, functional instruction 
+- [#15774](https://github.com/1024pix/pix/pull/15774) datacenter-coquille 
+- [#15766](https://github.com/1024pix/pix/pull/15766) durabilite-ava-corrections-post-relecture 
+- [#15764](https://github.com/1024pix/pix/pull/15764) Feature toggles : Lecture synchrone et observabilité 
+- [#14935](https://github.com/1024pix/pix/pull/14935) intégration NR_Evaluation_AVA base 
+- [#15767](https://github.com/1024pix/pix/pull/15767) MDX-16 Modification media 
+- [#15739](https://github.com/1024pix/pix/pull/15739) Supprimer le logo national des emails FR (PIX-22197) 
+
+### :bug: Correction
+
+- [#15769](https://github.com/1024pix/pix/pull/15769) Réparer les timezones de 2 dates de PixCertif (PIX-22272). 
+
+### :building_construction: Tech
+
+- [#15758](https://github.com/1024pix/pix/pull/15758) :lock: Forcer la montée de version de `handlebars` 
+- [#15771](https://github.com/1024pix/pix/pull/15771) Ajoute le domaine de la route dans les logs SQL. 
+- [#15761](https://github.com/1024pix/pix/pull/15761) Corriger l'utilisation du logger dans le code de PgBoss 
+- [#15734](https://github.com/1024pix/pix/pull/15734) Réecrire des tests de usecases en unitaire vers un test integration (PIX-22242). 
+- [#15754](https://github.com/1024pix/pix/pull/15754) Utilise la quête du blueprint plutôt que son attribut `content` (PIX-22204). 
+- [#15609](https://github.com/1024pix/pix/pull/15609) Utiliser le SDK PgBoss au lieu de Knex 
+
+### :arrow_up: Montée de version
+
+- [#15772](https://github.com/1024pix/pix/pull/15772) Update dependency ember-source to ~6.12.0 (admin) 
+- [#15773](https://github.com/1024pix/pix/pull/15773) Update dependency ember-source to ~6.12.0 (junior)
+
 # [5.379.0](https://github.com/1024pix/pix/compare/v5.378.0...v5.379.0) (2026-04-07)
 
 ### :rocket: Amélioration

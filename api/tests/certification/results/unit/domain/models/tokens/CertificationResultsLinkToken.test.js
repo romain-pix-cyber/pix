@@ -11,10 +11,6 @@ describe('Unit | Certification | Results | Domain | Model | CertificationResults
     sinon.stub(config.jwtConfig.certificationResults, 'tokenLifespan').value(1000);
   });
 
-  afterEach(function () {
-    sinon.restore();
-  });
-
   describe('CertificationResultsLinkToken.decode', function () {
     it('decodes a valid token', function () {
       // given

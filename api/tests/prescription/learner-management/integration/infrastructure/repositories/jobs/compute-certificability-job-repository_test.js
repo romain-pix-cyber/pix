@@ -11,13 +11,10 @@ describe('Integration | Prescription | Application | Jobs | computeCertificabili
 
       // then
       await expect(ComputeCertificabilityJob.name).to.have.been.performed.withJob({
-        retrylimit: 0,
-        retrydelay: 0,
-        retrybackoff: false,
-        data: {
-          organizationLearnerId: 4123132,
-          correlationContext: EMPTY_CORRELATION_INFO,
-        },
+        retryLimit: 0,
+        retryDelay: 0,
+        retryBackoff: false,
+        data: { organizationLearnerId: 4123132, correlationContext: EMPTY_CORRELATION_INFO },
       });
     });
   });

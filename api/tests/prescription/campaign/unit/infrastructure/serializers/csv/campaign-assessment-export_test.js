@@ -1,26 +1,18 @@
 import stream from 'node:stream';
+import { text } from 'node:stream/consumers';
 
 const { PassThrough } = stream;
 
 import { CampaignAssessmentExport } from '../../../../../../../src/prescription/campaign/infrastructure/serializers/csv/campaign-assessment-export.js';
 import { getI18n } from '../../../../../../../src/shared/infrastructure/i18n/i18n.js';
-import { domainBuilder, expect, streamToPromise } from '../../../../../../test-helper.js';
+import { domainBuilder, expect } from '../../../../../../test-helper.js';
 
 describe('Unit | Serializer | CSV | campaign-assessment-export', function () {
   describe('#export', function () {
-    let outputStream,
-      csvPromise,
-      organization,
-      campaign,
-      competences,
-      targetProfile,
-      learningContent,
-      stageCollection,
-      translate;
+    let outputStream, organization, campaign, competences, targetProfile, learningContent, stageCollection, translate;
 
     beforeEach(function () {
       outputStream = new PassThrough();
-      csvPromise = streamToPromise(outputStream);
       translate = getI18n().__;
 
       organization = {};
@@ -62,7 +54,7 @@ describe('Unit | Serializer | CSV | campaign-assessment-export', function () {
       });
 
       const expectedHeader =
-        '\uFEFF"Nom de l\'organisation";' +
+        '"Nom de l\'organisation";' +
         '"ID Campagne";' +
         '"Code";' +
         '"Nom de la campagne";' +
@@ -80,9 +72,8 @@ describe('Unit | Serializer | CSV | campaign-assessment-export', function () {
 
       outputStream.end();
 
-      const csv = await csvPromise;
-
       // then
+      const csv = await text(outputStream);
       expect(csv).to.equal(expectedHeader);
     });
 
@@ -101,7 +92,7 @@ describe('Unit | Serializer | CSV | campaign-assessment-export', function () {
       });
 
       const expectedHeader =
-        '\uFEFF"Nom de l\'organisation";' +
+        '"Nom de l\'organisation";' +
         '"ID Campagne";' +
         '"Code";' +
         '"Nom de la campagne";' +
@@ -121,9 +112,8 @@ describe('Unit | Serializer | CSV | campaign-assessment-export', function () {
 
       outputStream.end();
 
-      const csv = await csvPromise;
-
       // then
+      const csv = await text(outputStream);
       expect(csv).to.equal(expectedHeader);
     });
 
@@ -142,7 +132,7 @@ describe('Unit | Serializer | CSV | campaign-assessment-export', function () {
       });
 
       const expectedHeader =
-        '\uFEFF"Nom de l\'organisation";' +
+        '"Nom de l\'organisation";' +
         '"ID Campagne";' +
         '"Code";' +
         '"Nom de la campagne";' +
@@ -163,9 +153,8 @@ describe('Unit | Serializer | CSV | campaign-assessment-export', function () {
 
       outputStream.end();
 
-      const csv = await csvPromise;
-
       // then
+      const csv = await text(outputStream);
       expect(csv).to.equal(expectedHeader);
     });
 
@@ -187,7 +176,7 @@ describe('Unit | Serializer | CSV | campaign-assessment-export', function () {
       });
 
       const expectedHeader =
-        '\uFEFF"Nom de l\'organisation";' +
+        '"Nom de l\'organisation";' +
         '"ID Campagne";' +
         '"Code";' +
         '"Nom de la campagne";' +
@@ -207,9 +196,8 @@ describe('Unit | Serializer | CSV | campaign-assessment-export', function () {
 
       outputStream.end();
 
-      const csv = await csvPromise;
-
       // then
+      const csv = await text(outputStream);
       expect(csv).to.equal(expectedHeader);
     });
 
@@ -230,7 +218,7 @@ describe('Unit | Serializer | CSV | campaign-assessment-export', function () {
       });
 
       const expectedHeader =
-        '\uFEFF"Nom de l\'organisation";' +
+        '"Nom de l\'organisation";' +
         '"ID Campagne";' +
         '"Code";' +
         '"Nom de la campagne";' +
@@ -250,9 +238,8 @@ describe('Unit | Serializer | CSV | campaign-assessment-export', function () {
 
       outputStream.end();
 
-      const csv = await csvPromise;
-
       // then
+      const csv = await text(outputStream);
       expect(csv).to.equal(expectedHeader);
     });
 
@@ -273,7 +260,7 @@ describe('Unit | Serializer | CSV | campaign-assessment-export', function () {
       });
 
       const expectedHeader =
-        '\uFEFF"Nom de l\'organisation";' +
+        '"Nom de l\'organisation";' +
         '"ID Campagne";' +
         '"Code";' +
         '"Nom de la campagne";' +
@@ -294,9 +281,8 @@ describe('Unit | Serializer | CSV | campaign-assessment-export', function () {
 
       outputStream.end();
 
-      const csv = await csvPromise;
-
       // then
+      const csv = await text(outputStream);
       expect(csv).to.equal(expectedHeader);
     });
 
@@ -315,7 +301,7 @@ describe('Unit | Serializer | CSV | campaign-assessment-export', function () {
       });
 
       const expectedHeader =
-        '\uFEFF"Nom de l\'organisation";' +
+        '"Nom de l\'organisation";' +
         '"ID Campagne";' +
         '"Code";' +
         '"Nom de la campagne";' +
@@ -335,9 +321,8 @@ describe('Unit | Serializer | CSV | campaign-assessment-export', function () {
 
       outputStream.end();
 
-      const csv = await csvPromise;
-
       // then
+      const csv = await text(outputStream);
       expect(csv).to.equal(expectedHeader);
     });
 
@@ -357,7 +342,7 @@ describe('Unit | Serializer | CSV | campaign-assessment-export', function () {
       });
 
       const expectedHeader =
-        '\uFEFF"Nom de l\'organisation";' +
+        '"Nom de l\'organisation";' +
         '"ID Campagne";' +
         '"Code";' +
         '"Nom de la campagne";' +
@@ -379,9 +364,8 @@ describe('Unit | Serializer | CSV | campaign-assessment-export', function () {
 
       outputStream.end();
 
-      const csv = await csvPromise;
-
       // then
+      const csv = await text(outputStream);
       expect(csv).to.equal(expectedHeader);
     });
   });

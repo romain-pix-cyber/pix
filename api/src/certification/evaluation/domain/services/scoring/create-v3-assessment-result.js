@@ -65,7 +65,7 @@ export function createV3AssessmentResult({
     }
   }
 
-  if (reachedMeshIndex === null) {
+  if (pixScore === 0 || reachedMeshIndex === null) {
     return AssessmentResultFactory.buildRejectedDueToBelowMinimumMesh({
       pixScore,
       assessmentId,

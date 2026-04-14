@@ -137,6 +137,7 @@ export default class Qrocm extends Component {
                   @type="text"
                   @id="{{block.input}}"
                   name={{block.randomName}}
+                  @isFullWidth={{true}}
                   autocomplete="nope"
                   placeholder={{block.placeholder}}
                   aria-label={{block.ariaLabel}}

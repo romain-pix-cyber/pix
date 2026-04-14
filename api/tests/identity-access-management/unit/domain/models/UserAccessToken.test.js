@@ -10,10 +10,6 @@ describe('Unit | Identity Access Management | Domain | Model | RefreshToken', fu
     sinon.stub(config.saml, 'accessTokenLifespanMs').value(7200000);
   });
 
-  afterEach(function () {
-    sinon.restore();
-  });
-
   describe('UserAccessToken.decode', function () {
     it('decodes a valid token', function () {
       // given

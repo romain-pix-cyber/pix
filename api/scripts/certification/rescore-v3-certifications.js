@@ -1,3 +1,5 @@
+import { setTimeout } from 'node:timers/promises';
+
 import CertificationRescored from '../../src/certification/evaluation/domain/events/CertificationRescored.js';
 import { usecases } from '../../src/certification/evaluation/domain/usecases/index.js';
 import { commaSeparatedNumberParser } from '../../src/shared/application/scripts/parsers.js';
@@ -22,12 +24,17 @@ export class RescoreV3Certifications extends Script {
           describe: "Liste d'IDs de certification séparés par des virgules. Ex: 1,2,3,4",
           coerce: commaSeparatedNumberParser(),
         },
+        throttleDelay: {
+          type: 'number',
+          describe: 'The throttle delay',
+          default: 250,
+        },
       },
     });
   }
 
   async handle({ logger, options }) {
-    const { dryRun, ids } = options;
+    const { dryRun, ids, throttleDelay } = options;
     logger.info(`Script execution started, about to process ${ids.length} certifications`);
     const failedIds = [];
     let successfulIdsProcessedCnt = 0;
@@ -47,6 +54,7 @@ export class RescoreV3Certifications extends Script {
           failedIds.push(certificationCourseId);
         }
       }
+      await setTimeout(throttleDelay);
     }
 
     if (failedIds.length > 0) {

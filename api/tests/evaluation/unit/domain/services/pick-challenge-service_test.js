@@ -24,8 +24,8 @@ describe('Unit | Service | PickChallengeService', function () {
       frenchSpokenChallenge = domainBuilder.buildChallenge({ locales: [FRENCH_SPOKEN] });
       otherFrenchSpokenChallenge = domainBuilder.buildChallenge({ locales: [FRENCH_SPOKEN] });
       frenchChallenge = domainBuilder.buildChallenge({ locales: [FRENCH_FRANCE] });
-      validatedChallenge = domainBuilder.buildChallenge({ status: 'validé' });
-      archivedChallenge = domainBuilder.buildChallenge({ status: 'archivé' });
+      validatedChallenge = domainBuilder.buildChallenge({ status: 'validé', locales: [FRENCH_SPOKEN] });
+      archivedChallenge = domainBuilder.buildChallenge({ status: 'archivé', locales: [FRENCH_SPOKEN] });
     });
 
     context('when challenge in selected locale exists', function () {
@@ -139,6 +139,64 @@ describe('Unit | Service | PickChallengeService', function () {
         expect(challenges).to.contains(challengeTwoForSkillOne);
         expect(challenges).to.contains(challengeOneForSkillTwo);
         expect(challenges).to.contains(challengeTwoForSkillTwo);
+      });
+    });
+
+    context('user locale has country code', function () {
+      let archivedChallenge_fr_fr, validatedChallenge_fr, validatedChallenge_fr_fr, locale;
+      beforeEach(function () {
+        validatedChallenge_fr = domainBuilder.buildChallenge({ status: 'validé', locales: [FRENCH_SPOKEN] });
+        validatedChallenge_fr_fr = domainBuilder.buildChallenge({ status: 'validé', locales: [FRENCH_FRANCE] });
+        archivedChallenge_fr_fr = domainBuilder.buildChallenge({ status: 'archivé', locales: [FRENCH_FRANCE] });
+        locale = FRENCH_FRANCE;
+      });
+
+      context('when there are many challenges with different locales', function () {
+        it('should prioritize challenge with an exact matching locale', function () {
+          // given
+          const skills = [{ challenges: [validatedChallenge_fr_fr, validatedChallenge_fr] }];
+
+          // when
+          const challenge = pickChallengeService.pickChallenge({
+            skills,
+            randomSeed,
+            locale,
+          });
+
+          // then
+          expect(challenge).to.equal(validatedChallenge_fr_fr);
+        });
+        it('should prioritize a validated challenge matching the language instead of an archived challenge with an exact matching locale', function () {
+          // given
+          const skills = [{ challenges: [archivedChallenge_fr_fr, validatedChallenge_fr] }];
+
+          // when
+          const challenge = pickChallengeService.pickChallenge({
+            skills,
+            randomSeed,
+            locale,
+          });
+
+          // then
+          expect(challenge).to.equal(validatedChallenge_fr);
+        });
+      });
+
+      context('when there are only challenges with locales without country code', function () {
+        it('should return challenge without country code', function () {
+          // given
+          const skills = [{ challenges: [validatedChallenge_fr] }];
+
+          // when
+          const challenge = pickChallengeService.pickChallenge({
+            skills,
+            randomSeed,
+            locale,
+          });
+
+          // then
+          expect(challenge).to.equal(validatedChallenge_fr);
+        });
       });
     });
   });

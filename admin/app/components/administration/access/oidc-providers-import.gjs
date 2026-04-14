@@ -6,6 +6,7 @@ import { t } from 'ember-intl';
 import ENV from 'pix-admin/config/environment';
 
 import AdministrationBlockLayout from '../block-layout';
+import DownloadTemplate from '../download-template';
 
 export default class OidcProvidersImport extends Component {
   @service intl;
@@ -54,14 +55,16 @@ export default class OidcProvidersImport extends Component {
       @title={{t "components.administration.oidc-providers-import.title"}}
       @description={{t "components.administration.oidc-providers-import.description"}}
     >
-      <PixButtonUpload
-        @id="oidc-providers-file-upload"
-        @onChange={{this.importOidcProviders}}
-        @variant="primary"
-        accept=".json"
-      >
-        {{t "components.administration.oidc-providers-import.upload-button"}}
-      </PixButtonUpload>
+      <DownloadTemplate @url="/api/admin/oidc-providers/import/template">
+        <PixButtonUpload
+          @id="oidc-providers-file-upload"
+          @onChange={{this.importOidcProviders}}
+          @variant="primary"
+          accept=".json"
+        >
+          {{t "components.administration.oidc-providers-import.upload-button"}}
+        </PixButtonUpload>
+      </DownloadTemplate>
     </AdministrationBlockLayout>
   </template>
 }

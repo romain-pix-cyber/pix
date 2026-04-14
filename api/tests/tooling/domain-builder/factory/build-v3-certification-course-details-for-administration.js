@@ -11,6 +11,7 @@ export const buildV3CertificationCourseDetailsForAdministration = ({
   abortReason,
   pixScore,
   reachedMeshIndex,
+  eduV3ExternalJuryResult,
   numberOfChallenges,
   certificationFramework,
 }) => {
@@ -24,6 +25,7 @@ export const buildV3CertificationCourseDetailsForAdministration = ({
     abortReason,
     pixScore,
     reachedMeshIndex,
+    eduV3ExternalJuryResult,
     certificationChallengesForAdministration,
     numberOfChallenges,
     certificationFramework,

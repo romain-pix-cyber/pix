@@ -12,7 +12,7 @@ import { LinkTo } from '@ember/routing';
 import { service } from '@ember/service';
 import Component from '@glimmer/component';
 import { tracked } from '@glimmer/tracking';
-import { t } from 'ember-intl';
+import { formatDate, t } from 'ember-intl';
 import { eq, not } from 'ember-truth-helpers';
 
 import { getColumnName } from '../../helpers/import-format.js';
@@ -46,10 +46,6 @@ export default class List extends Component {
   @service intl;
   @service locale;
 
-  displayDate(date) {
-    return this.intl.formatDate(date);
-  }
-
   @action
   getExtraColumnRowValue(extraColumnName, participant) {
     const extraColumnValue = participant.extraColumns[extraColumnName];
@@ -60,7 +56,7 @@ export default class List extends Component {
     if (!extraColumnValue) return '';
 
     if (!isNaN(new Date(extraColumnValue).getTime())) {
-      return this.displayDate(extraColumnValue);
+      return this.intl.formatDate(extraColumnValue);
     }
 
     return extraColumnValue;
@@ -344,7 +340,7 @@ export default class List extends Component {
                 <:cell>
                   {{#if participant.lastParticipationDate}}
                     <div class="organization-participant__align-element">
-                      <span>{{this.displayDate participant.lastParticipationDate}}</span>
+                      <span>{{formatDate participant.lastParticipationDate}}</span>
                       <LastParticipationDateTooltip
                         @id={{participant.id}}
                         @campaignName={{participant.campaignName}}

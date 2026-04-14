@@ -11,6 +11,7 @@ const serialize = function (juryCertification, { translate }) {
         competencesWithMark: juryCertification.competenceMarks,
         commentForOrganization: juryCertification.commentForOrganization.getComment(translate),
         commentForCandidate: juryCertification.commentForCandidate.getComment(translate),
+        reachedResultKey: juryCertification.reachedResultKey,
       };
     },
     attributes: [
@@ -32,7 +33,7 @@ const serialize = function (juryCertification, { translate }) {
       'isRejectedForFraud',
       'juryId',
       'pixScore',
-      'reachedMeshIndex',
+      'reachedResultKey',
       'competencesWithMark',
       'commentForCandidate',
       'commentForOrganization',

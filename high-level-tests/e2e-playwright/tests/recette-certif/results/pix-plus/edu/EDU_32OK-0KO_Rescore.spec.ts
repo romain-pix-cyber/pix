@@ -118,6 +118,7 @@ test(
           nbValidatedTechnicalIssues: 0,
           result: 'Admissible',
         });
+
         await test.step('Rescore certification and check for scoring', async () => {
           await test.step('Alter candidate answers directly in BDD to have all answers wrong, to demonstrate re-scoring', async () => {
             const wrongAnswersSequence = Array(32).fill(false);
@@ -166,6 +167,14 @@ test(
         'Numéro de certification',
         'Centre de certification',
       ]);
+    });
+
+    await test.step('Cannot set external jury result', async () => {
+      await pixAdminRoleCertifPage.goto(process.env.PIX_ADMIN_URL!);
+      const adminHomepage = new AdminHomePage(pixAdminRoleCertifPage);
+      const sessionsMainPage = await adminHomepage.goToCertificationSessionsTab();
+      await sessionsMainPage.goToCertificationWithSearchBar(certificationNumber);
+      await expect(pixAdminRoleCertifPage.getByText('Résultats de la certification Pix+ Edu')).not.toBeVisible();
     });
 
     await snapshotHandler.expectOrRecord(snapshotPath);

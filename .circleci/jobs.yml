@@ -187,6 +187,22 @@ commands:
           paths:
             - ~/.npm
 
+  npm_install_cypress_with_cache:
+    parameters:
+      cache_key:
+        type: string
+    steps:
+      - run: cat package*.json > cachekey
+      - restore_cache:
+          keys:
+            - v7-<<parameters.cache_key>>-npm-{{ checksum "cachekey" }}
+      - run: npm ci
+      - run: npx cypress install
+      - save_cache:
+          key: v7-<<parameters.cache_key>>-npm-{{ checksum "cachekey" }}
+          paths:
+            - ~/.npm
+
   frontend_build:
     parameters:
       app_name:
@@ -547,7 +563,7 @@ jobs:
 
   api_unit_test:
     executor:
-      name: node-redis-postgres-s3-docker
+      name: node-docker
     working_directory: ~/pix/api
     steps:
       - run:
@@ -563,10 +579,6 @@ jobs:
           command: npm run test:api:unit
           environment:
             NODE_ENV: test
-            TEST_DATABASE_URL: postgres://circleci@localhost:5432/circleci
-            TEST_REDIS_URL: redis://localhost:6379
-            TEST_IMPORT_STORAGE_ENDPOINT: http://localhost:9090
-            TEST_IMPORT_STORAGE_BUCKET_NAME: pix-import-test
             MOCHA_FILE: /home/circleci/test-results/test-results.[hash].xml
             MOCHA_REPORTER: mocha-junit-reporter
           when: always
@@ -964,7 +976,7 @@ jobs:
           background: true
       - attach_workspace:
           at: ~/pix
-      - npm_install_with_cache:
+      - npm_install_cypress_with_cache:
           cache_key: e2e
       - run:
           name: Lint
@@ -1044,7 +1056,7 @@ jobs:
           background: true
       - attach_workspace:
           at: ~/pix
-      - npm_install_with_cache:
+      - npm_install_cypress_with_cache:
           cache_key: e2e
       - run:
           name: Lint

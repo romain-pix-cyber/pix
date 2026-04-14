@@ -25,6 +25,7 @@ async function _createScoCampaigns(databaseBuilder) {
     name: "Campagne d'évaluation SCO",
     code: 'SCOASSIMP',
     externalIdLabel: 'IdPixLabel',
+    recommendationEngine: true,
     createdAt: dayjs().subtract(30, 'days').toDate(),
     configCampaign: {
       participantCount: 10,

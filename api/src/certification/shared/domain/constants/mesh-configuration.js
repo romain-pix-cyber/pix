@@ -1,4 +1,4 @@
-export const CERTIFICATE_LEVELS = {
+export const CORE_CERTIFICATE_LEVELS = {
   preBeginner: 'LEVEL_PRE_BEGINNER',
   beginner1: 'LEVEL_BEGINNER_1',
   beginner2: 'LEVEL_BEGINNER_2',
@@ -10,14 +10,19 @@ export const CERTIFICATE_LEVELS = {
   expert8: 'LEVEL_EXPERT_8',
 };
 
-export const MESH_CONFIGURATION = new Map([
-  [CERTIFICATE_LEVELS.preBeginner, { weight: 64, coefficient: 0 }],
-  [CERTIFICATE_LEVELS.beginner1, { weight: 64, coefficient: 1 }],
-  [CERTIFICATE_LEVELS.beginner2, { weight: 128, coefficient: 1 }],
-  [CERTIFICATE_LEVELS.independent3, { weight: 128, coefficient: 2 }],
-  [CERTIFICATE_LEVELS.independent4, { weight: 128, coefficient: 3 }],
-  [CERTIFICATE_LEVELS.advanced5, { weight: 128, coefficient: 4 }],
-  [CERTIFICATE_LEVELS.advanced6, { weight: 128, coefficient: 5 }],
-  [CERTIFICATE_LEVELS.expert7, { weight: 128, coefficient: 6 }],
-  [CERTIFICATE_LEVELS.expert8, { weight: 128, coefficient: 7 }],
+export const CORE_MESH_CONFIGURATION = new Map([
+  [CORE_CERTIFICATE_LEVELS.preBeginner, { weight: 64, coefficient: 0 }],
+  [CORE_CERTIFICATE_LEVELS.beginner1, { weight: 64, coefficient: 1 }],
+  [CORE_CERTIFICATE_LEVELS.beginner2, { weight: 128, coefficient: 1 }],
+  [CORE_CERTIFICATE_LEVELS.independent3, { weight: 128, coefficient: 2 }],
+  [CORE_CERTIFICATE_LEVELS.independent4, { weight: 128, coefficient: 3 }],
+  [CORE_CERTIFICATE_LEVELS.advanced5, { weight: 128, coefficient: 4 }],
+  [CORE_CERTIFICATE_LEVELS.advanced6, { weight: 128, coefficient: 5 }],
+  [CORE_CERTIFICATE_LEVELS.expert7, { weight: 128, coefficient: 6 }],
+  [CORE_CERTIFICATE_LEVELS.expert8, { weight: 128, coefficient: 7 }],
 ]);
+
+export const PIX_PLUS_EDU_EXTERNAL_LEVELS = {
+  ADVANCED: 'ADVANCED',
+  EXPERT: 'EXPERT',
+};

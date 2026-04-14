@@ -508,6 +508,148 @@ module('Integration | Component | SessionSupervising::CandidateInList', function
           )
           .exists();
       });
+
+      module('when the invigilator validates the live alert and the adapter fails', function () {
+        test('it displays a specific notification for the ALREADY_ANSWERED_ERROR code', async function (assert) {
+          // given
+          const pixToast = this.owner.lookup('service:pixToast');
+          sinon.stub(pixToast, 'sendErrorNotification');
+          const adapter = store.adapterFor('session-management');
+          adapter.validateLiveAlert = sinon
+            .stub()
+            .rejects({ errors: [{ code: 'ALREADY_ANSWERED_ERROR', detail: 'error message' }] });
+
+          this.candidate = store.createRecord('certification-candidate-for-supervising', {
+            id: '456',
+            startDateTime: new Date('2022-10-19T14:30:15Z'),
+            theoricalEndDateTime: new Date('2022-10-19T16:00:00Z'),
+            extraTimePercentage: 0.12,
+            authorizedToStart: false,
+            assessmentStatus: 'started',
+            challengeLiveAlert: {
+              type: 'challenge',
+              status: 'ongoing',
+              hasEmbed: false,
+              hasAttachment: false,
+              isFocus: false,
+              hasImage: false,
+            },
+          });
+
+          // when
+          const screen = await renderScreen(hbs`<SessionSupervising::CandidateInList @candidate={{this.candidate}} />`);
+          await click(screen.getByRole('button', { name: 'Gérer le signalement' }));
+          await click(
+            await screen.findByRole('radio', {
+              name: t('pages.session-finalization.add-issue-modal.subcategory-labels.website-unavailable'),
+            }),
+          );
+          await click(
+            screen.getByRole('button', {
+              name: t('pages.session-supervising.candidate-in-list.handle-live-alert-modal.ask.validate-alert-button'),
+            }),
+          );
+
+          // then
+          sinon.assert.calledOnceWithExactly(pixToast.sendErrorNotification, {
+            message: t(
+              'pages.session-supervising.candidate-in-list.handle-live-alert-modal.error-handling.challenge-already-answered',
+            ),
+          });
+          assert.ok(true);
+        });
+
+        test('it displays a generic notification for any other error', async function (assert) {
+          // given
+          const pixToast = this.owner.lookup('service:pixToast');
+          sinon.stub(pixToast, 'sendErrorNotification');
+          const adapter = store.adapterFor('session-management');
+          adapter.validateLiveAlert = sinon.stub().rejects({ errors: [{}] });
+
+          this.candidate = store.createRecord('certification-candidate-for-supervising', {
+            id: '456',
+            startDateTime: new Date('2022-10-19T14:30:15Z'),
+            theoricalEndDateTime: new Date('2022-10-19T16:00:00Z'),
+            extraTimePercentage: 0.12,
+            authorizedToStart: false,
+            assessmentStatus: 'started',
+            challengeLiveAlert: {
+              type: 'challenge',
+              status: 'ongoing',
+              hasEmbed: false,
+              hasAttachment: false,
+              isFocus: false,
+              hasImage: false,
+            },
+          });
+
+          // when
+          const screen = await renderScreen(hbs`<SessionSupervising::CandidateInList @candidate={{this.candidate}} />`);
+          await click(screen.getByRole('button', { name: 'Gérer le signalement' }));
+          await click(
+            await screen.findByRole('radio', {
+              name: t('pages.session-finalization.add-issue-modal.subcategory-labels.website-unavailable'),
+            }),
+          );
+          await click(
+            screen.getByRole('button', {
+              name: t('pages.session-supervising.candidate-in-list.handle-live-alert-modal.ask.validate-alert-button'),
+            }),
+          );
+
+          // then
+          sinon.assert.calledOnceWithExactly(pixToast.sendErrorNotification, {
+            message: t(
+              'pages.session-supervising.candidate-in-list.handle-live-alert-modal.error-handling.miscellaneous',
+            ),
+          });
+          assert.ok(true);
+        });
+      });
+
+      module('when the invigilator rejects the live alert and the adapter fails', function () {
+        test('it displays a generic error notification', async function (assert) {
+          // given
+          const pixToast = this.owner.lookup('service:pixToast');
+          sinon.stub(pixToast, 'sendErrorNotification');
+          const adapter = store.adapterFor('session-management');
+          adapter.dismissLiveAlert = sinon.stub().rejects();
+
+          this.candidate = store.createRecord('certification-candidate-for-supervising', {
+            id: '456',
+            startDateTime: new Date('2022-10-19T14:30:15Z'),
+            theoricalEndDateTime: new Date('2022-10-19T16:00:00Z'),
+            extraTimePercentage: 0.12,
+            authorizedToStart: false,
+            assessmentStatus: 'started',
+            challengeLiveAlert: {
+              type: 'challenge',
+              status: 'ongoing',
+              hasEmbed: false,
+              hasAttachment: false,
+              isFocus: false,
+              hasImage: false,
+            },
+          });
+
+          // when
+          const screen = await renderScreen(hbs`<SessionSupervising::CandidateInList @candidate={{this.candidate}} />`);
+          await click(screen.getByRole('button', { name: 'Gérer le signalement' }));
+          await click(
+            await screen.findByRole('button', {
+              name: t('pages.session-supervising.candidate-in-list.handle-live-alert-modal.ask.dismiss-alert-button'),
+            }),
+          );
+
+          // then
+          sinon.assert.calledOnceWithExactly(pixToast.sendErrorNotification, {
+            message: t(
+              'pages.session-supervising.candidate-in-list.handle-live-alert-modal.error-handling.miscellaneous',
+            ),
+          });
+          assert.ok(true);
+        });
+      });
     });
 
     module('when the live alert type is companion', function () {

@@ -2,12 +2,7 @@ import { createServer } from '../../../../../server.js';
 import { AutoJuryCommentKeys } from '../../../../../src/certification/shared/domain/models/JuryComment.js';
 import { AssessmentResult } from '../../../../../src/shared/domain/models/AssessmentResult.js';
 import { Membership } from '../../../../../src/shared/domain/models/Membership.js';
-import {
-  databaseBuilder,
-  expect,
-  generateAuthenticatedUserRequestHeaders,
-  insertUserWithRoleSuperAdmin,
-} from '../../../../test-helper.js';
+import { databaseBuilder, expect, generateAuthenticatedUserRequestHeaders } from '../../../../test-helper.js';
 
 describe('Certification | Results | Acceptance | Application | Routes | organization', function () {
   const BOM_CHAR = '\ufeff';
@@ -15,7 +10,6 @@ describe('Certification | Results | Acceptance | Application | Routes | organiza
 
   beforeEach(async function () {
     server = await createServer();
-    await insertUserWithRoleSuperAdmin();
   });
 
   describe('GET /api/organizations/{organizationId}/certification-results', function () {

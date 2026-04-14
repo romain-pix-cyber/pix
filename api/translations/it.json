@@ -524,7 +524,7 @@
   },
   "verification-code-email": {
     "body": {
-      "context": "Desidera modificare l'indirizzo e-mail del suo account. Per continuare, inserire il seguente codice in Pix :",
+      "context": "Per verificare il tuo indirizzo e-mail, puoi inserire il seguente codice su Pix:",
       "doNotAnswer": "Questa è un'e-mail automatica, non rispondete.",
       "greeting": "Salve,",
       "moreOn": "Per saperne di più",

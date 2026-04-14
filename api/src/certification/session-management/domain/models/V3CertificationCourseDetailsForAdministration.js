@@ -11,6 +11,7 @@ export class V3CertificationCourseDetailsForAdministration {
     abortReason,
     pixScore,
     reachedMeshIndex,
+    eduV3ExternalJuryResult,
     numberOfChallenges,
     certificationFramework,
   }) {
@@ -24,9 +25,15 @@ export class V3CertificationCourseDetailsForAdministration {
     this.abortReason = abortReason;
     this.pixScore = pixScore;
     this.reachedMeshIndex = reachedMeshIndex;
+    this.eduV3ExternalJuryResult = eduV3ExternalJuryResult;
     this.numberOfChallenges = numberOfChallenges;
     this.endedAt = endedAt;
     this.certificationFramework = certificationFramework;
+  }
+
+  get reachedResultKey() {
+    const resultKey = this.eduV3ExternalJuryResult || (this.reachedMeshIndex ?? 'BELOW_MINIMUM');
+    return `${this.certificationFramework}.${resultKey}`;
   }
 
   setCompetencesDetails(competenceList) {

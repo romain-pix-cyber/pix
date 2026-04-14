@@ -1,9 +1,4 @@
-import fs from 'node:fs';
-import { unlink, writeFile } from 'node:fs/promises';
-import * as url from 'node:url';
-
 import FormData from 'form-data';
-import streamToPromise from 'stream-to-promise';
 
 import { PIX_ADMIN } from '../../../../src/authorization/domain/constants.js';
 import {
@@ -11,12 +6,10 @@ import {
   databaseBuilder,
   expect,
   generateAuthenticatedUserRequestHeaders,
-  getFakeAttestationTemplate,
   knex,
   mockAttestationStorageUpload,
 } from '../../../test-helper.js';
-
-const __dirname = url.fileURLToPath(new URL('.', import.meta.url));
+import { AttestationTemplateFixture } from '../../../tooling/fixtures/index.js';
 
 describe('Quest | Acceptance | Application | Attestation Route ', function () {
   let server;
@@ -41,7 +34,11 @@ describe('Quest | Acceptance | Application | Attestation Route ', function () {
           const formData = new FormData();
           formData.append('templateKey', templateKey);
           formData.append('templateName', templateName);
-          formData.append('templateFile', getFakeAttestationTemplate());
+          const templateFile = await AttestationTemplateFixture.getFile();
+          formData.append('templateFile', templateFile, {
+            filename: 'attestation-template.pdf',
+            contentType: 'application/pdf',
+          });
           mockAttestationStorageUpload({ attestation: { templateName } });
           const options = {
             method: 'POST',
@@ -50,7 +47,7 @@ describe('Quest | Acceptance | Application | Attestation Route ', function () {
               ...formData.getHeaders(),
               ...generateAuthenticatedUserRequestHeaders({ userId }),
             },
-            payload: await streamToPromise(formData),
+            payload: formData.getBuffer(),
           };
 
           // when
@@ -72,9 +69,7 @@ describe('Quest | Acceptance | Application | Attestation Route ', function () {
           formData.append('templateKey', 'key');
           formData.append('templateName', 'name');
 
-          const testFilePath = `${__dirname}/testFile_temp.jpeg`;
-          await writeFile(testFilePath, Buffer.alloc(0));
-          formData.append('templateFile', fs.createReadStream(testFilePath));
+          formData.append('templateFile', Buffer.alloc(0), { filename: 'testFile_temp.jpeg' });
 
           const options = {
             method: 'POST',
@@ -83,7 +78,7 @@ describe('Quest | Acceptance | Application | Attestation Route ', function () {
               ...formData.getHeaders(),
               ...generateAuthenticatedUserRequestHeaders({ userId }),
             },
-            payload: await streamToPromise(formData),
+            payload: formData.getBuffer(),
           };
 
           // when
@@ -91,9 +86,6 @@ describe('Quest | Acceptance | Application | Attestation Route ', function () {
 
           // then
           expect(response.statusCode).to.equal(400);
-
-          // after
-          await unlink(testFilePath);
         });
       });
     });

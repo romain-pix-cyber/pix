@@ -198,8 +198,72 @@ module('Integration | Component | Auth::ToggableLoginForm', function (hooks) {
             assert.strictEqual(sessionServiceObserver.email, 'pix@example.net');
             assert.strictEqual(sessionServiceObserver.password, 'JeMeLoggue1024');
           });
+
+          test('it should display an error when authentication fails after 412', async function (assert) {
+            // given
+            const acceptCertificationCenterInvitationStub = sinon.stub();
+            acceptCertificationCenterInvitationStub.rejects({ errors: [{ code: 412, status: '412' }] });
+            this.set('certificationCenterInvitation', {
+              id: '56',
+              status: 'PENDING',
+              certificationCenterName: 'Some Center',
+              email: 'marie.tim@example.net',
+              accept: acceptCertificationCenterInvitationStub,
+            });
+
+            SessionStub.prototype.authenticate = sinon.stub().rejects();
+
+            const screen = await render(
+              hbs`<Auth::ToggableLoginForm
+  @isWithInvitation='true'
+  @certificationCenterInvitationId='1'
+  @certificationCenterInvitationCode='C0D3'
+  @certificationCenterInvitation={{this.certificationCenterInvitation}}
+/>`,
+            );
+
+            await fillByLabel(emailInputLabel, 'pix@example.net');
+            await fillByLabel(passwordInputLabel, 'JeMeLoggue1024');
+
+            // when
+            await clickByName(loginLabel);
+
+            // then
+            assert.dom(screen.getByText(t('common.api-error-messages.internal-server-error'))).exists();
+          });
         });
       });
+    });
+  });
+
+  module('When the form is invalid', function () {
+    test('it should not accept invitation when email is empty', async function (assert) {
+      // given
+      const acceptStub = sinon.stub().resolves();
+      this.set('certificationCenterInvitation', {
+        id: '56',
+        status: 'PENDING',
+        certificationCenterName: 'Some Center',
+        email: 'marie.tim@example.net',
+        accept: acceptStub,
+      });
+
+      await render(
+        hbs`<Auth::ToggableLoginForm
+  @isWithInvitation='true'
+  @certificationCenterInvitationId='1'
+  @certificationCenterInvitationCode='C0D3'
+  @certificationCenterInvitation={{this.certificationCenterInvitation}}
+/>`,
+      );
+
+      // when
+      await fillByLabel(passwordInputLabel, 'Pix12345!');
+      await clickByName(loginLabel);
+
+      // then
+      sinon.assert.notCalled(acceptStub);
+      assert.ok(true);
     });
   });
 });

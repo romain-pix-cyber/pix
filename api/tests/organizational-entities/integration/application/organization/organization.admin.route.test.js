@@ -22,10 +22,6 @@ describe('Integration | Organizational Entities | Application | Route | Admin | 
     await httpTestServer.register(organizationAdminRoutes);
   });
 
-  afterEach(function () {
-    sinon.restore();
-  });
-
   describe('GET /api/admin/organizations', function () {
     const method = 'GET';
 

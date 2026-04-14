@@ -18,7 +18,7 @@ describe('Certification | Session-management | Unit | Application | jury-certifi
         i18n: getI18n(),
       };
 
-      const juryCertification = domainBuilder.buildJuryCertification({
+      const juryCertification = domainBuilder.certification.sessionManagement.buildJuryCertification({
         certificationCourseId: 123,
         sessionId: 456,
         userId: 789,

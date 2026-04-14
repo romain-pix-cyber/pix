@@ -10,7 +10,6 @@ const updateCampaign = async function ({
   ownerId,
   campaignAdministrationRepository,
   membershipRepository,
-  campaignUpdateValidator,
 }) {
   const campaign = await campaignAdministrationRepository.get(campaignId);
 
@@ -35,9 +34,6 @@ const updateCampaign = async function ({
     customLandingPageText,
     ownerId,
   });
-
-  // TODO : should be called inside model method updateFields
-  campaignUpdateValidator.validate(campaign);
 
   return campaignAdministrationRepository.update(campaign);
 };

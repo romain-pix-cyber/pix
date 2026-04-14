@@ -1,0 +1,46 @@
+@use 'pix-design-tokens/breakpoints';
+@use 'pix-design-tokens/fonts';
+@use 'pix-design-tokens/typography';
+
+.add-email-with-validation {
+  display: flex;
+  flex-direction: column;
+
+  &__title {
+    @extend %pix-title-s;
+
+    padding-bottom: var(--pix-spacing-6x);
+    color: var(--pix-neutral-900);
+    text-align: center;
+    border-bottom: 1px solid var(--pix-neutral-100);
+
+    @include breakpoints.device-is('tablet') {
+      text-align: start;
+    }
+  }
+
+  &__form {
+    display: flex;
+    flex-direction: column;
+    margin-top: var(--pix-spacing-6x);
+    margin-bottom: var(--pix-spacing-6x);
+
+    &__fieldset {
+      display: flex;
+      flex-direction: column;
+      gap: var(--pix-spacing-4x);
+      margin-bottom: var(--pix-spacing-4x);
+    }
+  }
+
+  &__actions {
+    display: flex;
+    flex-direction: row;
+    gap: var(--pix-spacing-3x);
+    margin-top: var(--pix-spacing-6x);
+  }
+
+  &__code-info {
+    @extend %pix-body-s;
+  }
+}

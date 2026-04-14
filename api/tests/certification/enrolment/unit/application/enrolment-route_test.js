@@ -1,17 +1,10 @@
-import fs from 'node:fs';
-import { stat, unlink, writeFile } from 'node:fs/promises';
-import * as url from 'node:url';
-
 import FormData from 'form-data';
-import streamToPromise from 'stream-to-promise';
 
 import { enrolmentController } from '../../../../../src/certification/enrolment/application/enrolment-controller.js';
 import * as moduleUnderTest from '../../../../../src/certification/enrolment/application/enrolment-route.js';
 import { authorization } from '../../../../../src/certification/shared/application/pre-handlers/authorization.js';
 import { NotFoundError } from '../../../../../src/shared/domain/errors.js';
 import { expect, HttpTestServer, sinon } from '../../../../test-helper.js';
-
-const __dirname = url.fileURLToPath(new URL('.', import.meta.url));
 
 describe('Certification | Enrolment | Unit | Application | Routes', function () {
   describe('PUT /api/session/{sessionId}/enrol-students-to-session', function () {
@@ -90,24 +83,16 @@ describe('Certification | Enrolment | Unit | Application | Routes', function () 
   });
 
   describe('POST /api/sessions/{sessionId}/certification-candidates/import', function () {
-    const testFilePath = `${__dirname}/testFile_temp.ods`;
     const method = 'POST';
 
     let headers;
     let payload;
 
-    beforeEach(async function () {
-      await writeFile(testFilePath, Buffer.alloc(0));
+    beforeEach(function () {
       const form = new FormData();
-      const knownLength = await stat(testFilePath).size;
-      form.append('file', fs.createReadStream(testFilePath), { knownLength });
-
+      form.append('file', Buffer.alloc(0), { filename: 'test-file' });
       headers = form.getHeaders();
-      payload = await streamToPromise(form);
-    });
-
-    afterEach(async function () {
-      await unlink(testFilePath);
+      payload = form.getBuffer();
     });
 
     it('should exist', async function () {

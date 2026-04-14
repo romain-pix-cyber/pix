@@ -113,47 +113,6 @@ describe('Unit | UseCase | saveOrganizationLearnersFile', function () {
     importOrganizationLearnerSetStub.addLearners.withArgs(parsedLearners);
   });
 
-  context('success cases', function () {
-    it('should process the file', async function () {
-      // when
-      await saveOrganizationLearnersFile({
-        organizationImportId,
-        importStorage: importStorageStub,
-        organizationImportRepository: organizationImportRepositoryStub,
-        organizationLearnerRepository: organizationLearnerRepositoryStub,
-        organizationLearnerImportFormatRepository: organizationLearnerImportFormatRepositoryStub,
-        dependencies: dependencieStub,
-      });
-
-      // then
-      expect(
-        organizationLearnerRepositoryStub.findAllCommonLearnersFromOrganizationId.calledOnceWithExactly({
-          organizationId,
-        }),
-        'organizationLearnerRepository.findAllCommonLearnersFromOrganizationId',
-      ).to.be.true;
-      expect(importOrganizationLearnerSetStub.setExistingLearners.calledOnceWithExactly(existingLearners)).to.be.true;
-      expect(
-        organizationLearnerRepositoryStub.disableCommonOrganizationLearnersFromOrganizationId.calledOnceWithExactly({
-          organizationId,
-          excludeOrganizationLearnerIds: learnerIds,
-        }),
-        'organizationLearnerRepository.disableCommonOrganizationLearnersFromOrganizationId',
-      ).to.be.true;
-      expect(
-        organizationLearnerRepositoryStub.saveCommonOrganizationLearners.calledOnceWithExactly(learnerToSave),
-        'organizationLearnerRepository.saveCommonOrganizationLearners',
-      ).to.be.true;
-
-      expect(
-        organizationImportRepositoryStub.save.calledOnceWith(organizationImportStub),
-        'orgnizationImportRepository.save',
-      ).to.be.true;
-      expect(importStorageStub.deleteFile.calledOnceWithExactly({ filename: s3Filepath }), 'importStorage.deleteFile')
-        .to.be.true;
-    });
-  });
-
   context(' error cases', function () {
     it('save the error when an error occured', async function () {
       // given

@@ -16,7 +16,7 @@ export default class NewController extends Controller {
   @action
   redirectOnCancel() {
     if (this.parentOrganizationId) {
-      return this.router.transitionTo('authenticated.organizations.get.children', this.parentOrganizationId);
+      return this.router.transitionTo('authenticated.organizations.get.network', this.parentOrganizationId);
     }
     this.router.transitionTo('authenticated.organizations');
   }

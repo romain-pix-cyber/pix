@@ -1,6 +1,5 @@
-import stream from 'node:stream';
-
-const { PassThrough } = stream;
+import { PassThrough } from 'node:stream';
+import { text } from 'node:stream/consumers';
 
 import dayjs from 'dayjs';
 
@@ -12,14 +11,7 @@ import { CAMPAIGN_FEATURES, ORGANIZATION_FEATURE } from '../../../../../../src/s
 import { Assessment } from '../../../../../../src/shared/domain/models/Assessment.js';
 import { KnowledgeElement } from '../../../../../../src/shared/domain/models/KnowledgeElement.js';
 import { getI18n } from '../../../../../../src/shared/infrastructure/i18n/i18n.js';
-import {
-  databaseBuilder,
-  domainBuilder,
-  expect,
-  mockLearningContent,
-  sinon,
-  streamToPromise,
-} from '../../../../../test-helper.js';
+import { databaseBuilder, domainBuilder, expect, mockLearningContent, sinon } from '../../../../../test-helper.js';
 
 describe('Integration | Domain | Use Cases | start-writing-campaign-assessment-results-to-stream', function () {
   describe('#startWritingCampaignAssessmentResultsToStream', function () {
@@ -30,7 +22,6 @@ describe('Integration | Domain | Use Cases | start-writing-campaign-assessment-r
     let campaignParticipation;
     let organizationLearner;
     let writableStream;
-    let csvPromise;
     let i18n;
     let createdAt, sharedAt, createdAtFormated, sharedAtFormated;
     let now;
@@ -93,7 +84,6 @@ describe('Integration | Domain | Use Cases | start-writing-campaign-assessment-r
       await mockLearningContent(learningContent);
 
       writableStream = new PassThrough();
-      csvPromise = streamToPromise(writableStream);
     });
 
     [
@@ -145,16 +135,13 @@ describe('Integration | Domain | Use Cases | start-writing-campaign-assessment-r
           });
 
           it('should return the correct filename', async function () {
-            // given
-
             // when
             const filename = await usecases.startWritingCampaignAssessmentResultsToStream({
               campaignId: campaign.id,
               writableStream,
               i18n,
             });
-            await csvPromise;
-            dayjs();
+
             const expectedFilename =
               'Resultats-' +
               campaign.name +
@@ -277,8 +264,8 @@ describe('Integration | Domain | Use Cases | start-writing-campaign-assessment-r
               writableStream,
               i18n,
             });
-            const csv = await csvPromise;
 
+            const csv = await text(writableStream);
             const csvLines = csv.split('\n');
             const csvFirstLineCells = csvLines[0].split(';');
 
@@ -422,8 +409,8 @@ describe('Integration | Domain | Use Cases | start-writing-campaign-assessment-r
               writableStream,
               i18n,
             });
-            const csv = await csvPromise;
 
+            const csv = await text(writableStream);
             const csvLines = csv.split('\n');
             const csvFirstLineCells = csvLines[0].split(';');
 
@@ -523,7 +510,7 @@ describe('Integration | Domain | Use Cases | start-writing-campaign-assessment-r
 
           it('should return the complete line', async function () {
             // given
-            const expectedCsvFirstCell = '\uFEFF"Nom de l\'organisation"';
+            const expectedCsvFirstCell = '"Nom de l\'organisation"';
             let csvSecondLine =
               `"${organization.name}";` +
               `${campaign.id};` +
@@ -558,8 +545,8 @@ describe('Integration | Domain | Use Cases | start-writing-campaign-assessment-r
               writableStream,
               i18n,
             });
-            const csv = await csvPromise;
 
+            const csv = await text(writableStream);
             const csvLines = csv.split('\n');
             const csvFirstLineCells = csvLines[0].split(';');
 
@@ -662,7 +649,7 @@ describe('Integration | Domain | Use Cases | start-writing-campaign-assessment-r
 
           it('should return a csv line with progression', async function () {
             // given
-            const expectedCsvFirstCell = '\uFEFF"Nom de l\'organisation"';
+            const expectedCsvFirstCell = '"Nom de l\'organisation"';
 
             let csvSecondLine =
               `"${organization.name}";` +
@@ -723,7 +710,7 @@ describe('Integration | Domain | Use Cases | start-writing-campaign-assessment-r
               i18n,
             });
 
-            const csv = await csvPromise;
+            const csv = await text(writableStream);
             const csvLines = csv.split('\n');
             const csvFirstLineCells = csvLines[0].split(';');
 
@@ -855,7 +842,7 @@ describe('Integration | Domain | Use Cases | start-writing-campaign-assessment-r
 
           it('should return 2 lines', async function () {
             // given
-            const expectedCsvFirstCell = '\uFEFF"Nom de l\'organisation"';
+            const expectedCsvFirstCell = '"Nom de l\'organisation"';
 
             let csvSecondLine =
               `"${organization.name}";` +
@@ -915,7 +902,7 @@ describe('Integration | Domain | Use Cases | start-writing-campaign-assessment-r
               i18n,
             });
 
-            const csv = await csvPromise;
+            const csv = await text(writableStream);
             const csvLines = csv.split('\n');
             const csvFirstLineCells = csvLines[0].split(';');
 

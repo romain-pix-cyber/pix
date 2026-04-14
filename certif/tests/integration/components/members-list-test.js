@@ -55,6 +55,74 @@ module('Integration | Component | MembersList', function (hooks) {
         .dom(screen.getByRole('heading', { level: 1, name: t('pages.team.members.modals.change-member-role.title') }))
         .exists();
     });
+
+    test('displays a success notification when the role is saved', async function (assert) {
+      // given
+      const pixToast = this.owner.lookup('service:pixToast');
+      sinon.stub(pixToast, 'sendSuccessNotification');
+      const connectedUserWithAdminRole = store.createRecord('member', {
+        id: '1',
+        firstName: 'Jacques',
+        lastName: 'Ouzi',
+        role: 'ADMIN',
+      });
+      const memberWithMemberRole = store.createRecord('member', {
+        id: '3',
+        firstName: 'Franck',
+        lastName: 'Ofone',
+        role: 'MEMBER',
+        save: sinon.stub().resolves(),
+      });
+      const members = [connectedUserWithAdminRole, memberWithMemberRole];
+      sinon.stub(currentUser, 'certificationPointOfContact').value({ id: connectedUserWithAdminRole.id });
+      this.set('members', members);
+      const screen = await render(hbs`<MembersList @members={{this.members}} />`);
+      const table = screen.getByRole('table', { name: t('pages.team.table.caption') });
+      await click(within(table).getByRole('button', { name: t('pages.team.members.actions.edit-role') }));
+      await waitForDialog();
+
+      // when
+      await click(screen.getByRole('button', { name: t('pages.team.members.actions.save') }));
+
+      // then
+      sinon.assert.calledOnce(pixToast.sendSuccessNotification);
+      assert.ok(true);
+    });
+
+    test('displays an error notification when saving the role fails', async function (assert) {
+      // given
+      const pixToast = this.owner.lookup('service:pixToast');
+      sinon.stub(pixToast, 'sendErrorNotification');
+      const connectedUserWithAdminRole = store.createRecord('member', {
+        id: '1',
+        firstName: 'Jacques',
+        lastName: 'Ouzi',
+        role: 'ADMIN',
+      });
+      const memberWithMemberRole = store.createRecord('member', {
+        id: '3',
+        firstName: 'Franck',
+        lastName: 'Ofone',
+        role: 'MEMBER',
+        save: sinon.stub().rejects(),
+        rollbackAttributes: sinon.stub(),
+      });
+      const members = [connectedUserWithAdminRole, memberWithMemberRole];
+      sinon.stub(currentUser, 'certificationPointOfContact').value({ id: connectedUserWithAdminRole.id });
+      this.set('members', members);
+      const screen = await render(hbs`<MembersList @members={{this.members}} />`);
+      const table = screen.getByRole('table', { name: t('pages.team.table.caption') });
+      await click(within(table).getByRole('button', { name: t('pages.team.members.actions.edit-role') }));
+      await waitForDialog();
+
+      // when
+      await click(screen.getByRole('button', { name: t('pages.team.members.actions.save') }));
+
+      // then
+      sinon.assert.calledOnce(pixToast.sendErrorNotification);
+      sinon.assert.calledOnce(memberWithMemberRole.rollbackAttributes);
+      assert.ok(true);
+    });
   });
 
   module('For remove member button', function () {
@@ -85,6 +153,77 @@ module('Integration | Component | MembersList', function (hooks) {
       assert
         .dom(screen.getByRole('heading', { level: 1, name: t('pages.team.members.remove-membership-modal.title') }))
         .exists();
+    });
+
+    test('displays a success notification when the member is removed', async function (assert) {
+      // given
+      const pixToast = this.owner.lookup('service:pixToast');
+      sinon.stub(pixToast, 'sendSuccessNotification');
+      const onRemoveMember = sinon.stub().resolves();
+      const connectedUserWithAdminRole = store.createRecord('member', {
+        id: '1',
+        firstName: 'Jacques',
+        lastName: 'Ouzi',
+        role: 'ADMIN',
+      });
+      const memberWithMemberRole = store.createRecord('member', {
+        id: '3',
+        firstName: 'Franck',
+        lastName: 'Ofone',
+        role: 'MEMBER',
+      });
+      const members = [connectedUserWithAdminRole, memberWithMemberRole];
+      sinon.stub(currentUser, 'certificationPointOfContact').value({ id: connectedUserWithAdminRole.id });
+      this.set('members', members);
+      this.set('onRemoveMember', onRemoveMember);
+      const screen = await render(
+        hbs`<MembersList @members={{this.members}} @onRemoveMember={{this.onRemoveMember}} />`,
+      );
+      await click(screen.getByRole('button', { name: t('pages.team.members.actions.remove-membership') }));
+      await waitForDialog();
+
+      // when
+      await click(screen.getByRole('button', { name: t('pages.team.members.remove-membership-modal.actions.remove') }));
+
+      // then
+      sinon.assert.calledOnce(onRemoveMember);
+      sinon.assert.calledOnce(pixToast.sendSuccessNotification);
+      assert.ok(true);
+    });
+
+    test('displays an error notification when removing the member fails', async function (assert) {
+      // given
+      const pixToast = this.owner.lookup('service:pixToast');
+      sinon.stub(pixToast, 'sendErrorNotification');
+      const onRemoveMember = sinon.stub().rejects(new Error());
+      const connectedUserWithAdminRole = store.createRecord('member', {
+        id: '1',
+        firstName: 'Jacques',
+        lastName: 'Ouzi',
+        role: 'ADMIN',
+      });
+      const memberWithMemberRole = store.createRecord('member', {
+        id: '3',
+        firstName: 'Franck',
+        lastName: 'Ofone',
+        role: 'MEMBER',
+      });
+      const members = [connectedUserWithAdminRole, memberWithMemberRole];
+      sinon.stub(currentUser, 'certificationPointOfContact').value({ id: connectedUserWithAdminRole.id });
+      this.set('members', members);
+      this.set('onRemoveMember', onRemoveMember);
+      const screen = await render(
+        hbs`<MembersList @members={{this.members}} @onRemoveMember={{this.onRemoveMember}} />`,
+      );
+      await click(screen.getByRole('button', { name: t('pages.team.members.actions.remove-membership') }));
+      await waitForDialog();
+
+      // when
+      await click(screen.getByRole('button', { name: t('pages.team.members.remove-membership-modal.actions.remove') }));
+
+      // then
+      sinon.assert.calledOnce(pixToast.sendErrorNotification);
+      assert.ok(true);
     });
   });
 
@@ -162,6 +301,28 @@ module('Integration | Component | MembersList', function (hooks) {
           sinon.assert.called(session.waitBeforeInvalidation);
           assert.dom(screen.queryByRole('heading', { level: 1, name: 'Quitter cet espace Pix Certif' })).doesNotExist();
           assert.true(onLeaveCertificationCenter.calledOnce);
+        });
+
+        test('displays an error notification when leaving fails', async function (assert) {
+          // given
+          const pixToast = this.owner.lookup('service:pixToast');
+          sinon.stub(pixToast, 'sendErrorNotification');
+          const onLeaveCertificationCenter = sinon.stub().rejects(new Error());
+          this.set('onLeaveCertificationCenter', onLeaveCertificationCenter);
+
+          await render(
+            hbs`<MembersList @members={{this.members}} @onLeaveCertificationCenter={{this.onLeaveCertificationCenter}} />`,
+          );
+
+          await clickByName('Quitter cet espace Pix Certif');
+          await waitForDialog();
+
+          // when
+          await clickByName('Confirmer');
+
+          // then
+          sinon.assert.calledOnce(pixToast.sendErrorNotification);
+          assert.ok(true);
         });
       });
     });

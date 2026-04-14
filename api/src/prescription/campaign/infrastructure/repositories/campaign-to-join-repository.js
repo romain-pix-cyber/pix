@@ -30,11 +30,16 @@ const getByCode = async function ({ code, organizationFeatureAPI }) {
     throw new NotFoundError(`La campagne au code ${code} n'existe pas ou son accès est restreint`);
   }
 
-  const externalIdFeature = await knexConn('campaign-features')
-    .select('params')
+  const campaignFeatures = await knexConn('campaign-features')
+    .select('features.key', 'params')
     .join('features', 'features.id', 'featureId')
-    .where({ campaignId: result.id, 'features.key': CAMPAIGN_FEATURES.EXTERNAL_ID.key })
-    .first();
+    .where({ campaignId: result.id })
+    .whereIn('features.key', [CAMPAIGN_FEATURES.RECOMMENDATION_ENGINE.key, CAMPAIGN_FEATURES.EXTERNAL_ID.key]);
+
+  const externalFeature = campaignFeatures.find((feature) => feature.key === CAMPAIGN_FEATURES.EXTERNAL_ID.key);
+  const hasRecommendationEngine = campaignFeatures.some(
+    (feature) => feature.key === CAMPAIGN_FEATURES.RECOMMENDATION_ENGINE.key,
+  );
 
   const { hasLearnersImportFeature } = await organizationFeatureAPI.getAllFeaturesFromOrganization(
     result.organizationId,
@@ -42,7 +47,9 @@ const getByCode = async function ({ code, organizationFeatureAPI }) {
 
   return new CampaignToJoin({
     ...result,
-    ...{ externalIdLabel: externalIdFeature?.params?.label, externalIdType: externalIdFeature?.params?.type },
+    externalIdLabel: externalFeature?.params?.label,
+    externalIdType: externalFeature?.params?.type,
+    recommendationEngine: hasRecommendationEngine,
     hasLearnersImportFeature,
   });
 };

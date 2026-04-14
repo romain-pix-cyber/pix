@@ -6,7 +6,13 @@ import { module, test } from 'qunit';
 module('Integration | Component | CopyPasteButton', function (hooks) {
   setupRenderingTest(hooks);
 
-  hooks.beforeEach(function () {});
+  hooks.beforeEach(function () {
+    Object.defineProperty(window.navigator, 'clipboard', {
+      value: { writeText: async () => {} },
+      writable: true,
+      configurable: true,
+    });
+  });
 
   const successMessage = 'Ouiiiiiii !';
   const defaultMessage = 'Ivre il clique sur le bouton et ....';

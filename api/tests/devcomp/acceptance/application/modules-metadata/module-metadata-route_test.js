@@ -3,7 +3,6 @@ import {
   databaseBuilder,
   expect,
   generateAuthenticatedUserRequestHeaders,
-  insertUserWithRoleSuperAdmin,
 } from '../../../../test-helper.js';
 
 describe('Acceptance | Controller | Modules Metadata | Route', function () {
@@ -17,7 +16,7 @@ describe('Acceptance | Controller | Modules Metadata | Route', function () {
     context('when modules exists', function () {
       it('should return modules metadata', async function () {
         // given
-        const superAdmin = await insertUserWithRoleSuperAdmin();
+        const superAdmin = databaseBuilder.factory.buildUser.withRoleSuperAdmin();
         await databaseBuilder.commit();
 
         const options = {

@@ -2296,42 +2296,24 @@
       "validation": "Je wachtwoord is bijgewerkt."
     },
     "user-account": {
-      "account-update-email": {
-        "email-information": "Dit e-mailadres moet geldig zijn voor het geval u uw wachtwoord vergeet. Dit wordt je nieuwe inlogadres.",
+      "account-add-or-update-email-with-validation": {
+        "code-reception-information": "Zodra u uw verzoek om een e-mailadres toe te voegen bevestigt, ontvangt u een code via e-mail.",
         "fields": {
-          "errors": {
-            "empty-password": "Je wachtwoord mag niet leeg zijn.",
-            "invalid-password": "Het ingevoerde wachtwoord is ongeldig.",
-            "mismatching-email": "De twee e-mailadressen zijn niet identiek. Controleer uw inzending.",
-            "new-email-already-exist": "Dit e-mailadres is al in gebruik.",
-            "unknown-error": "Er is een fout opgetreden. Probeer het opnieuw of neem contact op met de klantenservice.",
-            "wrong-email-format": "Je e-mailadres is ongeldig."
+          "email": {
+            "add-email": {
+              "label": "E-mailadres"
+            },
+            "update-email": {
+              "label": "Nieuw e-mailadres"
+            }
           },
-          "new-email": {
-            "label": "Nieuw e-mailadres"
-          },
-          "new-email-confirmation": {
-            "label": "Bevestiging van e-mailadres"
-          },
-          "password": {
-            "label": "Wachtwoord"
-          }
-        },
-        "password-information": "Voer uw wachtwoord in om te bevestigen",
-        "save-button": "Bevestig",
-        "title": "Je e-mailadres wijzigen"
-      },
-      "account-update-email-with-validation": {
-        "fields": {
           "errors": {
             "empty-password": "Je wachtwoord mag niet leeg zijn.",
             "invalid-email": "Je e-mailadres is ongeldig.",
             "invalid-or-already-used-email": "Ongeldig of al gebruikt e-mailadres",
             "invalid-password": "Het ingevoerde wachtwoord is ongeldig.",
-            "new-email-already-exist": "Dit e-mailadres is al in gebruik."
-          },
-          "new-email": {
-            "label": "Nieuw e-mailadres"
+            "new-email-already-exist": "Dit e-mailadres is al in gebruik.",
+            "unknown-error": "Er is een fout opgetreden. Probeer het opnieuw of neem contact op met de klantenservice."
           },
           "password": {
             "label": "Wachtwoord",
@@ -2339,10 +2321,12 @@
           }
         },
         "save-button": "Een verificatiecode ontvangen",
-        "title": "Je e-mailadres wijzigen"
+        "title": {
+          "add-email": "Een e-mailadres toevoegen",
+          "update-email": "Je e-mailadres wijzigen"
+        }
       },
       "connexion-methods": {
-        "add-email": "Een e-mailadres toevoegen",
         "authentication-methods": {
           "connection-via": "Inloggen via {identityProviderOrganizationName}",
           "gar": "Inloggen via ENT/Mediacentre",
@@ -2384,12 +2368,14 @@
           "email-modification-demand-expired": "Deze code is verlopen. Vernieuw de aanvraag.",
           "incorrect-code": "De ingevoerde code is onjuist.",
           "new-email-already-exist": "Dit e-mailadres is al in gebruik.",
+          "no-code": "Voer de {numInputs}-cijferige code in die u per e-mail heeft ontvangen.",
           "unknown-error": "Er is een fout opgetreden. Probeer het opnieuw of neem contact op met de klantenservice."
         },
         "send-back-the-code": "stuur me de code",
         "time-code-validation": "De ontvangen code is 10 minuten geldig",
         "title": "Je e-mailadres controleren",
-        "update-successful": "Je e-mailadres is gewijzigd!"
+        "update-successful": "Je e-mailadres is gewijzigd!",
+        "validate-new-email": "Valideer nieuw e-mailadres"
       },
       "language": {
         "lang": "Taal",

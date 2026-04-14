@@ -42,13 +42,12 @@ export async function saveAndCorrectAnswerForCampaign({
   const correctedAnswer = correctionService.evaluateAnswer({
     challenge,
     answer,
-    assessment,
+    challengeSubmittedAt: assessment.lastQuestionDate,
+    hasChallengeBeenFocusedOut: assessment.hasLastQuestionBeenFocusedOut,
+    isCertificationEvaluation: false,
     accessibilityAdjustmentNeeded: false,
     forceOKAnswer,
   });
-  const now = new Date();
-  const lastQuestionDate = assessment.lastQuestionDate || now;
-  correctedAnswer.setTimeSpentFrom({ now, lastQuestionDate });
 
   let savedAnswer;
   if (assessment.isSmartRandom()) {

@@ -1,6 +1,6 @@
 {
   "name": "pix-api",
-  "version": "5.379.0",
+  "version": "5.386.0",
   "private": false,
   "description": "Plateforme d'évaluation et de certification des compétences numériques",
   "homepage": "https://github.com/1024pix/pix#readme",
@@ -91,7 +91,7 @@
     "modulix:test": "npm run test:api:path -- 'tests/devcomp/unit/infrastructure/datasources/learning-content/module-datasource_test.js' 'tests/devcomp/acceptance/module-instantiation_test.js' 'tests/devcomp/unit/infrastructure/datasources/learning-content/validation/module-validation_test.js' 'tests/devcomp/integration/repositories/module-repository_test.js'"
   },
   "dependencies": {
-    "@1024pix/epreuves-components": "^4.2.0",
+    "@1024pix/epreuves-components": "^4.3.0",
     "@1024pix/oppsy": "^1.0.2",
     "@aws-sdk/client-s3": "^3.121.0",
     "@aws-sdk/lib-storage": "^3.121.0",
@@ -189,12 +189,12 @@
     "oxfmt": "^0.43.0",
     "pdfjs-dist": "^5.0.0",
     "sinon": "^21.0.0",
-    "sinon-chai": "^4.0.0",
-    "stream-to-promise": "^3.0.0"
+    "sinon-chai": "^4.0.0"
   },
   "overrides": {
     "@datadog/datadog-api-client": "1.53.0",
     "chai": "^6.0.0",
+    "handlebars": ">=4.7.9",
     "hapi-swagger": {
       "joi": "$joi"
     }

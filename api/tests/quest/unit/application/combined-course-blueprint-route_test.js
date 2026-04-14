@@ -1,0 +1,189 @@
+import { ATTESTATIONS } from '../../../../src/profile/domain/constants.js';
+import { combinedCourseBlueprintController } from '../../../../src/quest/application/combined-course-blueprint-controller.js';
+import * as combinedCourseBlueprintRoute from '../../../../src/quest/application/combined-course-blueprint-route.js';
+import { AdminCombinedCourseBlueprint } from '../../../../src/quest/domain/models/AdminCombinedCourseBlueprint.js';
+import { securityPreHandlers } from '../../../../src/shared/application/security-pre-handlers.js';
+import { expect, generateAuthenticatedUserRequestHeaders, HttpTestServer, sinon } from '../../../test-helper.js';
+
+describe('Quest | Unit | Routes | combined-course-blueprint-route', function () {
+  describe('GET /api/admin/combined-course-blueprints', function () {
+    it('should call prehandler', async function () {
+      // given
+      sinon.stub(securityPreHandlers, 'hasAtLeastOneAccessOf').returns(() => true);
+      sinon.stub(combinedCourseBlueprintController, 'findAll').callsFake((_, h) => h.response());
+
+      const httpTestServer = new HttpTestServer();
+      httpTestServer.setupAuthentication();
+      await httpTestServer.register(combinedCourseBlueprintRoute);
+
+      // when
+      await httpTestServer.request(
+        'GET',
+        '/api/admin/combined-course-blueprints',
+        null,
+        null,
+        generateAuthenticatedUserRequestHeaders({ userId: 123 }),
+      );
+
+      // then
+      expect(securityPreHandlers.hasAtLeastOneAccessOf).to.have.been.calledWithExactly([
+        securityPreHandlers.checkAdminMemberHasRoleSuperAdmin,
+        securityPreHandlers.checkAdminMemberHasRoleMetier,
+        securityPreHandlers.checkAdminMemberHasRoleSupport,
+        securityPreHandlers.checkAdminMemberHasRoleCertif,
+      ]);
+    });
+  });
+
+  describe('POST /api/admin/combined-course-blueprints', function () {
+    it('should call prehandler', async function () {
+      // given
+      sinon.stub(securityPreHandlers, 'hasAtLeastOneAccessOf').returns(() => true);
+      sinon.stub(combinedCourseBlueprintController, 'save').callsFake((_, h) => h.response());
+
+      const payload = {
+        data: {
+          type: 'combined-course-blueprints',
+          attributes: {
+            name: 'Mon parcours combiné',
+            'internal-name': 'Mon schéma de parcours combiné',
+            description: 'La description combinix',
+            illustration: 'illustration.svg',
+            'attestation-key': ATTESTATIONS.SIXTH_GRADE,
+            content: AdminCombinedCourseBlueprint.buildContentItems([{ moduleShortId: 'e67ec5d0' }]),
+          },
+        },
+      };
+
+      const httpTestServer = new HttpTestServer();
+      httpTestServer.setupAuthentication();
+      await httpTestServer.register(combinedCourseBlueprintRoute);
+
+      // when
+      await httpTestServer.request(
+        'POST',
+        '/api/admin/combined-course-blueprints',
+        payload,
+        null,
+        generateAuthenticatedUserRequestHeaders({ userId: 123 }),
+      );
+
+      // then
+      expect(securityPreHandlers.hasAtLeastOneAccessOf).to.have.been.calledWithExactly([
+        securityPreHandlers.checkAdminMemberHasRoleSuperAdmin,
+        securityPreHandlers.checkAdminMemberHasRoleMetier,
+        securityPreHandlers.checkAdminMemberHasRoleSupport,
+        securityPreHandlers.checkAdminMemberHasRoleCertif,
+      ]);
+    });
+  });
+
+  describe('GET /api/admin/combined-course-blueprints/{blueprintId}', function () {
+    it('should call prehandler', async function () {
+      // given
+      sinon.stub(securityPreHandlers, 'hasAtLeastOneAccessOf').returns(() => true);
+      sinon.stub(combinedCourseBlueprintController, 'getById').callsFake((_, h) => h.response());
+
+      const httpTestServer = new HttpTestServer();
+      httpTestServer.setupAuthentication();
+      await httpTestServer.register(combinedCourseBlueprintRoute);
+
+      // when
+      await httpTestServer.request(
+        'GET',
+        '/api/admin/combined-course-blueprints/123',
+        null,
+        null,
+        generateAuthenticatedUserRequestHeaders({ userId: 123 }),
+      );
+
+      // then
+      expect(securityPreHandlers.hasAtLeastOneAccessOf).to.have.been.calledWithExactly([
+        securityPreHandlers.checkAdminMemberHasRoleSuperAdmin,
+        securityPreHandlers.checkAdminMemberHasRoleMetier,
+        securityPreHandlers.checkAdminMemberHasRoleSupport,
+        securityPreHandlers.checkAdminMemberHasRoleCertif,
+      ]);
+    });
+  });
+
+  describe('DELETE /api/admin/combined-course-blueprints/{blueprintId}/organizations/{organizationId}', function () {
+    it('should call prehandler', async function () {
+      // given
+      sinon.stub(securityPreHandlers, 'hasAtLeastOneAccessOf').returns(() => true);
+      sinon.stub(combinedCourseBlueprintController, 'detachOrganization').callsFake((_, h) => h.response());
+
+      const httpTestServer = new HttpTestServer();
+      httpTestServer.setupAuthentication();
+      await httpTestServer.register(combinedCourseBlueprintRoute);
+
+      // when
+      await httpTestServer.request(
+        'DELETE',
+        '/api/admin/combined-course-blueprints/123/organizations/456',
+        null,
+        null,
+        generateAuthenticatedUserRequestHeaders({ userId: 123 }),
+      );
+
+      // then
+      expect(securityPreHandlers.hasAtLeastOneAccessOf).to.have.been.calledWithExactly([
+        securityPreHandlers.checkAdminMemberHasRoleSuperAdmin,
+        securityPreHandlers.checkAdminMemberHasRoleMetier,
+      ]);
+    });
+  });
+
+  describe('POST /api/admin/combined-course-blueprints/{blueprintId}/organizations', function () {
+    it('should call prehandler', async function () {
+      // given
+      sinon.stub(securityPreHandlers, 'hasAtLeastOneAccessOf').returns(() => true);
+      sinon.stub(combinedCourseBlueprintController, 'attachOrganizations').callsFake((_, h) => h.response());
+
+      const payload = { 'organization-ids': [456] };
+
+      const httpTestServer = new HttpTestServer();
+      httpTestServer.setupAuthentication();
+      await httpTestServer.register(combinedCourseBlueprintRoute);
+
+      // when
+      await httpTestServer.request(
+        'POST',
+        '/api/admin/combined-course-blueprints/123/organizations',
+        payload,
+        null,
+        generateAuthenticatedUserRequestHeaders({ userId: 123 }),
+      );
+
+      // then
+      expect(securityPreHandlers.hasAtLeastOneAccessOf).to.have.been.calledWithExactly([
+        securityPreHandlers.checkAdminMemberHasRoleSuperAdmin,
+        securityPreHandlers.checkAdminMemberHasRoleMetier,
+      ]);
+    });
+  });
+
+  describe('GET /api/organizations/{organizationId}/combined-course-blueprints', function () {
+    it('should call prehandler', async function () {
+      // given
+      sinon.stub(securityPreHandlers, 'checkOrganizationAccess').returns(() => true);
+      sinon.stub(combinedCourseBlueprintController, 'findByOrganizationId').callsFake((_, h) => h.response());
+
+      const httpTestServer = new HttpTestServer();
+      httpTestServer.setupAuthentication();
+      await httpTestServer.register(combinedCourseBlueprintRoute);
+
+      // when
+      await httpTestServer.request(
+        'GET',
+        '/api/organizations/456/combined-course-blueprints',
+        null,
+        null,
+        generateAuthenticatedUserRequestHeaders({ userId: 123 }),
+      );
+
+      // then
+      expect(securityPreHandlers.checkOrganizationAccess).to.have.been.called;
+    });
+  });
+});

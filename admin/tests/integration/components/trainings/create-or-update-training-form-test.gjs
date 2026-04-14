@@ -41,7 +41,7 @@ module('Integration | Component | trainings | CreateOrUpdateTrainingForm', funct
     assert.dom(screen.getByLabelText('Jours (JJ)')).exists();
     assert.dom(screen.getByLabelText('Heures (HH)')).exists();
     assert.dom(screen.getByLabelText('Minutes (MM)')).exists();
-    assert.dom(screen.getByLabelText('Langues localisées')).exists();
+    assert.dom(screen.getByLabelText('Locales')).exists();
     assert
       .dom(
         screen.getByRole('textbox', {
@@ -116,7 +116,7 @@ module('Integration | Component | trainings | CreateOrUpdateTrainingForm', funct
       assert.dom(screen.getByLabelText('Jours (JJ)')).hasValue(model.duration.days.toString());
       assert.dom(screen.getByLabelText('Heures (HH)')).hasValue(model.duration.hours.toString());
       assert.dom(screen.getByLabelText('Minutes (MM)')).hasValue(model.duration.minutes.toString());
-      assert.strictEqual(screen.getByLabelText('Langues localisées').innerText, localeCategories[model.locales[0]]);
+      assert.strictEqual(screen.getByLabelText('Locales').innerText, localeCategories[model.locales[0]]);
 
       assert
         .dom(

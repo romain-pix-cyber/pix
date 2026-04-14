@@ -91,12 +91,6 @@ describe('Acceptance | API | assessment-controller-get-next-challenge-for-certif
           certificationCenterId,
           version: AlgorithmEngineVersion.V3,
         }).id;
-        const certificationCourseId = databaseBuilder.factory.buildCertificationCourse({
-          isPublished: false,
-          version: AlgorithmEngineVersion.V3,
-          userId,
-          sessionId,
-        }).id;
 
         const candidate = databaseBuilder.factory.buildCertificationCandidate({
           ...user,
@@ -104,6 +98,13 @@ describe('Acceptance | API | assessment-controller-get-next-challenge-for-certif
           sessionId,
           reconciledAt: new Date('2020-01-15'),
         });
+        const certificationCourseId = databaseBuilder.factory.buildCertificationCourse({
+          isPublished: false,
+          version: AlgorithmEngineVersion.V3,
+          userId,
+          sessionId,
+          candidateId: candidate.id,
+        }).id;
         const version = databaseBuilder.factory.buildCertificationVersion({
           scope: SCOPES.CORE,
           startDate: new Date('2020-01-10'),
@@ -242,18 +243,19 @@ describe('Acceptance | API | assessment-controller-get-next-challenge-for-certif
           certificationCenterId,
           version: AlgorithmEngineVersion.V3,
         }).id;
-        const certificationCourseId = databaseBuilder.factory.buildCertificationCourse({
-          isPublished: false,
-          version: AlgorithmEngineVersion.V3,
-          userId,
-          sessionId,
-        }).id;
         const candidate = databaseBuilder.factory.buildCertificationCandidate({
           ...user,
           userId: user.id,
           sessionId,
           reconciledAt: new Date('2020-01-01'),
         });
+        const certificationCourseId = databaseBuilder.factory.buildCertificationCourse({
+          isPublished: false,
+          version: AlgorithmEngineVersion.V3,
+          userId,
+          sessionId,
+          candidateId: candidate.id,
+        }).id;
         databaseBuilder.factory.buildCoreSubscription({ certificationCandidateId: candidate.id });
         const assessment = databaseBuilder.factory.buildAssessment({
           id: assessmentId,

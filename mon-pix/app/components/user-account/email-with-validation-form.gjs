@@ -14,19 +14,20 @@ import isEmpty from 'lodash/isEmpty';
 import isEmailValid from '../../utils/email-validator';
 
 const ERROR_INPUT_MESSAGE_MAP = {
-  invalidEmail: 'pages.user-account.account-update-email-with-validation.fields.errors.invalid-email',
-  emptyPassword: 'pages.user-account.account-update-email-with-validation.fields.errors.empty-password',
-  emailAlreadyExist: 'pages.user-account.account-update-email-with-validation.fields.errors.new-email-already-exist',
+  invalidEmail: 'pages.user-account.account-add-or-update-email-with-validation.fields.errors.invalid-email',
+  emptyPassword: 'pages.user-account.account-add-or-update-email-with-validation.fields.errors.empty-password',
+  emailAlreadyExist:
+    'pages.user-account.account-add-or-update-email-with-validation.fields.errors.new-email-already-exist',
   invalidOrAlreadyUsedEmail:
-    'pages.user-account.account-update-email-with-validation.fields.errors.invalid-or-already-used-email',
-  invalidPassword: 'pages.user-account.account-update-email-with-validation.fields.errors.invalid-password',
-  unknownError: 'pages.user-account.account-update-email.fields.errors.unknown-error',
+    'pages.user-account.account-add-or-update-email-with-validation.fields.errors.invalid-or-already-used-email',
+  invalidPassword: 'pages.user-account.account-add-or-update-email-with-validation.fields.errors.invalid-password',
+  unknownError: 'pages.user-account.account-add-or-update-email-with-validation.fields.errors.unknown-error',
 };
 
 export default class EmailWithValidationForm extends Component {
   <template>
     <h2 class="update-email-with-validation__title">
-      {{t "pages.user-account.account-update-email-with-validation.title"}}
+      {{t "pages.user-account.account-add-or-update-email-with-validation.title.update-email"}}
     </h2>
 
     <form onSubmit={{this.onSubmit}}>
@@ -41,11 +42,15 @@ export default class EmailWithValidationForm extends Component {
           required
           autocomplete="off"
         >
-          <:label>{{t "pages.user-account.account-update-email-with-validation.fields.new-email.label"}}</:label>
+          <:label>{{t
+              "pages.user-account.account-add-or-update-email-with-validation.fields.email.update-email.label"
+            }}</:label>
         </PixInput>
       </div>
       <div class="update-email-with-validation__informations">
-        <p>{{t "pages.user-account.account-update-email-with-validation.fields.password.security-information"}}</p>
+        <p>{{t
+            "pages.user-account.account-add-or-update-email-with-validation.fields.password.security-information"
+          }}</p>
       </div>
       <div class="update-email-with-validation__password-input">
         <PixInputPassword
@@ -54,7 +59,7 @@ export default class EmailWithValidationForm extends Component {
           required
           autocomplete="off"
         >
-          <:label>{{t "pages.user-account.account-update-email-with-validation.fields.password.label"}}</:label>
+          <:label>{{t "pages.user-account.account-add-or-update-email-with-validation.fields.password.label"}}</:label>
         </PixInputPassword>
       </div>
       {{#if this.errorMessage}}
@@ -71,7 +76,7 @@ export default class EmailWithValidationForm extends Component {
           @type="submit"
           @isDisabled={{this.hasRequestedUpdate}}
         >
-          {{t "pages.user-account.account-update-email-with-validation.save-button"}}
+          {{t "pages.user-account.account-add-or-update-email-with-validation.save-button"}}
         </PixButton>
       </div>
     </form>
@@ -118,6 +123,7 @@ export default class EmailWithValidationForm extends Component {
           const emailVerificationCode = this.store.createRecord('email-verification-code', {
             password: this.password,
             newEmail: this.newEmail,
+            action: 'update-email',
           });
           await emailVerificationCode.sendNewEmail();
 

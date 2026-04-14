@@ -1,4 +1,3 @@
-import { JuryCertificationSummary } from '../../../../../../src/certification/session-management/domain/read-models/JuryCertificationSummary.js';
 import * as serializer from '../../../../../../src/certification/session-management/infrastructure/serializers/jury-certification-summary-serializer.js';
 import { AlgorithmEngineVersion } from '../../../../../../src/certification/shared/domain/models/AlgorithmEngineVersion.js';
 import { Frameworks } from '../../../../../../src/certification/shared/domain/models/Frameworks.js';
@@ -19,7 +18,7 @@ describe('Unit | Serializer | JSONAPI | jury-certification-summary-serializer', 
         description: 'someComment',
         resolvedAt: null,
       });
-      modelJuryCertifSummary = new JuryCertificationSummary({
+      modelJuryCertifSummary = domainBuilder.certification.sessionManagement.buildJuryCertificationSummary({
         id: 1,
         firstName: 'someFirstName',
         lastName: 'someLastName',
@@ -45,7 +44,7 @@ describe('Unit | Serializer | JSONAPI | jury-certification-summary-serializer', 
             status: modelJuryCertifSummary.status,
             'pix-score': modelJuryCertifSummary.pixScore,
             'algorithm-version': modelJuryCertifSummary.algorithmVersion,
-            'reached-mesh-index': modelJuryCertifSummary.reachedMeshIndex,
+            'reached-result-key': modelJuryCertifSummary.reachedResultKey,
             'created-at': modelJuryCertifSummary.createdAt,
             'completed-at': modelJuryCertifSummary.completedAt,
             'is-published': modelJuryCertifSummary.isPublished,

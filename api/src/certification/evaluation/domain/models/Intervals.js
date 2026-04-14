@@ -25,7 +25,7 @@ export class Intervals {
 
   findIntervalIndexFromCapacity(capacity) {
     if (capacity < this.intervals[0].bounds.min) {
-      return 0;
+      return null;
     }
 
     for (const [index, { bounds }] of this.intervals.entries()) {
@@ -35,10 +35,6 @@ export class Intervals {
     }
 
     return this.intervals.length - 1;
-  }
-
-  isCapacityBelowMinimum(capacity) {
-    return capacity <= this.intervals[0].bounds.min;
   }
 
   isCapacityAboveMaximum(capacity) {

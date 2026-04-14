@@ -16,7 +16,7 @@ describe('Unit | Devcomp | Domain | Models | Element | Text', function () {
     });
 
     it('should accept all valid tag values', function () {
-      const validTags = [' ', 'context', 'did-you-know', 'further-information', 'key-points', 'tip'];
+      const validTags = [' ', 'context', 'did-you-know', 'further-information', 'tip'];
 
       for (const tag of validTags) {
         const text = new Text({ id: 'id', content: 'content', tag });
@@ -55,7 +55,7 @@ describe('Unit | Devcomp | Domain | Models | Element | Text', function () {
       // then
       expect(error).to.be.instanceOf(TypeError);
       expect(error.message).to.equal(
-        "The tag value must be one of: ' ', 'context', 'did-you-know', 'further-information', 'key-points', 'tip'",
+        "The tag value must be one of: ' ', 'context', 'did-you-know', 'further-information', 'tip'",
       );
     });
   });

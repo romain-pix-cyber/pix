@@ -17,7 +17,7 @@ export default class JuryCertificationSummary extends Model {
   @attr() status;
   @attr() algorithmVersion;
   @attr() pixScore;
-  @attr() reachedMeshIndex;
+  @attr() reachedResultKey;
   @attr() createdAt;
   @attr() completedAt;
   @attr() isPublished;
@@ -67,15 +67,7 @@ export default class JuryCertificationSummary extends Model {
   }
 
   get result() {
-    if (this.algorithmVersion === 3) {
-      const meshKey = this.reachedMeshIndex ?? 'BELOW_MINIMUM';
-
-      return this.intl.t(`common.certification.meshLevels.${this.certificationFramework}.${meshKey}`, {
-        pixScore: this.pixScore,
-      });
-    }
-
-    return this.intl.t(`common.certification.meshLevels.${this.certificationFramework}.NONE`, {
+    return this.intl.t(`common.certification.meshLevels.${this.reachedResultKey}`, {
       pixScore: this.pixScore,
     });
   }

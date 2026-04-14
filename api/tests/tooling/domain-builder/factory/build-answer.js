@@ -3,6 +3,7 @@ import { AnswerStatus } from '../../../../src/shared/domain/models/AnswerStatus.
 
 function buildAnswer({
   id = 123,
+  createdAt = new Date(),
   result = AnswerStatus.OK,
   resultDetails = null,
   timeout = null,
@@ -14,6 +15,7 @@ function buildAnswer({
 } = {}) {
   return new Answer({
     id,
+    createdAt,
     result,
     resultDetails,
     timeout,

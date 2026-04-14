@@ -17,7 +17,6 @@
 @use 'authenticated/networks/get' as *;
 @use 'authenticated/organizations/get' as *;
 @use 'authenticated/organizations/all-tags' as *;
-@use 'authenticated/organizations/children.scss' as *;
 @use 'authenticated/sessions/list' as *;
 @use 'authenticated/sessions/session/certifications' as *;
 @use 'authenticated/sessions/session/informations' as *;

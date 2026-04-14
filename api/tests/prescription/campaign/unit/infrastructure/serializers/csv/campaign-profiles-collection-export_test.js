@@ -1,14 +1,15 @@
 import stream from 'node:stream';
+import { text } from 'node:stream/consumers';
 
 const { PassThrough } = stream;
 
 import { CampaignProfilesCollectionExport } from '../../../../../../../src/prescription/campaign/infrastructure/serializers/csv/campaign-profiles-collection-export.js';
 import { getI18n } from '../../../../../../../src/shared/infrastructure/i18n/i18n.js';
-import { domainBuilder, expect, sinon, streamToPromise } from '../../../../../../test-helper.js';
+import { domainBuilder, expect, sinon } from '../../../../../../test-helper.js';
 
 describe('Unit | Serializer | CSV | campaign-profiles-collection-export', function () {
   describe('#export', function () {
-    let outputStream, csvPromise, organization, campaign, competences;
+    let outputStream, organization, campaign, competences;
 
     const placementProfileServiceStub = {
       getPlacementProfilesWithSnapshotting: sinon.stub(),
@@ -18,7 +19,6 @@ describe('Unit | Serializer | CSV | campaign-profiles-collection-export', functi
 
     beforeEach(function () {
       outputStream = new PassThrough();
-      csvPromise = streamToPromise(outputStream);
 
       organization = {};
       campaign = {};
@@ -119,7 +119,7 @@ describe('Unit | Serializer | CSV | campaign-profiles-collection-export', functi
       });
 
       const expectedHeader =
-        '\uFEFF"Nom de l\'organisation";' +
+        '"Nom de l\'organisation";' +
         '"ID Campagne";' +
         '"Code";' +
         '"Nom de la campagne";' +
@@ -139,9 +139,8 @@ describe('Unit | Serializer | CSV | campaign-profiles-collection-export', functi
 
       outputStream.end();
 
-      const csv = await csvPromise;
-
       // then
+      const csv = await text(outputStream);
       expect(csv).to.equal(expectedHeader);
     });
 
@@ -159,7 +158,7 @@ describe('Unit | Serializer | CSV | campaign-profiles-collection-export', functi
       });
 
       const expectedHeader =
-        '\uFEFF"Nom de l\'organisation";' +
+        '"Nom de l\'organisation";' +
         '"ID Campagne";' +
         '"Code";' +
         '"Nom de la campagne";' +
@@ -180,9 +179,8 @@ describe('Unit | Serializer | CSV | campaign-profiles-collection-export', functi
 
       outputStream.end();
 
-      const csv = await csvPromise;
-
       // then
+      const csv = await text(outputStream);
       expect(csv).to.equal(expectedHeader);
     });
 
@@ -200,7 +198,7 @@ describe('Unit | Serializer | CSV | campaign-profiles-collection-export', functi
       });
 
       const expectedHeader =
-        '\uFEFF"Nom de l\'organisation";' +
+        '"Nom de l\'organisation";' +
         '"ID Campagne";' +
         '"Code";' +
         '"Nom de la campagne";' +
@@ -222,9 +220,8 @@ describe('Unit | Serializer | CSV | campaign-profiles-collection-export', functi
 
       outputStream.end();
 
-      const csv = await csvPromise;
-
       // then
+      const csv = await text(outputStream);
       expect(csv).to.equal(expectedHeader);
     });
 
@@ -240,7 +237,7 @@ describe('Unit | Serializer | CSV | campaign-profiles-collection-export', functi
       });
 
       const expectedHeader =
-        '\uFEFF"Nom de l\'organisation";' +
+        '"Nom de l\'organisation";' +
         '"ID Campagne";' +
         '"Code";' +
         '"Nom de la campagne";' +
@@ -261,9 +258,8 @@ describe('Unit | Serializer | CSV | campaign-profiles-collection-export', functi
 
       outputStream.end();
 
-      const csv = await csvPromise;
-
       // then
+      const csv = await text(outputStream);
       expect(csv).to.equal(expectedHeader);
     });
   });

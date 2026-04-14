@@ -6,7 +6,6 @@ import {
   databaseBuilder,
   expect,
   generateAuthenticatedUserRequestHeaders,
-  insertUserWithRoleSuperAdmin,
   knex,
   mockLearningContent,
   sinon,
@@ -15,15 +14,17 @@ import { buildLearningContent as learningContentBuilder } from '../../../../tool
 
 describe('Acceptance | Application | Certification | ComplementaryCertification | certification-framework-route', function () {
   let server;
+  let superAdmin;
 
   beforeEach(async function () {
     server = await createServer();
+    superAdmin = databaseBuilder.factory.buildUser.withRoleSuperAdmin();
+    await databaseBuilder.commit();
   });
 
   describe('GET /api/admin/certification-frameworks', function () {
     it('should return 200 HTTP status code with all frameworks', async function () {
       // given
-      const superAdmin = await insertUserWithRoleSuperAdmin();
       const options = {
         method: 'GET',
         url: '/api/admin/certification-frameworks',
@@ -109,8 +110,6 @@ describe('Acceptance | Application | Certification | ComplementaryCertification 
   describe('GET /api/admin/certification-frameworks/{scope}/active-consolidated-framework', function () {
     it('should return the active consolidated framework', async function () {
       // given
-      const superAdmin = await insertUserWithRoleSuperAdmin();
-
       const minimalLearningContent = [
         {
           id: 'recAreaCore',
@@ -195,8 +194,6 @@ describe('Acceptance | Application | Certification | ComplementaryCertification 
   describe('GET /api/admin/certification-frameworks/{scope}/framework-history', function () {
     it('should return the framework history for given scope ordered by start date descending', async function () {
       // given
-      const superAdmin = await insertUserWithRoleSuperAdmin();
-
       const newerVersion = databaseBuilder.factory.buildCertificationVersion({
         scope: SCOPES.CORE,
         startDate: new Date('2025-01-11'),
@@ -251,8 +248,6 @@ describe('Acceptance | Application | Certification | ComplementaryCertification 
 
     it('should return 201 HTTP status code and create a new framework', async function () {
       // given
-      const superAdmin = await insertUserWithRoleSuperAdmin();
-
       const tubeId = 'myTubeId';
       const skill = databaseBuilder.factory.learningContent.buildSkill({
         tubeId,
@@ -330,8 +325,6 @@ describe('Acceptance | Application | Certification | ComplementaryCertification 
 
     it('should create a new version and expire the previous one when a version already exists', async function () {
       // given
-      const superAdmin = await insertUserWithRoleSuperAdmin();
-
       const existingVersionStartDate = new Date('2024-01-01');
       const existingVersion = databaseBuilder.factory.buildCertificationVersion({
         scope: SCOPES.CORE,

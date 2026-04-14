@@ -5,7 +5,6 @@ import {
   databaseBuilder,
   expect,
   generateAuthenticatedUserRequestHeaders,
-  insertUserWithRoleSuperAdmin,
   knex,
 } from '../../../test-helper.js';
 
@@ -14,7 +13,6 @@ describe('Acceptance | API | Certification Center', function () {
 
   beforeEach(async function () {
     server = await createServer();
-    await insertUserWithRoleSuperAdmin();
   });
 
   describe('GET /api/certification-centers/{certificationCenterId}/sessions/{sessionId}/divisions', function () {
@@ -53,6 +51,7 @@ describe('Acceptance | API | Certification Center', function () {
     context('when certification center membership is linked to the certification center', function () {
       it('should return 200 HTTP status', async function () {
         // given
+        const superAdmin = databaseBuilder.factory.buildUser.withRoleSuperAdmin();
         const certificationCenter = databaseBuilder.factory.buildCertificationCenter();
         const user1 = databaseBuilder.factory.buildUser();
         databaseBuilder.factory.buildCertificationCenterMembership({
@@ -63,7 +62,7 @@ describe('Acceptance | API | Certification Center', function () {
 
         // when
         const response = await server.inject({
-          headers: generateAuthenticatedUserRequestHeaders(),
+          headers: generateAuthenticatedUserRequestHeaders({ userId: superAdmin.id }),
           method: 'GET',
           url: `/api/admin/certification-centers/${certificationCenter.id}/certification-center-memberships`,
         });
@@ -74,6 +73,7 @@ describe('Acceptance | API | Certification Center', function () {
 
       it('should return certification center memberships', async function () {
         // given
+        const superAdmin = databaseBuilder.factory.buildUser.withRoleSuperAdmin();
         const certificationCenter = databaseBuilder.factory.buildCertificationCenter();
         const user1 = databaseBuilder.factory.buildUser();
         const user2 = databaseBuilder.factory.buildUser();
@@ -89,7 +89,7 @@ describe('Acceptance | API | Certification Center', function () {
 
         // when
         const response = await server.inject({
-          headers: generateAuthenticatedUserRequestHeaders(),
+          headers: generateAuthenticatedUserRequestHeaders({ userId: superAdmin.id }),
           method: 'GET',
           url: `/api/admin/certification-centers/${certificationCenter.id}/certification-center-memberships`,
         });

@@ -183,7 +183,7 @@ describe('Certification | Evaluation | Unit | Domain | Models | ScoringSimulator
         ],
       },
     ].forEach(({ capacity, expectedScore, expectedCompetences }) => {
-      it(`returns the score ${expectedScore} and competences ${expectedCompetences}  when capacity is ${capacity}`, function () {
+      it(`returns the score ${expectedScore} and competences ${JSON.stringify(expectedCompetences)}  when capacity is ${capacity}`, function () {
         // given
         const certificationScoringIntervals = [
           { bounds: { max: -2, min: -8 }, meshLevel: 0 },

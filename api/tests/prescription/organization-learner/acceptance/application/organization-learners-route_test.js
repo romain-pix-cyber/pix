@@ -7,7 +7,6 @@ import {
   datamartBuilder,
   expect,
   generateAuthenticatedUserRequestHeaders,
-  insertUserWithRoleSuperAdmin,
   mockAttestationStorage,
 } from '../../../../test-helper.js';
 
@@ -16,7 +15,6 @@ describe('Prescription | Organization Learner | Acceptance | Application | Organ
 
   beforeEach(async function () {
     server = await createServer();
-    await insertUserWithRoleSuperAdmin();
   });
 
   describe('GET /api/organizations/{organizationId}/attestations/{attestationKey}', function () {

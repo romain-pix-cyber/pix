@@ -15,7 +15,7 @@ const snapshotPath = `recette-certif/${testRef}/${testRef}.json`;
 const csvResultPath = `recette-certif/${testRef}/${testRef}_csvresult.json`;
 
 test(
-  `${testRef} - User takes a certification test for a Pix+ Edu subscription. 32 right answers`,
+  `${testRef} - User takes a certification test for a Pix+ Edu subscription. 32 right answers. Volet externe also attributed`,
   {
     tag: ['@snapshot'],
     annotation: [
@@ -150,6 +150,102 @@ test(
         'Numéro de certification',
         'Centre de certification',
       ]);
+    });
+
+    await test.step('Setting external jury result to EXPERT', async () => {
+      await test.step('Set value', async () => {
+        await pixAdminRoleCertifPage.goto(process.env.PIX_ADMIN_URL!);
+        const adminHomepage = new AdminHomePage(pixAdminRoleCertifPage);
+        const sessionsMainPage = await adminHomepage.goToCertificationSessionsTab();
+        const certificationInformationPage = await sessionsMainPage.goToCertificationWithSearchBar(certificationNumber);
+        await certificationInformationPage.setExternalJuryResult('Expert');
+        await pixAdminRoleCertifPage
+          .getByText('Le résultat du volet jury externe a bien été enregistré')
+          .waitFor({ state: 'visible' });
+        await pixAdminRoleCertifPage.getByRole('button', { name: 'Fermer la notification' }).click();
+      });
+
+      await test.step('Check result is impacted everywhere', async () => {
+        await pixAdminRoleCertifPage.goto(process.env.PIX_ADMIN_URL!);
+        const adminHomepage = new AdminHomePage(pixAdminRoleCertifPage);
+        const sessionPage = await adminHomepage.goToSession(sessionNumber);
+        const certificationListPage = await sessionPage.goToCertificationListPage();
+        const certificationData = await certificationListPage.getCertificationData();
+        expect(certificationData.length).toBe(1);
+        expect(certificationData[0]).toMatchObject({
+          Prénom: certifiableUserData.firstName,
+          Nom: certifiableUserData.lastName,
+          Statut: 'Validée',
+          Résultats: 'Expert',
+          'Signalements impactants non résolus': '',
+          'Certification passée': 'Pix+ Édu 1er degré',
+        });
+        const certificationInformationPage = await certificationListPage.goToCertificationInfoPage(
+          certifiableUserData.firstName,
+        );
+        await checkCertificationGeneralInformationAndExpectSuccess(certificationInformationPage, {
+          sessionNumber,
+          status: 'Validée',
+          result: 'Expert',
+        });
+        await checkCertificationDetailsAndExpectSuccess(certificationInformationPage, {
+          status: 'Validée',
+          nbAnsweredQuestionsOverTotal: '32/32',
+          nbQuestionsOK: 32,
+          nbQuestionsKO: 0,
+          nbQuestionsAband: 0,
+          nbValidatedTechnicalIssues: 0,
+          result: 'Expert',
+        });
+      });
+    });
+
+    await test.step('Setting external jury result to PENDING', async () => {
+      await test.step('Set value', async () => {
+        await pixAdminRoleCertifPage.goto(process.env.PIX_ADMIN_URL!);
+        const adminHomepage = new AdminHomePage(pixAdminRoleCertifPage);
+        const sessionsMainPage = await adminHomepage.goToCertificationSessionsTab();
+        const certificationInformationPage = await sessionsMainPage.goToCertificationWithSearchBar(certificationNumber);
+        await certificationInformationPage.setExternalJuryResult('En attente');
+        await pixAdminRoleCertifPage
+          .getByText('Le résultat du volet jury externe a bien été enregistré')
+          .waitFor({ state: 'visible' });
+        await pixAdminRoleCertifPage.getByRole('button', { name: 'Fermer la notification' }).click();
+      });
+
+      await test.step('Check result is impacted everywhere', async () => {
+        await pixAdminRoleCertifPage.goto(process.env.PIX_ADMIN_URL!);
+        const adminHomepage = new AdminHomePage(pixAdminRoleCertifPage);
+        const sessionPage = await adminHomepage.goToSession(sessionNumber);
+        const certificationListPage = await sessionPage.goToCertificationListPage();
+        const certificationData = await certificationListPage.getCertificationData();
+        expect(certificationData.length).toBe(1);
+        expect(certificationData[0]).toMatchObject({
+          Prénom: certifiableUserData.firstName,
+          Nom: certifiableUserData.lastName,
+          Statut: 'Validée',
+          Résultats: 'Admissible',
+          'Signalements impactants non résolus': '',
+          'Certification passée': 'Pix+ Édu 1er degré',
+        });
+        const certificationInformationPage = await certificationListPage.goToCertificationInfoPage(
+          certifiableUserData.firstName,
+        );
+        await checkCertificationGeneralInformationAndExpectSuccess(certificationInformationPage, {
+          sessionNumber,
+          status: 'Validée',
+          result: 'Admissible',
+        });
+        await checkCertificationDetailsAndExpectSuccess(certificationInformationPage, {
+          status: 'Validée',
+          nbAnsweredQuestionsOverTotal: '32/32',
+          nbQuestionsOK: 32,
+          nbQuestionsKO: 0,
+          nbQuestionsAband: 0,
+          nbValidatedTechnicalIssues: 0,
+          result: 'Admissible',
+        });
+      });
     });
 
     await snapshotHandler.expectOrRecord(snapshotPath);

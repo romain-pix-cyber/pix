@@ -2305,42 +2305,24 @@
       "validation": "Ihr Passwort wurde aktualisiert."
     },
     "user-account": {
-      "account-update-email": {
-        "email-information": "Diese E-Mail-Adresse muss gültig sein, falls Sie Ihr Passwort vergessen haben. '<br>' Sie wird Ihre neue Anmeldeadresse sein.",
+      "account-add-or-update-email-with-validation": {
+        "code-reception-information": "Wenn Sie die Eingabe Ihrer E-Mail-Adresse bestätigen, erhalten Sie einen Code per E-Mail.",
         "fields": {
-          "errors": {
-            "empty-password": "Ihr Passwort darf nicht leer sein.",
-            "invalid-password": "Das von Ihnen eingegebene Passwort ist ungültig.",
-            "mismatching-email": "Die beiden E-Mail-Adressen sind nicht identisch. Bitte überprüfen Sie Ihre Eingabe.",
-            "new-email-already-exist": "Diese E-Mail-Adresse wird bereits verwendet.",
-            "unknown-error": "Es ist ein Fehler aufgetreten. Bitte versuchen Sie es noch einmal oder wenden Sie sich an den Support.",
-            "wrong-email-format": "Ihre E-Mail-Adresse ist ungültig."
+          "email": {
+            "add-email": {
+              "label": "E-Mail-Adresse"
+            },
+            "update-email": {
+              "label": "Neue E-Mail-Adresse"
+            }
           },
-          "new-email": {
-            "label": "Neue E-Mail-Adresse"
-          },
-          "new-email-confirmation": {
-            "label": "Bestätigung der E-Mail-Adresse"
-          },
-          "password": {
-            "label": "Passwort"
-          }
-        },
-        "password-information": "Geben Sie Ihr Passwort zur Bestätigung ein",
-        "save-button": "Bestätigen",
-        "title": "Ändern Ihrer E-Mail-Adresse"
-      },
-      "account-update-email-with-validation": {
-        "fields": {
           "errors": {
             "empty-password": "Ihr Passwort darf nicht leer sein.",
             "invalid-email": "Ihre E-Mail-Adresse ist ungültig.",
             "invalid-or-already-used-email": "Ungültige oder bereits verwendete E-Mail-Adresse",
             "invalid-password": "Das von Ihnen eingegebene Passwort ist ungültig.",
-            "new-email-already-exist": "Diese E-Mail-Adresse wird bereits verwendet."
-          },
-          "new-email": {
-            "label": "Neue E-Mail-Adresse"
+            "new-email-already-exist": "Diese E-Mail-Adresse wird bereits verwendet.",
+            "unknown-error": "Es ist ein Fehler aufgetreten. Bitte versuchen Sie es noch einmal oder wenden Sie sich an den Support."
           },
           "password": {
             "label": "Passwort",
@@ -2348,10 +2330,12 @@
           }
         },
         "save-button": "Einen Überprüfungscode erhalten",
-        "title": "Ändern Ihrer E-Mail-Adresse"
+        "title": {
+          "add-email": "E-Mail-Adresse hinzufügen",
+          "update-email": "Ändern Ihrer E-Mail-Adresse"
+        }
       },
       "connexion-methods": {
-        "add-email": "E-Mail-Adresse hinzufügen",
         "authentication-methods": {
           "connection-via": "Verbindung über {identityProviderOrganizationName}",
           "gar": "Verbindung über ENT/Mediacentre",
@@ -2393,12 +2377,14 @@
           "email-modification-demand-expired": "Dieser Code ist abgelaufen. Bitte erneuern Sie den Antrag.",
           "incorrect-code": "Der eingegebene Code ist falsch.",
           "new-email-already-exist": "Diese E-Mail-Adresse wird bereits verwendet.",
+          "no-code": "Bitte geben Sie den {numInputs}-stelligen Code ein, den Sie per E-Mail erhalten haben.",
           "unknown-error": "Es ist ein Fehler aufgetreten. Bitte versuchen Sie es noch einmal oder wenden Sie sich an den Support."
         },
         "send-back-the-code": "mir den Code zurückschicken",
         "time-code-validation": "Der empfangene Code ist 10 Minuten lang gültig",
         "title": "Überprüfung Ihrer E-Mail-Adresse",
-        "update-successful": "Ihre E-Mail-Adresse wurde geändert!"
+        "update-successful": "Ihre E-Mail-Adresse wurde geändert!",
+        "validate-new-email": "Neue E-Mail bestätigen"
       },
       "language": {
         "lang": "Sprache",

@@ -10,7 +10,6 @@ import {
   databaseBuilder,
   expect,
   generateAuthenticatedUserRequestHeaders,
-  insertUserWithRoleSuperAdmin,
   knex,
 } from '../../../test-helper.js';
 
@@ -101,11 +100,12 @@ describe('Quest | Acceptance | Application | Quest Route ', function () {
   describe('GET /api/admin/quests/template', function () {
     it('responds with a 200', async function () {
       // given
-      const admin = await insertUserWithRoleSuperAdmin();
+      const superAdmin = databaseBuilder.factory.buildUser.withRoleSuperAdmin();
       await databaseBuilder.commit();
+
       const options = {
         method: 'GET',
-        headers: generateAuthenticatedUserRequestHeaders({ userId: admin.id }),
+        headers: generateAuthenticatedUserRequestHeaders({ userId: superAdmin.id }),
         url: '/api/admin/quests/template',
       };
 
@@ -120,7 +120,7 @@ describe('Quest | Acceptance | Application | Quest Route ', function () {
   describe('POST /api/admin/quests', function () {
     it('responds with a 204 - no content', async function () {
       // given
-      const admin = await insertUserWithRoleSuperAdmin();
+      const superAdmin = databaseBuilder.factory.buildUser.withRoleSuperAdmin();
       await databaseBuilder.commit();
       // TODO j'ai l'impression qu'en séparateur en ; il capte pas les différents headers
       const input = `Quest ID,Json configuration for quest
@@ -128,7 +128,7 @@ describe('Quest | Acceptance | Application | Quest Route ', function () {
 
       const options = {
         method: 'POST',
-        headers: generateAuthenticatedUserRequestHeaders({ userId: admin.id }),
+        headers: generateAuthenticatedUserRequestHeaders({ userId: superAdmin.id }),
         url: '/api/admin/quests',
         payload: iconv.encode(input, 'UTF-8'),
       };

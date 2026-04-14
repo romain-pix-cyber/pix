@@ -771,5 +771,35 @@ describe('Integration | Domain | Algorithm-methods | SmartRandom', function () {
         expect(possibleSkillsForNextChallengeInEnglish[0].name).to.be.equal('@info2');
       });
     });
+
+    context('when user locale is `fr-fr`', function () {
+      beforeEach(function () {
+        locale = 'fr-fr';
+      });
+
+      it('should return fr-fr and fr challenges', function () {
+        targetSkills = [web1, cnil1];
+        const challengeCnil_1_fr_fr = domainBuilder.buildChallenge({
+          id: 'recweb1_2',
+          skill: cnil1,
+          locales: ['fr-fr'],
+        });
+        challenges = [challengeCnil_1_fr_fr, challengeWeb_1];
+
+        const { possibleSkillsForNextChallenge } = SmartRandom.getPossibleSkillsForNextChallenge({
+          targetSkills,
+          challenges,
+          knowledgeElements: [],
+          lastAnswer,
+          allAnswers,
+          locale,
+        });
+
+        // then
+        expect(possibleSkillsForNextChallenge.length).to.be.equal(2);
+        expect(possibleSkillsForNextChallenge[0].id).to.be.equal(web1.id);
+        expect(possibleSkillsForNextChallenge[1].id).to.be.equal(cnil1.id);
+      });
+    });
   });
 });

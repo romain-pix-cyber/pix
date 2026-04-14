@@ -4,7 +4,6 @@ import {
   generateAuthenticatedUserRequestHeaders,
   learningContentBuilder,
   mockLearningContent,
-  nock,
 } from '../../../../test-helper.js';
 
 describe('Acceptance | API | Courses', function () {
@@ -58,10 +57,6 @@ describe('Acceptance | API | Courses', function () {
 
       const learningContentObjects = learningContentBuilder.fromAreas(learningContent);
       await mockLearningContent(learningContentObjects);
-    });
-
-    after(function () {
-      nock.cleanAll();
     });
 
     context('when the course exists', function () {

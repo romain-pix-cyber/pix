@@ -1,7 +1,5 @@
 import PixBlock from '@1024pix/pix-ui/components/pix-block';
-import PixButton from '@1024pix/pix-ui/components/pix-button';
-import PixIconButton from '@1024pix/pix-ui/components/pix-icon-button';
-import PixSelect from '@1024pix/pix-ui/components/pix-select';
+import Component from '@glimmer/component';
 import { DescriptionList } from 'pix-admin/components/ui/description-list';
 
 import CertificationCompetenceList from '../competence-list';
@@ -9,22 +7,35 @@ import CertificationComments from './comments';
 import CertificationInformationCandidate from './informations/candidate';
 import CertificationInformationGlobalActions from './informations/global-actions';
 import CertificationInformationIssueReports from './informations/issue-reports';
+import PixPlusEduV2Results from './informations/pix-plus-edu-v2-results';
+import PixPlusEduV3Results from './informations/pix-plus-edu-v3-results';
 import CertificationInformationState from './informations/state';
 
-<template>
-  <div class="certification-information">
-    <div class="certification-information__buttons-row">
-      <CertificationInformationGlobalActions @certification={{@certification}} @session={{@session}} />
-    </div>
-    <div class="certification-information__block-row">
-      <CertificationInformationState @certification={{@certification}} @session={{@session}} />
-      <CertificationInformationCandidate @certification={{@certification}} />
-    </div>
+export default class CertificationInformations extends Component {
+  get shouldDisplayV2EduResult() {
+    return this.args.certification.isPixPlusEdu && !this.args.certification.isV3;
+  }
 
-    {{#if @certification.hasComplementaryCertifications}}
-      <PixBlock @variant="admin">
-        <div>
-          {{#if @certification.commonComplementaryCertificationCourseResult}}
+  get shouldDisplayV3EduResult() {
+    return (
+      this.args.certification.isPixPlusEdu &&
+      this.args.certification.isV3 &&
+      this.args.certification.status === 'validated'
+    );
+  }
+
+  <template>
+    <div class="certification-information">
+      <div class="certification-information__buttons-row">
+        <CertificationInformationGlobalActions @certification={{@certification}} @session={{@session}} />
+      </div>
+      <div class="certification-information__block-row">
+        <CertificationInformationState @certification={{@certification}} @session={{@session}} />
+        <CertificationInformationCandidate @certification={{@certification}} />
+      </div>
+      <div>
+        {{#if @certification.commonComplementaryCertificationCourseResult.content}}
+          <PixBlock @variant="admin">
             <h2 class="certification-information__title">Certification complémentaire</h2>
 
             <DescriptionList
@@ -35,95 +46,51 @@ import CertificationInformationState from './informations/state';
                 {{@certification.commonComplementaryCertificationCourseResult.status}}
               </DescriptionList.Item>
             </DescriptionList>
-          {{/if}}
+          </PixBlock>
+        {{/if}}
+        {{#if this.shouldDisplayV2EduResult}}
+          <PixBlock @variant="admin">
+            <PixPlusEduV2Results
+              @certification={{@certification}}
+              @displayJuryLevelSelect={{@displayJuryLevelSelect}}
+              @juryLevelOptions={{@juryLevelOptions}}
+              @selectedJuryLevel={{@selectedJuryLevel}}
+              @selectJuryLevel={{@selectJuryLevel}}
+              @onCancelJuryLevelEditButtonClick={{@onCancelJuryLevelEditButtonClick}}
+              @onEditJuryLevelSave={{@onEditJuryLevelSave}}
+              @shouldDisplayJuryLevelEditButton={{@shouldDisplayJuryLevelEditButton}}
+              @editJury={{@editJury}}
+            />
+          </PixBlock>
+        {{/if}}
+        {{#if this.shouldDisplayV3EduResult}}
+          <PixBlock @variant="admin">
+            <PixPlusEduV3Results @certification={{@certification}} />
+          </PixBlock>
+        {{/if}}
+      </div>
 
-          {{#if @certification.complementaryCertificationCourseResultWithExternal}}
-            <div class="certification-information-pix-edu">
-              <h2 class="certification-information__title">Résultats de la certification complémentaire Pix+ Edu</h2>
-              <div class="certification-information-pix-edu__container">
-                <div class="certification-information-pix-edu__card">
-                  <h3>Volet Pix</h3>
-                  <p>
-                    {{@certification.complementaryCertificationCourseResultWithExternal.pixResult}}
-                  </p>
-                </div>
-                <div class="certification-information-pix-edu__card">
-                  <h3>Volet jury</h3>
-                  {{#if @displayJuryLevelSelect}}
-                    <div class="certification-information-pix-edu__jury-level-editor">
-                      <PixSelect
-                        @screenReaderOnly={{true}}
-                        @options={{@juryLevelOptions}}
-                        @value={{@selectedJuryLevel}}
-                        @hideDefaultOption={{true}}
-                        @onChange={{@selectJuryLevel}}
-                        @placeholder="Choisir un niveau"
-                      >
-                        <:label>Sélectionner un niveau</:label>
-                      </PixSelect>
-                      <div>
-                        <PixButton
-                          @variant="secondary"
-                          @size="small"
-                          @triggerAction={{@onCancelJuryLevelEditButtonClick}}
-                        >
-                          Annuler
-                        </PixButton>
-                        <PixButton
-                          @size="small"
-                          @triggerAction={{@onEditJuryLevelSave}}
-                          aria-label="Modifier le niveau du jury"
-                        >
-                          Enregistrer
-                        </PixButton>
-                      </div>
-                    </div>
-                  {{else}}
-                    <div class="certification-information-pix-edu__jury-level">
-                      <p>
-                        {{@certification.complementaryCertificationCourseResultWithExternal.externalResult}}
-                      </p>
-                      {{#if @shouldDisplayJuryLevelEditButton}}
-                        <PixIconButton
-                          @ariaLabel="Modifier le volet jury"
-                          @triggerAction={{@editJury}}
-                          @iconName="edit"
-                        />
-                      {{/if}}
-                    </div>
-                  {{/if}}
-                </div>
-                <div class="certification-information-pix-edu__card">
-                  <h3>Niveau final</h3>
-                  <p>{{@certification.complementaryCertificationCourseResultWithExternal.finalResult}}</p>
-                </div>
-              </div>
-            </div>
-          {{/if}}
-        </div>
-      </PixBlock>
-    {{/if}}
+      {{#if @certificationIssueReports.length}}
+        <section class="certification-informations__row">
+          <CertificationInformationIssueReports
+            @certificationIssueReports={{@certificationIssueReports}}
+            @certification={{@certification}}
+          />
+        </section>
+      {{/if}}
 
-    {{#if @certificationIssueReports.length}}
-      <section class="certification-informations__row">
-        <CertificationInformationIssueReports
-          @certificationIssueReports={{@certificationIssueReports}}
-          @certification={{@certification}}
-        />
-      </section>
-    {{/if}}
+      <CertificationComments @onJuryCommentSave={{@onJuryCommentSave}} @certification={{@certification}} />
 
-    <CertificationComments @onJuryCommentSave={{@onJuryCommentSave}} @certification={{@certification}} />
+      {{#if @certification.competences.length}}
+        <PixBlock @variant="admin" class="certification-information-results">
+          <h2 class="certification-information__title">Résultats</h2>
 
-    {{#if @certification.competences.length}}
-      <PixBlock @variant="admin" class="certification-information-results">
-        <h2 class="certification-information__title">Résultats</h2>
-
-        <CertificationCompetenceList
-          @competences={{@certification.competences}}
-          @shouldDisplayPixScore={{@shouldDisplayPixScore}}
-        />
-      </PixBlock>
-    {{/if}}
-  </div>
-</template>
+          <CertificationCompetenceList
+            @competences={{@certification.competences}}
+            @shouldDisplayPixScore={{@shouldDisplayPixScore}}
+          />
+        </PixBlock>
+      {{/if}}
+    </div>
+  </template>
+}

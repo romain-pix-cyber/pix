@@ -16,10 +16,6 @@ describe('Integration | Team | Application | Route | organization-invitations', 
     await httpTestServer.register(teamRoutes[0]);
   });
 
-  afterEach(function () {
-    sinon.restore();
-  });
-
   describe('GET /api/organization-invitations/:id', function () {
     it('returns 200 when query is valid', async function () {
       // when

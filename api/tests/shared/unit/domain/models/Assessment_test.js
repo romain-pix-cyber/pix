@@ -43,54 +43,6 @@ describe('Unit | Domain | Models | Assessment', function () {
     });
   });
 
-  describe('#isEndedByInvigilator', function () {
-    it('should return true when its state is endedByInvigilator', function () {
-      // given
-      const assessment = new Assessment({ state: Assessment.states.ENDED_BY_INVIGILATOR });
-
-      // when
-      const isEndedByInvigilator = assessment.isEndedByInvigilator();
-
-      // then
-      expect(isEndedByInvigilator).to.be.true;
-    });
-
-    it('should return false when its state is not endedByInvigilator', function () {
-      // given
-      const assessment = new Assessment({ state: '' });
-
-      // when
-      const isEndedByInvigilator = assessment.isEndedByInvigilator();
-
-      // then
-      expect(isEndedByInvigilator).to.be.false;
-    });
-  });
-
-  describe('#hasBeenEndedDueToFinalization', function () {
-    it('should return true when its state is endedDueToFinalization', function () {
-      // given
-      const assessment = new Assessment({ state: 'endedDueToFinalization' });
-
-      // when
-      const hasBeenEndedDueToFinalization = assessment.hasBeenEndedDueToFinalization();
-
-      // then
-      expect(hasBeenEndedDueToFinalization).to.be.true;
-    });
-
-    it('should return false when its state is not endedDueToFinalization', function () {
-      // given
-      const assessment = new Assessment({ state: '' });
-
-      // when
-      const hasBeenEndedDueToFinalization = assessment.hasBeenEndedDueToFinalization();
-
-      // then
-      expect(hasBeenEndedDueToFinalization).to.be.false;
-    });
-  });
-
   describe('#setCompleted', function () {
     it('should return the same object with state completed', function () {
       // given

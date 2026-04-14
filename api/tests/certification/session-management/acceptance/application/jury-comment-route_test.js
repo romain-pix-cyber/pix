@@ -3,7 +3,6 @@ import {
   databaseBuilder,
   expect,
   generateAuthenticatedUserRequestHeaders,
-  insertUserWithRoleSuperAdmin,
 } from '../../../../test-helper.js';
 
 describe('Certification | Session Management | Acceptance | Application | Routes| jury-comment', function () {
@@ -11,8 +10,10 @@ describe('Certification | Session Management | Acceptance | Application | Routes
     it('should respond with 204', async function () {
       // given
       const server = await createServer();
-      await insertUserWithRoleSuperAdmin();
+      const superAdmin = databaseBuilder.factory.buildUser.withRoleSuperAdmin();
       const session = databaseBuilder.factory.buildSession();
+      await databaseBuilder.commit();
+
       const options = {
         method: 'PUT',
         payload: {
@@ -22,10 +23,9 @@ describe('Certification | Session Management | Acceptance | Application | Routes
             },
           },
         },
-        headers: generateAuthenticatedUserRequestHeaders(),
+        headers: generateAuthenticatedUserRequestHeaders({ userId: superAdmin.id }),
         url: `/api/admin/sessions/${session.id}/comment`,
       };
-      await databaseBuilder.commit();
 
       // when
       const response = await server.inject(options);
@@ -39,11 +39,12 @@ describe('Certification | Session Management | Acceptance | Application | Routes
     it('should respond with 204', async function () {
       // given
       const server = await createServer();
-      await insertUserWithRoleSuperAdmin();
+      const superAdmin = databaseBuilder.factory.buildUser.withRoleSuperAdmin();
       const session = databaseBuilder.factory.buildSession();
       await databaseBuilder.commit();
+
       const options = {
-        headers: generateAuthenticatedUserRequestHeaders(),
+        headers: generateAuthenticatedUserRequestHeaders({ userId: superAdmin.id }),
         method: 'DELETE',
         url: `/api/admin/sessions/${session.id}/comment`,
       };

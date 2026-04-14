@@ -3,16 +3,16 @@ import {
   databaseBuilder,
   expect,
   generateAuthenticatedUserRequestHeaders,
-  insertUserWithRoleSuperAdmin,
   knex,
 } from '../../../../test-helper.js';
 
 describe('Acceptance | Organization Entities | Admin | Route | Certification Centers', function () {
-  let adminMember, request, server;
+  let superAdmin, request, server;
 
   beforeEach(async function () {
     server = await createServer();
-    adminMember = await insertUserWithRoleSuperAdmin();
+    superAdmin = databaseBuilder.factory.buildUser.withRoleSuperAdmin();
+    await databaseBuilder.commit();
   });
 
   describe('GET /api/admin/certification-centers', function () {
@@ -25,7 +25,7 @@ describe('Acceptance | Organization Entities | Admin | Route | Certification Cen
 
     context('when user is Super Admin', function () {
       beforeEach(function () {
-        request.headers = generateAuthenticatedUserRequestHeaders();
+        request.headers = generateAuthenticatedUserRequestHeaders({ userId: superAdmin.id });
       });
 
       it('returns a list of certificationCenter, with their name and id', async function () {
@@ -157,7 +157,7 @@ describe('Acceptance | Organization Entities | Admin | Route | Certification Cen
         const response = await server.inject({
           method: 'POST',
           url: '/api/admin/certification-centers',
-          headers: generateAuthenticatedUserRequestHeaders(),
+          headers: generateAuthenticatedUserRequestHeaders({ userId: superAdmin.id }),
           payload: {
             data: {
               type: 'certification-center',
@@ -248,7 +248,7 @@ describe('Acceptance | Organization Entities | Admin | Route | Certification Cen
 
     context('when user is Super Admin', function () {
       beforeEach(function () {
-        request.headers = generateAuthenticatedUserRequestHeaders();
+        request.headers = generateAuthenticatedUserRequestHeaders({ userId: superAdmin.id });
       });
 
       it('returns 200 HTTP status', async function () {
@@ -354,7 +354,7 @@ describe('Acceptance | Organization Entities | Admin | Route | Certification Cen
 
         // when
         const { result, statusCode } = await server.inject({
-          headers: generateAuthenticatedUserRequestHeaders({ userId: adminMember.id }),
+          headers: generateAuthenticatedUserRequestHeaders({ userId: superAdmin.id }),
           method: 'PATCH',
           payload: {
             data: {
@@ -399,21 +399,21 @@ describe('Acceptance | Organization Entities | Admin | Route | Certification Cen
       const response = await server.inject({
         method: 'POST',
         url: `/api/admin/certification-centers/${certificationCenterId}/archive`,
-        headers: generateAuthenticatedUserRequestHeaders({ userId: adminMember.id }),
+        headers: generateAuthenticatedUserRequestHeaders({ userId: superAdmin.id }),
       });
 
       // then
       expect(response.statusCode).to.equal(204);
 
       const archivedCenter = await knex('certification-centers').where({ id: certificationCenterId }).first();
-      expect(archivedCenter.archivedBy).to.deep.equal(adminMember.id);
+      expect(archivedCenter.archivedBy).to.deep.equal(superAdmin.id);
       expect(archivedCenter.archivedAt).to.be.instanceOf(Date);
       expect(archivedCenter.archivedAt).not.to.deep.equal(previousUpdate);
 
       const disabledMembership = await knex('certification-center-memberships')
         .where({ certificationCenterId })
         .first();
-      expect(disabledMembership.updatedByUserId).to.equal(adminMember.id);
+      expect(disabledMembership.updatedByUserId).to.equal(superAdmin.id);
       expect(disabledMembership.disabledAt).to.deep.equal(archivedCenter.archivedAt);
 
       const cancelledInvitation = await knex('certification-center-invitations')
@@ -429,7 +429,7 @@ describe('Acceptance | Organization Entities | Admin | Route | Certification Cen
       // given
       const options = {
         method: 'GET',
-        headers: generateAuthenticatedUserRequestHeaders({ userId: adminMember.id }),
+        headers: generateAuthenticatedUserRequestHeaders({ userId: superAdmin.id }),
         url: '/api/admin/certification-centers/batch-archive/template',
       };
 
@@ -462,7 +462,7 @@ describe('Acceptance | Organization Entities | Admin | Route | Certification Cen
         const response = await server.inject({
           method: 'POST',
           url: `/api/admin/certification-centers/batch-archive`,
-          headers: generateAuthenticatedUserRequestHeaders({ userId: adminMember.id }),
+          headers: generateAuthenticatedUserRequestHeaders({ userId: superAdmin.id }),
           payload: buffer,
         });
 
@@ -475,8 +475,8 @@ describe('Acceptance | Organization Entities | Admin | Route | Certification Cen
           .first();
 
         expect(response.statusCode).to.equal(204);
-        expect(archivedCertificationCenter1.archivedBy).to.deep.equal(adminMember.id);
-        expect(archivedCertificationCenter2.archivedBy).to.deep.equal(adminMember.id);
+        expect(archivedCertificationCenter1.archivedBy).to.deep.equal(superAdmin.id);
+        expect(archivedCertificationCenter2.archivedBy).to.deep.equal(superAdmin.id);
         expect(archivedCertificationCenter1.archivedAt).not.to.be.null;
         expect(archivedCertificationCenter2.archivedAt).not.to.be.null;
       });
@@ -509,7 +509,7 @@ describe('Acceptance | Organization Entities | Admin | Route | Certification Cen
         const response = await server.inject({
           method: 'POST',
           url: `/api/admin/certification-centers/batch-archive`,
-          headers: generateAuthenticatedUserRequestHeaders({ userId: adminMember.id }),
+          headers: generateAuthenticatedUserRequestHeaders({ userId: superAdmin.id }),
           payload: buffer,
         });
 
@@ -527,8 +527,8 @@ describe('Acceptance | Organization Entities | Admin | Route | Certification Cen
           currentLine: 3,
           totalLines: 4,
         });
-        expect(archivedCertificationCenter1.archivedBy).to.deep.equal(adminMember.id);
-        expect(archivedCertificationCenter2.archivedBy).to.deep.equal(adminMember.id);
+        expect(archivedCertificationCenter1.archivedBy).to.deep.equal(superAdmin.id);
+        expect(archivedCertificationCenter2.archivedBy).to.deep.equal(superAdmin.id);
         expect(archivedCertificationCenter1.archivedAt).not.to.be.null;
         expect(archivedCertificationCenter2.archivedAt).not.to.be.null;
       });
@@ -539,7 +539,7 @@ describe('Acceptance | Organization Entities | Admin | Route | Certification Cen
         const options = {
           method: 'POST',
           url: '/api/admin/certification-centers/batch-archive',
-          headers: generateAuthenticatedUserRequestHeaders({ userId: adminMember.id }),
+          headers: generateAuthenticatedUserRequestHeaders({ userId: superAdmin.id }),
           payload: buffer,
         };
 

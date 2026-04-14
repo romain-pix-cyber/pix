@@ -14,6 +14,7 @@ const serialize = function (juryCertificationSummary, meta, { translate }) {
       result.certificationObtained = juryCertificationSummary.getCertificationLabel(translate);
       result.examinerComment = get(juryCertificationSummary, 'certificationIssueReports[0].description');
       result.numberOfCertificationIssueReports = juryCertificationSummary.certificationIssueReports.length;
+      result.reachedResultKey = juryCertificationSummary.reachedResultKey;
       result.numberOfCertificationIssueReportsWithRequiredAction =
         juryCertificationSummary.certificationIssueReports.filter(
           (issueReport) => issueReport.isImpactful && issueReport.resolvedAt === null,
@@ -26,7 +27,7 @@ const serialize = function (juryCertificationSummary, meta, { translate }) {
       'status',
       'pixScore',
       'algorithmVersion',
-      'reachedMeshIndex',
+      'reachedResultKey',
       'createdAt',
       'completedAt',
       'isPublished',

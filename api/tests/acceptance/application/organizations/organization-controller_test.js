@@ -5,8 +5,6 @@ import {
   databaseBuilder,
   expect,
   generateAuthenticatedUserRequestHeaders,
-  insertMultipleSendingFeatureForNewOrganization,
-  insertUserWithRoleSuperAdmin,
 } from '../../../test-helper.js';
 
 const { map: _map } = lodash;
@@ -16,8 +14,6 @@ describe('Acceptance | Application | organization-controller', function () {
 
   beforeEach(async function () {
     server = await createServer();
-    await insertUserWithRoleSuperAdmin();
-    await insertMultipleSendingFeatureForNewOrganization();
   });
 
   describe('GET /api/organizations/{id}/campaigns', function () {

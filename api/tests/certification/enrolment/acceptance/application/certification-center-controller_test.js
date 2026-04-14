@@ -5,7 +5,6 @@ import {
   databaseBuilder,
   expect,
   generateAuthenticatedUserRequestHeaders,
-  insertUserWithRoleSuperAdmin,
 } from '../../../../test-helper.js';
 
 describe('Acceptance | API | Certification Center', function () {
@@ -13,7 +12,6 @@ describe('Acceptance | API | Certification Center', function () {
 
   beforeEach(async function () {
     server = await createServer();
-    await insertUserWithRoleSuperAdmin();
   });
 
   describe('GET /api/certification-centers/{certificationCenterId}/sessions/{sessionId}/students', function () {

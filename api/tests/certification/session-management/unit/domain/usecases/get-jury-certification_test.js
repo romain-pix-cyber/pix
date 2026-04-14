@@ -4,7 +4,9 @@ import { domainBuilder, expect, sinon } from '../../../../../test-helper.js';
 describe('Certification | Session-management | Unit | Domain | Usecases | get-jury-certification', function () {
   it('should return the jury certification', async function () {
     // given
-    const expectedJuryCertification = domainBuilder.buildJuryCertification({ certificationCourseId: 777 });
+    const expectedJuryCertification = domainBuilder.certification.sessionManagement.buildJuryCertification({
+      certificationCourseId: 777,
+    });
     const juryCertificationRepository = { get: sinon.stub() };
     juryCertificationRepository.get.withArgs({ certificationCourseId: 123 }).resolves(expectedJuryCertification);
 

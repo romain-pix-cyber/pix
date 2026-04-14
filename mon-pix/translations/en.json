@@ -57,10 +57,10 @@
       "bad-request-error": "The data entered was not in the correct format.",
       "gateway-timeout-error": "The service is being slow. Please try again later.",
       "internal-server-error": "An error occurred, our teams are working on finding a solution. Please try again later.",
-      "login-unauthorized-error": "There was an error in the email address or username/password entered.",
+      "login-unauthorized-error": "The email address or username and/or password you entered are incorrect.",
       "login-unauthorized-remaining-attempts-error": "Warning: you have {remainingAttempts, plural, =0 {0 attempts} =1 {1 attempt} other {# attempts}} left before your Pix account is permanently blocked.",
       "login-unauthorized-remaining-attempts-with-user-name-error": "Warning: you have {remainingAttempts, plural, =0 {0 attempts} =1 {1 attempt} other {# attempts}} left before your Pix account is permanently blocked.'<br>'If you forget your password, '<strong>'contact your teacher'</strong>' to reset your password and/or recover your login.",
-      "login-unauthorized-with-user-name-error": "There was an error in the email address or username/password entered.'<br>'If you forget your password, '<strong>'contact your teacher'</strong>' to reset your password and/or recover your login.",
+      "login-unauthorized-with-user-name-error": "The email address or username and/or password you entered are incorrect.'<br>'If you forget your password, '<strong>'contact your teacher'</strong>' to reset your password and/or recover your login.",
       "login-unexpected-error": "Unable to connect. Please try again in a few moments. If the problem persists, '<'a href=\"{supportHomeUrl}\" target=\"blank\"'>'please contact us via the help center'</a>'.",
       "login-user-blocked-error": "Your account has reached the maximum number of failed login attempts and has been blocked. Please '<'a href=\"{url}\"'>'contact us'</a>' to unblock it.",
       "login-user-blocked-with-username-error": "Your account has been locked because you have made too many login attempts. To unlock it, please  '<strong>'contact your teacher'</strong>'; if they are unavailable, '<'a href=\"{url}\"'>'please contact us'</a>'.",
@@ -1870,7 +1870,7 @@
         "error-message": "Please agree to the terms and conditions of use.",
         "expired-authentication-key": "Your authentication demand has expired.",
         "invalid-email": "Your email address is invalid.",
-        "login-unauthorized-error": "There was an error in the email address or password entered.",
+        "login-unauthorized-error": "The email address and/or password you entered are incorrect.",
         "password-reset-token-invalid-or-expired": "Too much time has elapsed to validate your new password. Return to the login page to re-enter your username and temporary password."
       },
       "login-form": {
@@ -2305,42 +2305,24 @@
       "validation": "Your password has been updated."
     },
     "user-account": {
-      "account-update-email": {
-        "email-information": "Please provide a valid email address: it will be used to reset your password if you forget it. '<br>'This will change the email address you use to log in.",
+      "account-add-or-update-email-with-validation": {
+        "code-reception-information": "Once you have confirmed your request to add an email address, you will receive a code by email.",
         "fields": {
-          "errors": {
-            "empty-password": "Your password can't be empty.",
-            "invalid-password": "There was an error in the password entered.",
-            "mismatching-email": "The email addresses you entered do not match. Please check your entry for spelling errors.",
-            "new-email-already-exist": "This email address is already in use.",
-            "unknown-error": "An error has occurred. Please try again or contact the support.",
-            "wrong-email-format": "Your email address is invalid."
+          "email": {
+            "add-email": {
+              "label": "Email address"
+            },
+            "update-email": {
+              "label": "New email address"
+            }
           },
-          "new-email": {
-            "label": "New email address"
-          },
-          "new-email-confirmation": {
-            "label": "Confirm your email address"
-          },
-          "password": {
-            "label": "Password"
-          }
-        },
-        "password-information": "Enter your password to confirm",
-        "save-button": "Confirm",
-        "title": "Change your email address"
-      },
-      "account-update-email-with-validation": {
-        "fields": {
           "errors": {
             "empty-password": "Your password can't be empty.",
             "invalid-email": "Your email address is invalid.",
             "invalid-or-already-used-email": "Invalid or already used e-mail address",
             "invalid-password": "There was an error in the password entered.",
-            "new-email-already-exist": "This email address is already in use."
-          },
-          "new-email": {
-            "label": "New email address"
+            "new-email-already-exist": "This email address is already in use.",
+            "unknown-error": "An error has occurred. Please try again or contact the support."
           },
           "password": {
             "label": "Password",
@@ -2348,10 +2330,12 @@
           }
         },
         "save-button": "Get a verification code",
-        "title": "Change your email address"
+        "title": {
+          "add-email": "Add an email address",
+          "update-email": "Change your email address"
+        }
       },
       "connexion-methods": {
-        "add-email": "Add an email address",
         "authentication-methods": {
           "connection-via": "Login via {identityProviderOrganizationName}",
           "gar": "Login via ENT/Mediacentre",
@@ -2393,12 +2377,14 @@
           "email-modification-demand-expired": "This code has expired. Please renew your request.",
           "incorrect-code": "The code entered is incorrect.",
           "new-email-already-exist": "This email address is already in use.",
+          "no-code": "Please enter the {numInputs}-digit code you received by email.",
           "unknown-error": "An error has occurred. Please try again or contact the support."
         },
         "send-back-the-code": "Send the code again",
         "time-code-validation": "The code received is valid for 10 minutes",
         "title": "Verify your email address",
-        "update-successful": "Your email address has been changed!"
+        "update-successful": "Your email address has been changed!",
+        "validate-new-email": "Validate new email"
       },
       "language": {
         "lang": "Language",

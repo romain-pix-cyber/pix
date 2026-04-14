@@ -1,13 +1,16 @@
 import PixButton from '@1024pix/pix-ui/components/pix-button';
 import PixNotificationAlert from '@1024pix/pix-ui/components/pix-notification-alert';
 import t from 'ember-intl/helpers/t';
-import UpdateEmailWithValidation from 'mon-pix/components/user-account/update-email-with-validation';
+
+import AddOrUpdateEmailWithValidation from '../../../components/user-account/add-or-update-email-with-validation';
+
 <template>
   <div class="user-account__connection-methods">
     {{#if @controller.isEmailEditionMode}}
-      <UpdateEmailWithValidation
+      <AddOrUpdateEmailWithValidation
         @disableEmailEditionMode={{@controller.disableEmailEditionMode}}
         @displayEmailUpdateMessage={{@controller.displayEmailUpdateMessage}}
+        @canAddEmailConnectionMethod={{@controller.canAddEmailConnectionMethod}}
       />
     {{else}}
       {{#if @controller.shouldShowPixAuthenticationMethod}}
@@ -78,8 +81,12 @@ import UpdateEmailWithValidation from 'mon-pix/components/user-account/update-em
               —
             </p>
           </div>
-          <PixButton class="user-account-panel-item__add-email-button" @size="small">
-            {{t "pages.user-account.connexion-methods.add-email"}}
+          <PixButton
+            class="user-account-panel-item__add-email-button"
+            @size="small"
+            @triggerAction={{@controller.enableEmailEditionMode}}
+          >
+            {{t "pages.user-account.account-add-or-update-email-with-validation.title.add-email"}}
           </PixButton>
         </div>
       {{/if}}

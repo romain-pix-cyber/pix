@@ -1,4 +1,3 @@
-import { isFranceLocale } from '../../../shared/domain/services/locale-service.js';
 import {
   getEmailValidationUrl,
   getPixAppConnexionUrl,
@@ -35,7 +34,6 @@ export function createAccountCreationEmail({ locale, email, firstName, token, re
       homeName: getPixWebsiteDomain(locale),
       homeUrl: getPixWebsiteUrl(locale),
       helpdeskUrl: getSupportUrl(locale),
-      displayNationalLogo: isFranceLocale(locale),
       askForHelp: i18n.__('pix-account-creation-email.params.askForHelp'),
       disclaimer: i18n.__('pix-account-creation-email.params.disclaimer'),
       doNotAnswer: i18n.__('pix-account-creation-email.params.doNotAnswer'),

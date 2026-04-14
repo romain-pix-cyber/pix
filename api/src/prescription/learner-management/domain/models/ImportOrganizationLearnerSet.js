@@ -7,6 +7,7 @@ import {
 import { convertDateValue } from '../../../../shared/infrastructure/utils/date-utils.js';
 import { CommonOrganizationLearner } from '../models/CommonOrganizationLearner.js';
 import { validateCommonOrganizationLearner } from '../validators/common-organization-learner-validator.js';
+import { CommonOrganizationLearnerFilter } from './CommonOrganizationLearnerFilter.js';
 
 class ImportOrganizationLearnerSet {
   #learners;
@@ -250,6 +251,25 @@ class ImportOrganizationLearnerSet {
     if (errors.length > 0) {
       throw errors;
     }
+  }
+
+  get filtersAvailableValues() {
+    return this.#columnMapping
+      .filter((header) => header.config?.displayable?.filterable?.type === 'list')
+      .map((header) => {
+        const attributeName = header.config?.property ?? header.config?.mappingColumn ?? header.name;
+        const isProperty = Boolean(header.config?.property);
+
+        const values = [
+          ...new Set(
+            this.#learners
+              .map((learner) => (isProperty ? learner[attributeName] : learner.attributes?.[attributeName]))
+              .filter((value) => value != null),
+          ),
+        ];
+
+        return new CommonOrganizationLearnerFilter({ organizationId: this.#organizationId, attributeName, values });
+      });
   }
 
   get learners() {

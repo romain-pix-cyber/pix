@@ -38,6 +38,7 @@ const getV3DetailsByCertificationCourseId = async function ({ certificationCours
       assessmentResultStatus: 'assessment-results.status',
       pixScore: 'assessment-results.pixScore',
       reachedMeshIndex: 'assessment-results.reachedMeshIndex',
+      eduV3ExternalJuryResult: 'assessment-results.eduV3ExternalJuryResult',
       endedAt: 'certification-courses.endedAt',
       certificationFramework: 'certification-courses.framework',
     })

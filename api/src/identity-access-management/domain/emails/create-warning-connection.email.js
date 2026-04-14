@@ -1,4 +1,4 @@
-import { FRENCH_FRANCE, isFranceLocale } from '../../../shared/domain/services/locale-service.js';
+import { FRENCH_FRANCE } from '../../../shared/domain/services/locale-service.js';
 import {
   getEmailValidationUrl,
   getPixAppUrl,
@@ -34,7 +34,6 @@ export function createWarningConnectionEmail({ locale = FRENCH_FRANCE, email, fi
       homeName: getPixWebsiteDomain(locale),
       homeUrl: getPixWebsiteUrl(locale),
       helpDeskUrl: getEmailValidationUrl({ locale, redirectUrl: getSupportUrl(locale), token: validationToken }),
-      displayNationalLogo: isFranceLocale(locale),
       contactUs: i18n.__('common.email.contactUs'),
       doNotAnswer: i18n.__('common.email.doNotAnswer'),
       moreOn: i18n.__('common.email.moreOn'),

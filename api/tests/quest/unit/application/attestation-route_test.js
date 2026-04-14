@@ -1,16 +1,10 @@
 import FormData from 'form-data';
-import streamToPromise from 'stream-to-promise';
 
 import { attestationController } from '../../../../src/quest/application/attestation-controller.js';
 import * as attestationRoute from '../../../../src/quest/application/attestation-route.js';
 import { securityPreHandlers } from '../../../../src/shared/application/security-pre-handlers.js';
-import {
-  expect,
-  generateAuthenticatedUserRequestHeaders,
-  getFakeAttestationTemplate,
-  HttpTestServer,
-  sinon,
-} from '../../../test-helper.js';
+import { expect, generateAuthenticatedUserRequestHeaders, HttpTestServer, sinon } from '../../../test-helper.js';
+import { AttestationTemplateFixture } from '../../../tooling/fixtures/index.js';
 
 describe('Quest | Unit | Routes | Attestation Route', function () {
   describe('POST /api/admin/attestations', function () {
@@ -26,13 +20,13 @@ describe('Quest | Unit | Routes | Attestation Route', function () {
         const formData = new FormData();
         formData.append('templateKey', 'my_key');
         formData.append('templateName', 'my_name');
-        formData.append('templateFile', getFakeAttestationTemplate());
+        formData.append('templateFile', await AttestationTemplateFixture.getFile());
 
         const headers = {
           ...formData.getHeaders(),
           ...generateAuthenticatedUserRequestHeaders({ userId: 132 }),
         };
-        const payload = await streamToPromise(formData);
+        const payload = formData.getBuffer();
         // when
         await httpTestServer.request('POST', '/api/admin/attestations', payload, null, headers);
 
@@ -55,13 +49,13 @@ describe('Quest | Unit | Routes | Attestation Route', function () {
 
         const formData = new FormData();
         formData.append('templateName', 'my_name');
-        formData.append('templateFile', getFakeAttestationTemplate());
+        formData.append('templateFile', await AttestationTemplateFixture.getFile());
 
         const headers = {
           ...formData.getHeaders(),
           ...generateAuthenticatedUserRequestHeaders({ userId: 132 }),
         };
-        const payload = await streamToPromise(formData);
+        const payload = formData.getBuffer();
 
         // when
         const response = await httpTestServer.request('POST', '/api/admin/attestations', payload, null, headers);
@@ -78,13 +72,13 @@ describe('Quest | Unit | Routes | Attestation Route', function () {
 
         const formData = new FormData();
         formData.append('templateKey', 'key');
-        formData.append('templateFile', getFakeAttestationTemplate());
+        formData.append('templateFile', await AttestationTemplateFixture.getFile());
 
         const headers = {
           ...formData.getHeaders(),
           ...generateAuthenticatedUserRequestHeaders({ userId: 132 }),
         };
-        const payload = await streamToPromise(formData);
+        const payload = formData.getBuffer();
 
         // when
         const response = await httpTestServer.request('POST', '/api/admin/attestations', payload, null, headers);
@@ -107,7 +101,7 @@ describe('Quest | Unit | Routes | Attestation Route', function () {
           ...formData.getHeaders(),
           ...generateAuthenticatedUserRequestHeaders({ userId: 132 }),
         };
-        const payload = await streamToPromise(formData);
+        const payload = formData.getBuffer();
 
         // when
         const response = await httpTestServer.request('POST', '/api/admin/attestations', payload, null, headers);

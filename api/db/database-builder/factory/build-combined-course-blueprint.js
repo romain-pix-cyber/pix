@@ -13,7 +13,6 @@ const buildCombinedCourseBlueprint = function ({
   illustration = 'images/illustration.svg',
   createdAt = new Date(),
   updatedAt,
-  content = [],
   questId,
 } = {}) {
   const targetProfileId = buildTargetProfile().id;
@@ -21,7 +20,12 @@ const buildCombinedCourseBlueprint = function ({
     ? buildQuest({
         rewardType: null,
         rewardId: null,
-        successRequirements: [CombinedCourseBlueprint.buildRequirementForCombinedCourse({ targetProfileId }).toDTO()],
+        successRequirements: [
+          CombinedCourseBlueprint.buildRequirementForCombinedCourse({ targetProfileId }).toDTO(),
+          CombinedCourseBlueprint.buildRequirementForCombinedCourse({
+            moduleId: 'eeeb4951-6f38-4467-a4ba-0c85ed71321a',
+          }).toDTO(),
+        ],
       }).id
     : questId;
 
@@ -33,7 +37,6 @@ const buildCombinedCourseBlueprint = function ({
     illustration,
     createdAt,
     updatedAt: updatedAt ?? createdAt,
-    content: JSON.stringify(content),
     questId,
   };
 

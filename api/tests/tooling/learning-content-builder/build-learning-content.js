@@ -166,6 +166,12 @@ function _convertLanguesToLocales(langues) {
     if (langue === 'Anglais') {
       return ENGLISH_SPOKEN;
     }
+    if (langue === 'Germano Autrichien') {
+      return 'de-AT';
+    }
+    if (langue === 'Allemand') {
+      return 'de';
+    }
   });
 }
 

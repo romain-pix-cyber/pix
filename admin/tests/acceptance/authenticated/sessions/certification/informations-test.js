@@ -302,6 +302,7 @@ module('Acceptance | Route | routes/authenticated/sessions/certification | infor
         test('should be possible to update jury level', async function (assert) {
           //given
           await authenticateAdminMemberWithRole({ isSuperAdmin: true })(server);
+          certification.update({ certificationFramework: 'EDU_1ER_DEGRE' });
           const complementaryCertificationCourseResultWithExternal = server.create(
             'complementary-certification-course-result-with-external',
             {
@@ -344,6 +345,7 @@ module('Acceptance | Route | routes/authenticated/sessions/certification | infor
         test('should be possible to unset jury level', async function (assert) {
           //given
           await authenticateAdminMemberWithRole({ isSuperAdmin: true })(server);
+          certification.update({ certificationFramework: 'EDU_1ER_DEGRE' });
           const complementaryCertificationCourseResultWithExternal = server.create(
             'complementary-certification-course-result-with-external',
             {
@@ -404,6 +406,7 @@ module('Acceptance | Route | routes/authenticated/sessions/certification | infor
         test('it should not display previously opened jury level options', async function (assert) {
           //given
           await authenticateAdminMemberWithRole({ isSuperAdmin: true })(server);
+          certification.update({ certificationFramework: 'EDU_1ER_DEGRE' });
           this.server.create('user', { id: 777 });
           this.server.create('user', { id: 666 });
           const juryCertificationSummaries = [
@@ -435,6 +438,7 @@ module('Acceptance | Route | routes/authenticated/sessions/certification | infor
             id: 398,
             sessionId: session.id,
             userId: 777,
+            certificationFramework: 'EDU_1ER_DEGRE',
             complementaryCertificationCourseResultWithExternal: complementaryCertificationCourseResultWithExternal1,
             competencesWithMark: [],
           });
@@ -459,6 +463,7 @@ module('Acceptance | Route | routes/authenticated/sessions/certification | infor
             id: 456,
             userId: 666,
             sessionId: session.id,
+            certificationFramework: 'EDU_2ND_DEGRE',
             complementaryCertificationCourseResultWithExternal: complementaryCertificationCourseResultWithExternal2,
             competencesWithMark: [],
           });
@@ -507,6 +512,7 @@ module('Acceptance | Route | routes/authenticated/sessions/certification | infor
       test('it displays external complementary certifications', async function (assert) {
         // given
         await authenticateAdminMemberWithRole({ isSuperAdmin: true })(server);
+        certification.update({ certificationFramework: 'EDU_1ER_DEGRE' });
         const complementaryCertificationCourseResultWithExternal = server.create(
           'complementary-certification-course-result-with-external',
           {
@@ -530,6 +536,33 @@ module('Acceptance | Route | routes/authenticated/sessions/certification | infor
         assert.dom(screen.getByText('Niveau final')).exists();
         assert.strictEqual(screen.getAllByText('Pix+ Édu Initié (entrée dans le métier)').length, 2);
         assert.strictEqual(screen.getAllByText('Pix+ Édu Avancé').length, 1);
+      });
+    });
+
+    module('when certification is v3 Pix+ Edu', function () {
+      test('should be possible to update the external jury level', async function (assert) {
+        // given
+        await authenticateAdminMemberWithRole({ isSuperAdmin: true })(server);
+        certification.update({
+          version: 3,
+          isPublished: true,
+          certificationFramework: 'EDU_1ER_DEGRE',
+          reachedResultKey: 'PIX_EDU_FORMATION_INITIALE_1ER_DEGRE.0',
+        });
+
+        const screen = await visit(`/sessions/certification/${certification.id}`);
+
+        // when
+        await click(screen.getByRole('button', { name: 'Modifier le volet jury' }));
+
+        await click(screen.getByRole('button', { name: 'Sélectionner un niveau' }));
+        await screen.findByRole('listbox');
+        await click(screen.getByRole('option', { name: 'Avancé' }));
+
+        await clickByName('Enregistrer');
+
+        // then
+        assert.dom(await screen.findByText('Le résultat du volet jury externe a bien été enregistré')).exists();
       });
     });
 

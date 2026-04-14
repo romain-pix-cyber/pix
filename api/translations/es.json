@@ -510,7 +510,7 @@
   },
   "verification-code-email": {
     "body": {
-      "context": "Deseas cambiar la dirección de correo electrónico de tu cuenta. Para continuar, introduce el siguiente código en Pix:",
+      "context": "Para verificar tu dirección de correo electrónico, puedes introducir el siguiente código en Pix:",
       "doNotAnswer": "Este es un correo electrónico automático, por favor, no respondas directamente.",
       "greeting": "Hola:",
       "moreOn": "Más información sobre",

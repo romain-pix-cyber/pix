@@ -510,7 +510,7 @@
   },
   "verification-code-email": {
     "body": {
-      "context": "Je wilt je e-mailadres op je account wijzigen. Voer de volgende code in bij Pix om verder te gaan:",
+      "context": "Om je e-mailadres te verifiëren, kun je de volgende code invoeren op Pix:",
       "doNotAnswer": "Dit is een automatische e-mail, antwoord niet.",
       "greeting": "Hallo,",
       "moreOn": "Ontdek meer over",

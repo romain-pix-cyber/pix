@@ -7,7 +7,6 @@ import {
   databaseBuilder,
   expect,
   generateAuthenticatedUserRequestHeaders,
-  insertUserWithRoleSuperAdmin,
   knex,
 } from '../../../test-helper.js';
 import { createMockedTestOidcProviders } from '../../../tooling/openid-client/openid-client-mocks.js';
@@ -15,12 +14,38 @@ import { createMockedTestOidcProviders } from '../../../tooling/openid-client/op
 describe('Acceptance | Identity Access Management | Route | Admin | oidc-provider', function () {
   let server;
 
+  describe('GET /api/admin/oidc-providers/import/template', function () {
+    it('returns a 200 HTTP status code and a JSON formatted string', async function () {
+      // given
+      server = await createServer();
+
+      const superAdmin = databaseBuilder.factory.buildUser.withRoleSuperAdmin();
+      await databaseBuilder.commit();
+
+      const options = {
+        method: 'GET',
+        url: '/api/admin/oidc-providers/import/template',
+        headers: generateAuthenticatedUserRequestHeaders({ userId: superAdmin.id }),
+      };
+
+      // when
+      const response = await server.inject(options);
+
+      // then
+      expect(response.statusCode).to.equal(200);
+      expect(response.result).to.be.a.string;
+      expect(() => JSON.parse(response.result)).not.to.throw();
+    });
+  });
+
   describe('POST /api/admin/oidc-providers/import', function () {
     it('imports oidc providers and returns an HTTP status code 204', async function () {
       // given
       server = await createServer();
 
-      const superAdmin = await insertUserWithRoleSuperAdmin();
+      const superAdmin = databaseBuilder.factory.buildUser.withRoleSuperAdmin();
+      await databaseBuilder.commit();
+
       const payload = [
         {
           application: 'orga',
@@ -83,7 +108,9 @@ describe('Acceptance | Identity Access Management | Route | Admin | oidc-provide
       await createMockedTestOidcProviders([{ application: 'admin', applicationTld: '.fr' }]);
       server = await createServer();
 
-      const superAdmin = await insertUserWithRoleSuperAdmin();
+      const superAdmin = databaseBuilder.factory.buildUser.withRoleSuperAdmin();
+      await databaseBuilder.commit();
+
       const options = {
         method: 'GET',
         url: '/api/admin/oidc/identity-providers',
@@ -133,7 +160,9 @@ describe('Acceptance | Identity Access Management | Route | Admin | oidc-provide
         ]);
         server = await createServer();
 
-        const superAdmin = await insertUserWithRoleSuperAdmin();
+        const superAdmin = databaseBuilder.factory.buildUser.withRoleSuperAdmin();
+        await databaseBuilder.commit();
+
         const options = {
           method: 'GET',
           url: '/api/admin/oidc/identity-providers',

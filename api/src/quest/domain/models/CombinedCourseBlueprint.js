@@ -1,6 +1,5 @@
-import Joi from 'joi';
-
 import { CampaignParticipationStatuses } from '../../../prescription/shared/domain/constants.js';
+import { ADMIN_COMBINED_COURSE_BLUEPRINT_ITEMS } from './AdminCombinedCourseBlueprint.js';
 import { CombinedCourse } from './CombinedCourse.js';
 import { CRITERION_COMPARISONS, Quest, REQUIREMENT_COMPARISONS, REQUIREMENT_TYPES } from './Quest.js';
 import { buildRequirement } from './Requirement.js';
@@ -12,7 +11,6 @@ export class CombinedCourseBlueprint {
     internalName,
     description,
     illustration,
-    content,
     createdAt,
     updatedAt,
     organizationIds = [],
@@ -23,7 +21,6 @@ export class CombinedCourseBlueprint {
     this.internalName = internalName;
     this.description = description;
     this.illustration = illustration;
-    this.content = content;
     this.createdAt = createdAt;
     this.updatedAt = updatedAt;
     this.organizationIds = organizationIds;
@@ -62,7 +59,7 @@ export class CombinedCourseBlueprint {
     const createdAt = new Date();
 
     const quest = new Quest({
-      createdAt: createdAt,
+      createdAt,
       updatedAt: createdAt,
       rewardType: this.quest.rewardType,
       rewardId: this.quest.rewardId,
@@ -83,14 +80,14 @@ export class CombinedCourseBlueprint {
     );
   }
 
-  static buildWithQuest({ combinedCourseBlueprint, modulesByShortId, rewardId, rewardType }) {
-    const successRequirements = combinedCourseBlueprint.content.map((requirement) => {
-      if (requirement.type === COMBINED_COURSE_BLUEPRINT_ITEMS.EVALUATION) {
+  static buildWithQuest({ adminCombinedCourseBlueprint, modulesByShortId, rewardId, rewardType }) {
+    const successRequirements = adminCombinedCourseBlueprint.content.map((requirement) => {
+      if (requirement.type === ADMIN_COMBINED_COURSE_BLUEPRINT_ITEMS.EVALUATION) {
         const requirementTargetProfileId = requirement.value;
         return CombinedCourseBlueprint.buildRequirementForCombinedCourse({
           targetProfileId: requirementTargetProfileId,
         });
-      } else if (requirement.type === COMBINED_COURSE_BLUEPRINT_ITEMS.MODULE) {
+      } else if (requirement.type === ADMIN_COMBINED_COURSE_BLUEPRINT_ITEMS.MODULE) {
         const [module] = modulesByShortId[requirement.value];
         return CombinedCourseBlueprint.buildRequirementForCombinedCourse({
           moduleId: module.id,
@@ -101,8 +98,6 @@ export class CombinedCourseBlueprint {
     });
 
     const quest = new Quest({
-      createdAt: combinedCourseBlueprint.createdAt,
-      updatedAt: combinedCourseBlueprint.createdAt,
       rewardType,
       rewardId,
       eligibilityRequirements: [],
@@ -110,7 +105,7 @@ export class CombinedCourseBlueprint {
     });
 
     return new CombinedCourseBlueprint({
-      ...combinedCourseBlueprint,
+      ...adminCombinedCourseBlueprint,
       quest,
     });
   }
@@ -151,14 +146,6 @@ export class CombinedCourseBlueprint {
       });
     }
   }
-  static buildContentItems(items) {
-    const data = items.map(({ moduleShortId, targetProfileId }) => {
-      return moduleShortId
-        ? { type: COMBINED_COURSE_BLUEPRINT_ITEMS.MODULE, value: moduleShortId }
-        : { type: COMBINED_COURSE_BLUEPRINT_ITEMS.EVALUATION, value: targetProfileId };
-    });
-    return Joi.attempt(data, contentSchema);
-  }
 
   detachOrganization({ organizationId }) {
     this.organizationIds = this.organizationIds.filter((id) => id !== organizationId);
@@ -179,33 +166,3 @@ export class CombinedCourseBlueprint {
     return { duplicatedOrganizationIds, attachedOrganizationIds };
   }
 }
-
-export const COMBINED_COURSE_BLUEPRINT_ITEMS = {
-  MODULE: 'module',
-  EVALUATION: 'evaluation',
-};
-
-export const contentSchema = Joi.array()
-  .items(
-    Joi.object({
-      type: Joi.string()
-        .valid(COMBINED_COURSE_BLUEPRINT_ITEMS.EVALUATION, COMBINED_COURSE_BLUEPRINT_ITEMS.MODULE)
-        .required(),
-      value: Joi.alternatives()
-        .conditional('type', {
-          switch: [
-            {
-              is: COMBINED_COURSE_BLUEPRINT_ITEMS.EVALUATION,
-              then: Joi.number().integer(),
-            },
-            {
-              is: COMBINED_COURSE_BLUEPRINT_ITEMS.MODULE,
-              then: Joi.string(),
-            },
-          ],
-        })
-        .required(),
-    }),
-  )
-  .required()
-  .strict();

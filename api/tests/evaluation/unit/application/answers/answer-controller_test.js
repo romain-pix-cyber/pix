@@ -13,12 +13,15 @@ import {
 } from '../../../../test-helper.js';
 
 describe('Unit | Controller | answer-controller', function () {
-  let answerSerializerStub;
+  let answerSerializerStub, certificationEvaluationApiStub;
 
   beforeEach(function () {
     answerSerializerStub = {
       serialize: sinon.stub(),
       deserialize: sinon.stub(),
+    };
+    certificationEvaluationApiStub = {
+      evaluateAndSaveAnswer: sinon.stub(),
     };
     sinon.stub(questUsecases, 'rewardUser');
   });
@@ -113,7 +116,6 @@ describe('Unit | Controller | answer-controller', function () {
       answerSerializerStub.deserialize.returns(deserializedAnswer);
       sinon.stub(evaluationUsecases, 'saveAndCorrectAnswerForCompetenceEvaluation');
       sinon.stub(evaluationUsecases, 'saveAndCorrectAnswerForCampaign');
-      sinon.stub(evaluationUsecases, 'saveAndCorrectAnswerForCertification');
       sinon.stub(evaluationUsecases, 'saveAndCorrectAnswerForDemoAndPreview');
     });
 
@@ -172,21 +174,24 @@ describe('Unit | Controller | answer-controller', function () {
 
       it('should call appropriate usecase when assessment is of type CERTIFICATION', async function () {
         // given
-        const assessment = domainBuilder.buildAssessment({ type: Assessment.types.CERTIFICATION });
+        const assessment = domainBuilder.buildAssessment({
+          type: Assessment.types.CERTIFICATION,
+          certificationCourseId: 112233,
+        });
         assessmentRepository.getWithAnswers.withArgs(assessmentId).resolves(assessment);
 
         // when
         response = await answerController.save(request, hFake, {
           answerSerializer: answerSerializerStub,
           assessmentRepository,
+          certificationEvaluationApi: certificationEvaluationApiStub,
         });
 
         // then
-        expect(evaluationUsecases.saveAndCorrectAnswerForCertification).to.have.been.calledWithExactly({
+        expect(certificationEvaluationApiStub.evaluateAndSaveAnswer).to.have.been.calledWithExactly({
           answer: deserializedAnswer,
-          assessment,
+          certificationCourseId: 112233,
           userId,
-          locale,
         });
         expect(answerSerializerStub.serialize).to.have.been.calledWithExactly(createdAnswer);
         expect(response.source).to.deep.equal(serializedAnswer);

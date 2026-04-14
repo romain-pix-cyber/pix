@@ -2,7 +2,7 @@ import { PasswordNotMatching } from '../../../../../src/identity-access-manageme
 import { User } from '../../../../../src/identity-access-management/domain/models/User.js';
 import { pixAuthenticationService } from '../../../../../src/identity-access-management/domain/services/pix-authentication-service.js';
 import * as userRepository from '../../../../../src/identity-access-management/infrastructure/repositories/user.repository.js';
-import { UserNotFoundError } from '../../../../../src/shared/domain/errors.js';
+import { UserIsBlocked, UserIsTemporaryBlocked, UserNotFoundError } from '../../../../../src/shared/domain/errors.js';
 import * as userLoginRepository from '../../../../../src/shared/infrastructure/repositories/user-login-repository.js';
 import { catchErr, databaseBuilder, expect, sinon } from '../../../../test-helper.js';
 
@@ -140,7 +140,7 @@ describe('Integration | Identity Access Management | Domain | Services | pix-aut
         });
 
         context('When user failed to login with username multiple times', function () {
-          it('throws PasswordNotMatching error and block temporarily the user', async function () {
+          it('throws UserIsTemporaryBlocked error and block temporarily the user', async function () {
             // given
             databaseBuilder.factory.buildUserLogin({
               userId: user.id,
@@ -161,9 +161,7 @@ describe('Integration | Identity Access Management | Domain | Services | pix-aut
             expect(userLogin.failureCount).to.equal(10);
             expect(userLogin.temporaryBlockedUntil).not.to.be.null;
 
-            expect(error).to.be.an.instanceof(PasswordNotMatching);
-            expect(error.meta.remainingAttempts).to.be.null;
-            expect(error.meta.isLoginFailureWithUsername).to.be.true;
+            expect(error).to.be.an.instanceof(UserIsTemporaryBlocked);
           });
 
           context('When less than 10 attempts remaining before blocking', function () {
@@ -185,13 +183,13 @@ describe('Integration | Identity Access Management | Domain | Services | pix-aut
 
               // then
               expect(error).to.be.an.instanceof(PasswordNotMatching);
-              expect(error.meta.remainingAttempts).to.be.equal(9);
+              expect(error.meta.remainingAttempts).to.be.equal(8); // 30 - (21 + 1) = 8
             });
           });
         });
 
         context('When user failure count reaches the blocking limit', function () {
-          it('throws PasswordNotMatching error and block the user', async function () {
+          it('throws UserIsBlocked error and block the user', async function () {
             // given
             databaseBuilder.factory.buildUserLogin({
               userId: user.id,
@@ -211,8 +209,7 @@ describe('Integration | Identity Access Management | Domain | Services | pix-aut
             const userLogin = await userLoginRepository.findByUserId(user.id);
             expect(userLogin.blockedUntil).not.to.be.null;
 
-            expect(error).to.be.an.instanceof(PasswordNotMatching);
-            expect(error.meta.remainingAttempts).to.equal(0);
+            expect(error).to.be.an.instanceof(UserIsBlocked);
           });
         });
       });

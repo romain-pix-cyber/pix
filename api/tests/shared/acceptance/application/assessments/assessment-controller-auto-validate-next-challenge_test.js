@@ -5,7 +5,6 @@ import {
   databaseBuilder,
   expect,
   generateAuthenticatedUserRequestHeaders,
-  insertUserWithRoleSuperAdmin,
   knex,
   learningContentBuilder,
   mockLearningContent,
@@ -64,16 +63,15 @@ describe('Acceptance | API | assessment-controller-auto-validate-next-challenge'
   });
 
   describe('POST /api/admin/assessments/:id/always-ok-validate-next-challenge', function () {
-    let userId;
+    let superAdmin;
 
     beforeEach(async function () {
-      const user = await insertUserWithRoleSuperAdmin();
-      userId = user.id;
+      superAdmin = databaseBuilder.factory.buildUser.withRoleSuperAdmin();
       assessmentId = databaseBuilder.factory.buildAssessment({
         state: Assessment.states.STARTED,
         type: Assessment.types.PREVIEW,
         lastChallengeId,
-        userId,
+        userId: superAdmin.id,
       }).id;
       await databaseBuilder.commit();
     });
@@ -83,7 +81,7 @@ describe('Acceptance | API | assessment-controller-auto-validate-next-challenge'
       const response = await server.inject({
         method: 'POST',
         url: `/api/admin/assessments/${assessmentId}/always-ok-validate-next-challenge`,
-        headers: generateAuthenticatedUserRequestHeaders({ userId }),
+        headers: generateAuthenticatedUserRequestHeaders({ userId: superAdmin.id }),
       });
 
       // then

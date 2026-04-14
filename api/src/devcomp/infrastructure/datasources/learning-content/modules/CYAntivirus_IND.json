@@ -133,35 +133,35 @@
                     "id": "1",
                     "content": "<p>Optimiser les performances générales de l’ordinateur.</p>",
                     "feedback": {
-                      "diagnosis": "<p>Eh non ! Un antivirus est un <strong>logiciel spécialisé contre les logiciels malveillants</strong>. <br>Son rôle principal est de <strong>détecter</strong> la présence de logiciels malveillants sur un appareil.</p>"
+                      "diagnosis": "<p>Eh non ! Un antivirus est un <strong>logiciel spécialisé contre les logiciels malveillants</strong>. <br>Son rôle principal est de <strong>détecter</strong> la présence de logiciels malveillants sur un appareil et de prévenir l’utilisateur.</p>"
                     }
                   },
                   {
                     "id": "2",
                     "content": "<p>Organiser automatiquement les fichiers pour libérer de l’espace.</p>",
                     "feedback": {
-                      "diagnosis": "<p>Eh non ! Un antivirus est un <strong>logiciel spécialisé contre les logiciels malveillants</strong>. <br>Son rôle principal est de <strong>détecter</strong> la présence de logiciels malveillants sur un appareil.</p>"
+                      "diagnosis": "<p>Eh non ! Un antivirus est un <strong>logiciel spécialisé contre les logiciels malveillants</strong>. <br>Son rôle principal est de <strong>détecter</strong> la présence de logiciels malveillants sur un appareil et de prévenir l’utilisateur.</p>"
                     }
                   },
                   {
                     "id": "3",
                     "content": "<p>Détecter la présence de logiciels malveillants sur un appareil.</p>",
                     "feedback": {
-                      "diagnosis": "<p>En effet, un antivirus est un <strong>logiciel spécialisé contre les logiciels malveillants</strong>. <br>Son rôle principal est de <strong>détecter</strong> la présence de logiciels malveillants sur un appareil.</p>"
+                      "diagnosis": "<p>En effet, un antivirus est un <strong>logiciel spécialisé contre les logiciels malveillants</strong>. <br>Son rôle principal est de <strong>détecter</strong> la présence de logiciels malveillants sur un appareil et de prévenir l’utilisateur.</p>"
                     }
                   },
                   {
                     "id": "4",
                     "content": "<p>Restreindre l’accès aux contenus en fonction de l’âge de l’utilisateur.</p>",
                     "feedback": {
-                      "diagnosis": "<p>Eh non ! Un antivirus est un <strong>logiciel spécialisé contre les logiciels malveillants</strong>. <br>Son rôle principal est de <strong>détecter</strong> la présence de logiciels malveillants sur un appareil.</p>"
+                      "diagnosis": "<p>Eh non ! Un antivirus est un <strong>logiciel spécialisé contre les logiciels malveillants</strong>. <br>Son rôle principal est de <strong>détecter</strong> la présence de logiciels malveillants sur un appareil et de prévenir l’utilisateur.</p>"
                     }
                   },
                   {
                     "id": "4",
                     "content": "<p>Je ne sais pas.</p>",
                     "feedback": {
-                      "diagnosis": "<p>Un antivirus est un <strong>logiciel spécialisé contre les logiciels malveillants</strong>. <br>Son rôle principal est de <strong>détecter</strong> la présence de logiciels malveillants sur un appareil.</p>"
+                      "diagnosis": "<p>Un antivirus est un <strong>logiciel spécialisé contre les logiciels malveillants</strong>. <br>Son rôle principal est de <strong>détecter</strong> la présence de logiciels malveillants sur un appareil et de prévenir l’utilisateur.</p>"
                     }
                   }
                 ],
@@ -181,7 +181,7 @@
                 "id": "911286d9-f015-40a7-8150-c0a961f329cd",
                 "type": "text",
                 "tag": " ",
-                "content": "<p>Pour détecter la présence des logiciels malveillants, l’antivirus va surveiller les fichiers programmes de l’ordinateur de Philippe.</p>"
+                "content": "<p>Pour détecter la présence des logiciels malveillants, l’antivirus va surveiller les fichiers et les programmes de l’ordinateur de Philippe.</p>"
               }
             },
             {
@@ -226,7 +226,7 @@
                   },
                   {
                     "id": "5360a3a5-f829-4069-9638-78a4a34b7966",
-                    "text": "Branchement pour la première fois d’une nouvelle clé usb",
+                    "text": "Branchement d’une clé usb à l’ordinateur",
                     "image": {
                       "url": "",
                       "altText": ""
@@ -265,7 +265,16 @@
                 "id": "09624e99-41b4-4988-b697-5339222362cd",
                 "type": "text",
                 "tag": " ",
-                "content": "<p>Il existe des antivirus <strong>gratuits </strong>ou <strong>payants </strong>pour les ordinateurs, les tablettes, les smartphones&nbsp;: Norton, Avast, McAfee, Trend, CyRadar, Avira, AVG, Bitdefender, ReasonLabs, ClamAV.<br><strong>Un seul antivirus suffit.</strong></p><p><br>Une fois installé,<strong> pas besoin de lancer l’antivirus</strong> à chaque démarrage de l’appareil. L’antivirus fonctionne<strong> tout seul et en permanence</strong>.</p><p><br><strong>🤔 Bon à savoir</strong> <br>Certains appareils intègrent déjà des systèmes de protection contre les logiciels malveillants. Il est tout de même recommandé d’installer un logiciel antivirus.</p>"
+                "content": "<p>Il existe des antivirus <strong>gratuits </strong>ou <strong>payants </strong>pour les ordinateurs, les tablettes, les smartphones&nbsp;: Norton, Avast, McAfee, Trend, CyRadar, Avira, AVG, Bitdefender, ReasonLabs, ClamAV...<br><strong>Un seul antivirus suffit.</strong></p><p><br>Une fois installé,<strong> pas besoin de lancer l’antivirus</strong> à chaque démarrage de l’appareil. L’antivirus fonctionne<strong> tout seul et en permanence</strong>.</p>"
+              }
+            },
+            {
+              "type": "element",
+              "element": {
+                "id": "4800cfd2-7912-4dea-97d1-caa4ed2f2db4",
+                "type": "text",
+                "tag": "did-you-know",
+                "content": "<p>Certains appareils intègrent déjà des systèmes de protection contre les logiciels malveillants. Il est tout de même recommandé d’installer un logiciel antivirus.</p>"
               }
             }
           ]
@@ -303,35 +312,35 @@
                     "id": "1",
                     "content": "<p>En comparant les caractéristiques des fichiers et programmes à celles de logiciels malveillants déjà identifiés.</p>",
                     "feedback": {
-                      "diagnosis": "<p>Effectivement ! Comme tout fichier, chaque logiciel malveillant possède des caractéristiques qui lui sont propres. On appelle cela : la <strong>signature</strong> du logiciel malveillant.<br><br>Lorsqu’un fichier est téléchargé, créé, modifié ou exécuté, l’antivirus le compare à une une base contenant les signatures des logiciels malveillants déjà connus par l’antivirus)&nbsp;: la <strong>base de signature</strong>.</p>"
+                      "diagnosis": "<p>Effectivement ! Comme tout fichier, chaque logiciel malveillant possède des caractéristiques qui lui sont propres. On appelle cela&nbsp;: la <strong>signature</strong> du logiciel malveillant.<br><br>Lorsqu’un fichier est téléchargé, créé, modifié ou exécuté, l’antivirus le compare à une base contenant les signatures des logiciels malveillants déjà connus par l’antivirus)&nbsp;: la <strong>base de signature</strong>.</p>"
                     }
                   },
                   {
                     "id": "2",
                     "content": "<p>En analysant uniquement les noms des fichiers et programmes ainsi que leurs extensions.</p>",
                     "feedback": {
-                      "diagnosis": "<p>Eh non ! Chaque logiciel malveillant possède des caractéristiques qui lui sont propres, appelées <strong>signature </strong>(virales).<br><br>Lorsqu’un fichier ou un programme est téléchargé, créé, modifié ou exécuté, l’antivirus le compare à une une base contenant des signatures des logiciels malveillants déjà connus par l’antivirus&nbsp;: la <strong>base de signatures</strong>.</p>"
+                      "diagnosis": "<p>Eh non ! Chaque logiciel malveillant possède des caractéristiques qui lui sont propres, appelées <strong>signatures&nbsp;</strong>(virales).<br><br>Lorsqu’un fichier ou un programme est téléchargé, créé, modifié ou exécuté, l’antivirus le compare à une base contenant des signatures des logiciels malveillants déjà connus par l’antivirus&nbsp;: la <strong>base de signatures</strong>.</p>"
                     }
                   },
                   {
                     "id": "3",
                     "content": "<p>En supprimant tous les fichiers et programmes qu’il ne reconnaît pas.</p>",
                     "feedback": {
-                      "diagnosis": "<p>Eh non ! Chaque logiciel malveillant possède des caractéristiques qui lui sont propres, appelées <strong>signature </strong>(virales).<br><br>Lorsqu’un fichier ou un programme est téléchargé, créé, modifié ou exécuté, l’antivirus le compare à une une base contenant des signatures des logiciels malveillants déjà connus par l’antivirus&nbsp;: la <strong>base de signatures</strong>.</p>"
+                      "diagnosis": "<p>Eh non ! Chaque logiciel malveillant possède des caractéristiques qui lui sont propres, appelées <strong>signatures&nbsp;</strong>(virales).<br><br>Lorsqu’un fichier ou un programme est téléchargé, créé, modifié ou exécuté, l’antivirus le compare à une base contenant des signatures des logiciels malveillants déjà connus par l’antivirus&nbsp;: la <strong>base de signatures</strong>.</p>"
                     }
                   },
                   {
                     "id": "4",
                     "content": "<p>En vérifiant si le fichier ou le programme est utilisé par beaucoup d’autres personnes.</p>",
                     "feedback": {
-                      "diagnosis": "<p>Eh non ! Chaque logiciel malveillant possède des caractéristiques qui lui sont propres, appelées <strong>signature </strong>(virales).<br><br>Lorsqu’un fichier ou un programme est téléchargé, créé, modifié ou exécuté, l’antivirus le compare à une une base contenant des signatures des logiciels malveillants déjà connus par l’antivirus&nbsp;: la <strong>base de signatures</strong>.</p>"
+                      "diagnosis": "<p>Eh non ! Chaque logiciel malveillant possède des caractéristiques qui lui sont propres, appelées <strong>signatures&nbsp;</strong>(virales).<br><br>Lorsqu’un fichier ou un programme est téléchargé, créé, modifié ou exécuté, l’antivirus le compare à une base contenant des signatures des logiciels malveillants déjà connus par l’antivirus&nbsp;: la <strong>base de signatures</strong>.</p>"
                     }
                   },
                   {
                     "id": "5",
                     "content": "<p>Je ne sais pas.<br></p>",
                     "feedback": {
-                      "diagnosis": "<p>Chaque logiciel malveillant possède des caractéristiques qui lui sont propres, appelées <strong>signature </strong>(virales).<br><br>Lorsqu’un fichier ou un programme est téléchargé, créé, modifié ou exécuté, l’antivirus le compare à une une base contenant des signatures des logiciels malveillants déjà connus par l’antivirus&nbsp;: la <strong>base de signatures</strong>.</p>"
+                      "diagnosis": "<p>Chaque logiciel malveillant possède des caractéristiques qui lui sont propres, appelées <strong>signatures&nbsp;</strong>(virales).<br><br>Lorsqu’un fichier ou un programme est téléchargé, créé, modifié ou exécuté, l’antivirus le compare à une une base contenant des signatures des logiciels malveillants déjà connus par l’antivirus&nbsp;: la <strong>base de signatures</strong>.</p>"
                     }
                   }
                 ],
@@ -351,7 +360,7 @@
                 "id": "0ea11031-0120-4e7a-ab3d-77c028a6363f",
                 "type": "text",
                 "tag": " ",
-                "content": "<p>La base de signatures est une liste des signatures des logiciels malveillants déjà connus par l’antivirus.<br>🚨 Lorsque l’antivirus détecte une correspondance entre une des signatures connues et les caractéristiques d'un fichier ou un programme, il peut&nbsp;:</p><ul><li>le <strong>bloquer</strong>, c'est-à-dire l'empêcher de s'installer ou de fonctionner sur l'appareil,</li><li>ou <strong>le supprimer</strong> de l'appareil.</li></ul><p><br>Ce mécanisme permet de détecter rapidement les logiciels malveillants déjà recensés.</p>"
+                "content": "<p>La base de signatures est une liste des signatures des logiciels malveillants déjà connus par l’antivirus.<br>🚨 Lorsque l’antivirus détecte une correspondance entre une des signatures connues et les caractéristiques d’un fichier ou un programme, il peut&nbsp;:</p><ul><li>le <strong>bloquer</strong>, c’est-à-dire l’empêcher de s’installer ou de fonctionner sur l’appareil,</li><li>ou <strong>le supprimer</strong> de l’appareil.</li></ul><p><br>Ce mécanisme permet de détecter rapidement les logiciels malveillants déjà recensés.</p>"
               }
             }
           ]
@@ -387,15 +396,130 @@
               }
             },
             {
-              "type": "element",
-              "element": {
-                "id": "480099ac-a5d1-4a86-a5a8-59828e92afac",
-                "type": "custom-draft",
-                "title": "Notifications",
-                "url": "https://1024pix.github.io/atelier-contenus/LSI/CY_antivirus/notifs.html",
-                "instruction": "<p>Pour chacune des notifications, indiquez ce que doit faire Philippe.</p>",
-                "height": 550
-              }
+              "type": "stepper",
+              "instruction": "<p>Pour chacune des notifications suivantes, indiquez ce que doit faire Philippe.</p>",
+              "steps": [
+                {
+                  "elements": [
+                    {
+                      "id": "6a831899-1418-4f4d-b416-e21b8cb0e4d5",
+                      "type": "text",
+                      "tag": " ",
+                      "content": "<p>Notification 1&nbsp;:&nbsp;</p><p>«&nbsp;Antivirus Security</p><h5>Analyse quotidienne terminée</h5><p><em>Aucun élément dangereux détecté.&nbsp;»</em></p>"
+                    },
+                    {
+                      "id": "9afeaf94-83f1-46d6-ab24-c74507d07327",
+                      "type": "qcu-discovery",
+                      "instruction": "<p>Que doit faire Philippe ?</p>",
+                      "hasShortProposals": false,
+                      "proposals": [
+                        {
+                          "id": "1",
+                          "content": "<p>Fermer la notification.<br></p>",
+                          "feedback": {
+                            "diagnosis": "<p>Effectivement, ici la notification transmet seulement une information mais ne demande pas d’action de la part de Philippe. Il faut toujours lire attentivement les notifications de l’antivirus.<br></p>"
+                          }
+                        },
+                        {
+                          "id": "2",
+                          "content": "<p>Éteindre immédiatement l’ordinateur.</p>",
+                          "feedback": {
+                            "diagnosis": "<p>Eh non ! Ici la notification transmet seulement une information mais ne demande pas d’action de la part de Philippe.&nbsp;Il faut toujours lire attentivement les notifications de l’antivirus.</p>"
+                          }
+                        },
+                        {
+                          "id": "3",
+                          "content": "<p>Je ne sais pas.<br></p>",
+                          "feedback": {
+                            "diagnosis": "<p>Ici la notification transmet seulement une information mais ne demande pas d’action de la part de Philippe.&nbsp;Il faut toujours lire attentivement les notifications de l’antivirus.</p>"
+                          }
+                        }
+                      ],
+                      "solution": "1"
+                    }
+                  ]
+                },
+                {
+                  "elements": [
+                    {
+                      "id": "be387c2a-753e-4898-85e2-1881d3e21ef4",
+                      "type": "text",
+                      "tag": " ",
+                      "content": "<p>Notification 2&nbsp;:&nbsp;</p><p>«Antivirus Security</p><h5>Menace détectée sur la clé USB</h5><p><em>L’élément potentiellement dangereux a été isolé.&nbsp;»</em></p>"
+                    },
+                    {
+                      "id": "d4cce256-419a-41fe-a383-593ac06bb4b3",
+                      "type": "qcu-discovery",
+                      "instruction": "<p>Que doit faire Philippe ?</p>",
+                      "hasShortProposals": false,
+                      "proposals": [
+                        {
+                          "id": "1",
+                          "content": "<p>Fermer la notification.<br></p>",
+                          "feedback": {
+                            "diagnosis": "<p>Ici la notification transmet une information importante à Philippe&nbsp;: il&nbsp; ya un problème avec la clé USB. Mieux vaut ne plus l’utiliser tant qu’elle contient des éléments dangereux.</p>"
+                          }
+                        },
+                        {
+                          "id": "2",
+                          "content": "<p>Débrancher la clé et ne plus l’utiliser.</p>",
+                          "feedback": {
+                            "diagnosis": "<p>Effectivement, ici la notification transmet une information importante à Philippe&nbsp;: il&nbsp; ya un problème avec la clé USB. Mieux vaut ne plus l’utiliser tant qu’elle contient des éléments dangereux.</p>"
+                          }
+                        },
+                        {
+                          "id": "3",
+                          "content": "<p>Je ne sais pas.<br></p>",
+                          "feedback": {
+                            "diagnosis": "<p>Ici la notification transmet une information importante à Philippe&nbsp;: il&nbsp; ya un problème avec la clé USB. Mieux vaut ne plus l’utiliser tant qu’elle contient des éléments dangereux.</p>"
+                          }
+                        }
+                      ],
+                      "solution": "2"
+                    }
+                  ]
+                },
+                {
+                  "elements": [
+                    {
+                      "id": "f3034a7c-3cfb-4b5d-8fbc-8823de2c21be",
+                      "type": "text",
+                      "tag": " ",
+                      "content": "<p>Notification 3&nbsp;:&nbsp;</p><p>«&nbsp;Antivirus Security</p><h5>Mise à jour prête à être installée</h5><p><em>La base de signatures de votre antivirus doit être mise à jour.&nbsp;»</em></p>"
+                    },
+                    {
+                      "id": "c3f27692-a0e8-4280-9781-c7878cdd20bd",
+                      "type": "qcu-discovery",
+                      "instruction": "<p>Que doit faire Philippe ?</p>",
+                      "hasShortProposals": false,
+                      "proposals": [
+                        {
+                          "id": "1",
+                          "content": "<p>Fermer la notification.<br></p>",
+                          "feedback": {
+                            "diagnosis": "<p>Ici la notification transmet une information importante à Philippe&nbsp;: son antivirus doit être mis à jour. Il est important de ne pas ignorer cette notification et d’installer la notification.</p>"
+                          }
+                        },
+                        {
+                          "id": "2",
+                          "content": "<p>Installer la mise à jour.<br></p>",
+                          "feedback": {
+                            "diagnosis": "<p>Effectivement, ici la notification transmet une information importante à Philippe&nbsp;: son antivirus doit être mis à jour. Il est important de ne pas ignorer cette notification et d’installer la notification.</p>"
+                          }
+                        },
+                        {
+                          "id": "3",
+                          "content": "<p>Je ne sais pas.<br></p>",
+                          "feedback": {
+                            "diagnosis": "<p>Ici la notification transmet une information importante à Philippe&nbsp;: son antivirus doit être mis à jour. Il est important de ne pas ignorer cette notification et d’installer la notification.</p>"
+                          }
+                        }
+                      ],
+                      "solution": "2"
+                    }
+                  ]
+                }
+              ]
             }
           ]
         },
@@ -410,7 +534,7 @@
                 "id": "0fee0aa5-3408-47c2-81a6-1fce8b187903",
                 "type": "text",
                 "tag": " ",
-                "content": "<p>En cas de doute (après le téléchargement d’un fichier ou l’utilisation d’un support externe par exemple), il est possible de<strong> lancer une analyse manuelle</strong>.&nbsp;</p><br><p>Lancer une analyse manuelle consiste à demander explicitement à l’antivirus d’examiner&nbsp;:</p><ul>    <li>l’ensemble de l’appareil,</li>    <li>ou un élément précis (dossier, disque dur, clé USB).</li></ul><p>Cela permet de vérifier qu’aucun logiciel malveillant ne s’est installé.&nbsp;🕵️‍♀️</p>"
+                "content": "<p>En cas de doute (après le téléchargement d’un fichier ou l’utilisation d’un support externe par exemple), il est possible de<strong> lancer une analyse manuelle</strong>.&nbsp;</p><br><p>Lancer une analyse manuelle consiste à demander explicitement à l’antivirus d’examiner&nbsp;:</p><ul>    <li>l’ensemble de l’appareil,</li>    <li>ou un élément précis (dossier, disque dur, clé USB).</li></ul><p>Cela permet de vérifier qu’aucun logiciel malveillant ne s’est installé.&nbsp;🕵️‍♀<br></p>"
               }
             }
           ]
@@ -541,7 +665,7 @@
               "element": {
                 "id": "fef05ca3-6910-4604-916e-fd7751417144",
                 "type": "qcm",
-                "instruction": "<p>Quelles actions effectuent un logiciel antivirus ? </p>",
+                "instruction": "<p>Quelles actions effectue un logiciel antivirus ? </p>",
                 "hasShortProposals": false,
                 "proposals": [
                   {
@@ -564,7 +688,7 @@
                 "feedbacks": {
                   "valid": {
                     "state": "<p>Bonne réponse ! 🎉</p>",
-                    "diagnosis": "<p>Un antivirus est conçu pour protéger un  appareil&nbsp;: il surveille ce qu’il s’y passe en continu, repère les logiciels potentiellement malveillants puis les bloque ou les supprime.</p>"
+                    "diagnosis": "<p>Un antivirus est conçu pour protéger un  appareil&nbsp;: il surveille ce qu’il s’y passe en continu, repère les logiciels potentiellement malveillants puis les bloque ou les supprime en informant l’utilisateur.</p>"
                   },
                   "invalid": {
                     "state": "<p>Mauvaise réponse.</p>",
@@ -685,7 +809,8 @@
                       "t3"
                     ],
                     "solutions": [
-                      "base de signatures"
+                      "base de signatures",
+                      "base virale"
                     ]
                   },
                   {

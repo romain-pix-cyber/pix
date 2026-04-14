@@ -34,6 +34,7 @@ const serialize = function (campaignsToJoin) {
       'multipleSendings',
       'isMobileCompliant',
       'isTabletCompliant',
+      'recommendationEngine',
     ],
   }).serialize(campaignsToJoin);
 };

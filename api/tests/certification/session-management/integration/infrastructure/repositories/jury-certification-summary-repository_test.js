@@ -79,6 +79,7 @@ describe('Integration | Repository | JuryCertificationSummary', function () {
           assessmentId: manyAsrAssessmentId,
           createdAt: new Date('2018-04-15T00:00:00Z'),
           status: AssessmentResult.status.VALIDATED,
+          eduV3ExternalJuryResult: 'COUCOU',
         });
 
         return databaseBuilder.commit();
@@ -89,30 +90,32 @@ describe('Integration | Repository | JuryCertificationSummary', function () {
         const juryCertificationSummaries = await juryCertificationSummaryRepository.findBySessionId({ sessionId });
 
         // then
-        const expectedJuryCertificationSummary = domainBuilder.buildJuryCertificationSummary({
-          completedAt: manyAsrCertification.completedAt,
-          createdAt: manyAsrCertification.createdAt,
-          firstName: manyAsrCertification.firstName,
-          id: manyAsrCertification.id,
-          isPublished: manyAsrCertification.isPublished,
-          lastName: 'AAA',
-          algorithmVersion: AlgorithmEngineVersion.V2,
-          pixScore: latestAssessmentResult.pixScore,
-          reachedMeshIndex: latestAssessmentResult.reachedMeshIndex,
-          status: latestAssessmentResult.status,
-          certificationIssueReports: [
-            domainBuilder.buildCertificationIssueReport({
-              id: certificationIssueReport.id,
-              certificationCourseId: manyAsrCertification.id,
-              description,
-              categoryId,
-              subcategory: null,
-              category: CertificationIssueReportCategory.OTHER,
-              hasBeenAutomaticallyResolved: null,
-            }),
-          ],
-          certificationFramework: Frameworks.DROIT,
-        });
+        const expectedJuryCertificationSummary =
+          domainBuilder.certification.sessionManagement.buildJuryCertificationSummary({
+            completedAt: manyAsrCertification.completedAt,
+            createdAt: manyAsrCertification.createdAt,
+            firstName: manyAsrCertification.firstName,
+            id: manyAsrCertification.id,
+            isPublished: manyAsrCertification.isPublished,
+            lastName: 'AAA',
+            algorithmVersion: AlgorithmEngineVersion.V2,
+            pixScore: latestAssessmentResult.pixScore,
+            reachedMeshIndex: latestAssessmentResult.reachedMeshIndex,
+            status: latestAssessmentResult.status,
+            certificationIssueReports: [
+              domainBuilder.buildCertificationIssueReport({
+                id: certificationIssueReport.id,
+                certificationCourseId: manyAsrCertification.id,
+                description,
+                categoryId,
+                subcategory: null,
+                category: CertificationIssueReportCategory.OTHER,
+                hasBeenAutomaticallyResolved: null,
+              }),
+            ],
+            certificationFramework: Frameworks.DROIT,
+            eduV3ExternalJuryResult: 'COUCOU',
+          });
         expect(juryCertificationSummaries).to.have.lengthOf(3);
         expect(juryCertificationSummaries[0]).to.deepEqualInstance(expectedJuryCertificationSummary);
         expect(juryCertificationSummaries[1].id).to.equal(startedCertification.id);
@@ -126,6 +129,9 @@ describe('Integration | Repository | JuryCertificationSummary', function () {
           // then
           expect(juryCertificationSummaries[0].pixScore).to.equal(latestAssessmentResult.pixScore);
           expect(juryCertificationSummaries[0].reachedMeshIndex).to.equal(latestAssessmentResult.reachedMeshIndex);
+          expect(juryCertificationSummaries[0].eduV3ExternalJuryResult).to.equal(
+            latestAssessmentResult.eduV3ExternalJuryResult,
+          );
           expect(juryCertificationSummaries[0].status).to.equal(AssessmentResult.status.VALIDATED);
           expect(juryCertificationSummaries[0].firstName).to.equal(manyAsrCertification.firstName);
           expect(juryCertificationSummaries[0].lastName).to.equal(manyAsrCertification.lastName);

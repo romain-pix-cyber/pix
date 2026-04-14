@@ -20,7 +20,6 @@ describe('Unit | Identity Access Management | Domain | Email | email-change-veri
 
     const variables = email.variables;
     expect(variables.code).to.equal(emailParams.code);
-    expect(variables.displayNationalLogo).to.be.false;
     expect(variables).to.have.property('homeName').that.is.a('string');
     expect(variables).to.have.property('homeUrl').that.is.a('string');
     expect(variables).to.have.property('context').that.is.a('string');
@@ -31,20 +30,5 @@ describe('Unit | Identity Access Management | Domain | Email | email-change-veri
     expect(variables).to.have.property('seeYouSoon').that.is.a('string');
     expect(variables).to.have.property('signing').that.is.a('string');
     expect(variables).to.have.property('warningMessage').that.is.a('string');
-  });
-
-  context('when locale is fr-FR', function () {
-    it('displays french national logo', function () {
-      const emailParams = {
-        email: 'test@example.com',
-        code: '123',
-        locale: 'fr-FR',
-      };
-
-      const email = emailChangeVerificationCodeEmail(emailParams);
-
-      const variables = email.variables;
-      expect(variables.displayNationalLogo).to.be.true;
-    });
   });
 });

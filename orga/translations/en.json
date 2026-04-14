@@ -201,10 +201,10 @@
       "default": "An error has occurred. Please try again or contact the support.",
       "expired-authentication-key": "Your authentication demand has expired.",
       "internal-server-error": "An error occurred, our teams are working on finding a solution. Please try again later.",
-      "login-unauthorized-error": "There was an error in the email address or username/password entered.",
+      "login-unauthorized-error": "The email address or username and/or password you entered are incorrect.",
       "login-unauthorized-remaining-attempts-error": "Warning: you have {remainingAttempts, plural, =0 {0 attempts} =1 {1 attempt} other {# attempts}} left before your Pix account is permanently blocked.",
       "login-unauthorized-remaining-attempts-with-user-name-error": "Warning: you have {remainingAttempts, plural, =0 {0 attempts} =1 {1 attempt} other {# attempts}} left before your Pix account is permanently blocked.'<br>'If you forget your password, '<strong>'contact your teacher'</strong>' to reset your password and/or recover your login.",
-      "login-unauthorized-with-user-name-error": "There was an error in the email address or username/password entered.'<br>'If you forget your password, '<strong>'contact your teacher'</strong>' to reset your password and/or recover your login.",
+      "login-unauthorized-with-user-name-error": "The email address or username and/or password you entered are incorrect.'<br>'If you forget your password, '<strong>'contact your teacher'</strong>' to reset your password and/or recover your login.",
       "login-unexpected-error": "Unable to connect. Please try again in a few moments. If the problem persists, '<'a href=\"{supportHomeUrl}\" target=\"blank\"'>'please contact us via the help center'</a>'.",
       "login-user-blocked-error": "Your account has reached the maximum number of failed login attempts and has been blocked. Please '<'a href=\"{url}\"'>'contact us'</a>' to unblock it.",
       "login-user-temporary-blocked-error": "You have made too many login attempts, your Pix account is temporarily blocked for {blockingDurationMinutes} minutes. Try again later or click on '<'a href=\"{url}\"'>'forgotten password'</a>' to reset it.",
@@ -1163,7 +1163,7 @@
         "empty-password": "You have not entered your password.",
         "invalid-email": "Your email address is invalid.",
         "status": {
-          "404": "There was an error in the email address or password entered.",
+          "404": "The email address and/or password you entered are incorrect.",
           "409": "This invitation has been already accepted or cancelled."
         }
       },

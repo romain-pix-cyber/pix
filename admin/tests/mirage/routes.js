@@ -56,6 +56,7 @@ import {
   getTraining,
   updateTraining,
 } from './handlers/trainings';
+import { updateEduV3ExternalJuryResult } from './handlers/update-edu-v3-external-jury-result';
 import { findPaginatedFilteredUsers } from './handlers/users';
 
 /* eslint-disable ember/no-get */
@@ -658,6 +659,8 @@ export default function routes() {
   this.post('/admin/certification-courses/:id/assessment-results', () => {
     return new Response(204);
   });
+
+  this.post('/admin/certification-courses/:id/edu-v3-external-jury-result', updateEduV3ExternalJuryResult);
 
   this.get('/admin/tags');
   this.post('/admin/tags', (schema, request) => {

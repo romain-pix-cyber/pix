@@ -422,7 +422,7 @@
               "element": {
                 "id": "24101a5e-9303-49eb-9210-c208f79cb90c",
                 "type": "custom",
-                "instruction": "",
+                "instruction": "Pour chacun des cas ci-dessous : ouvrez et lisez le message d’arnaque, puis répondez à la question.",
                 "tagName": "phishing-message",
                 "props": {},
                 "title": "",

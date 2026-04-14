@@ -3,7 +3,6 @@ import {
   databaseBuilder,
   expect,
   generateAuthenticatedUserRequestHeaders,
-  insertUserWithRoleSuperAdmin,
   learningContentBuilder,
   mockLearningContent,
 } from '../../../../test-helper.js';
@@ -13,7 +12,6 @@ describe('Acceptance | Route | target-profile', function () {
 
   beforeEach(async function () {
     server = await createServer();
-    await insertUserWithRoleSuperAdmin();
   });
 
   describe('GET /api/organizations/{organizationId}/target-profiles', function () {

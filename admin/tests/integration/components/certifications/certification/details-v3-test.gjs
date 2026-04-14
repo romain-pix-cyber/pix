@@ -626,7 +626,7 @@ function createCertificationCourseDetailsRecord({ certificationChallengesForAdmi
     assessmentResultStatus: 'validated',
     numberOfChallenges: 15,
     certificationFramework: 'CORE',
-    reachedMeshIndex: 5,
+    reachedResultKey: 'CORE.5',
     certificationChallengesForAdministration,
     ...params,
   });

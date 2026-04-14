@@ -7,8 +7,8 @@ const schema = Joi.object({
   additionalRequiredProperties: Joi.object().optional(),
   application: Joi.string()
     .valid(...VALID_APPLICATIONS)
-    .optional(),
-  applicationTld: Joi.string().valid('.fr', '.org').optional(),
+    .required(),
+  applicationTld: Joi.string().valid('.fr', '.org').required(),
   claimMapping: Joi.object().optional(),
   claimsToStore: Joi.string().optional(),
   clientId: Joi.string().required(),
@@ -32,7 +32,7 @@ const schema = Joi.object({
   scope: Joi.string().required(),
   shouldCloseSession: Joi.boolean().optional().default(false),
   slug: Joi.string().required(),
-  source: Joi.string().optional(),
+  source: Joi.string().required(),
   isVisible: Joi.boolean().optional().default(true),
 });
 
@@ -51,8 +51,17 @@ function validate(oidcProvider) {
 }
 
 /**
+ * @returns {string}
+ */
+function getImportTemplate() {
+  const schemaForSingleOidcProvider = Object.fromEntries(Object.keys(schema.describe().keys).map((key) => [key, null]));
+  const schemaForMultipleOidcProvider = [schemaForSingleOidcProvider];
+  return JSON.stringify(schemaForMultipleOidcProvider, null, 2);
+}
+
+/**
  * @typedef AddOidcProviderValidator
  * @type {object}
  * @property validate
  */
-export const addOidcProviderValidator = { validate };
+export const addOidcProviderValidator = { validate, getImportTemplate };

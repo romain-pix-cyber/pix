@@ -9,6 +9,8 @@ import { EntityValidationError } from '../../../shared/domain/errors.js';
 import { cryptoService as injectedCryptoService } from '../../../shared/domain/services/crypto-service.js';
 import { COMBINED_COURSE_ITEM_TYPES, CombinedCourseItem } from './CombinedCourseItem.js';
 import { CombinedCourseParticipationDetails } from './CombinedCourseParticipationDetails.js';
+import { DataForQuest } from './DataForQuest.js';
+import { Eligibility } from './Eligibility.js';
 import { TYPES } from './Requirement.js';
 
 const schema = Joi.object({
@@ -224,10 +226,24 @@ export class CombinedCourseDetails extends CombinedCourse {
     }
   }
 
-  generateItems({ recommendedModuleIdsForUser = [], dataForQuest, participation = null } = {}) {
-    this.items = [];
+  updateItemsFromPassages(passages) {
+    const updatedDataForQuest = new DataForQuest({
+      eligibility: new Eligibility({
+        organizationLearner: this.dataForQuest.eligibility.organizationLearner,
+        organization: this.dataForQuest.eligibility.organization,
+        campaignParticipations: this.dataForQuest.eligibility.campaignParticipations,
+        passages,
+      }),
+    });
+    this.#generateItems({
+      dataForQuest: updatedDataForQuest,
+      participation: this.participation,
+    });
+    return this;
+  }
+
+  #setParticipationStatus(participation) {
     this.participation = participation;
-    this.dataForQuest = dataForQuest;
 
     if (!this.participation) {
       this.status = CombinedCourseStatuses.NOT_STARTED;
@@ -237,6 +253,11 @@ export class CombinedCourseDetails extends CombinedCourse {
           ? CombinedCourseStatuses.STARTED
           : CombinedCourseStatuses.COMPLETED;
     }
+  }
+
+  #generateItems({ dataForQuest } = {}) {
+    this.items = [];
+    this.dataForQuest = dataForQuest;
 
     const targetProfileIdsThatNeedAFormationItem = [];
 
@@ -290,7 +311,7 @@ export class CombinedCourseDetails extends CombinedCourse {
           continue;
         }
 
-        const isRecommended = recommendedModuleIdsForUser.find(
+        const isRecommended = this.recommendedModuleIdsForUser.find(
           (recommendedModule) => recommendedModule.moduleId === module.id,
         );
 
@@ -309,6 +330,12 @@ export class CombinedCourseDetails extends CombinedCourse {
         }
       }
     }
+  }
+
+  setDataAndGenerateItems({ recommendedModuleIdsForUser = [], dataForQuest, participation = null } = {}) {
+    this.recommendedModuleIdsForUser = recommendedModuleIdsForUser;
+    this.#setParticipationStatus(participation);
+    this.#generateItems({ dataForQuest });
   }
 
   isSuccessful() {

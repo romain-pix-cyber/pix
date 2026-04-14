@@ -1,3 +1,4 @@
+import { fallbackChallengeLocales } from '../../../../shared/domain/services/locale-service.js';
 import { STEPS_NAMES } from '../../models/SmartRandomStep.js';
 import { logStep } from '../smart-random-log-service.js';
 import { computeTubesFromSkills } from '../tube-service.js';
@@ -81,11 +82,13 @@ const findFirstChallenge = ({ knowledgeElements, targetSkills, tubes }) => {
   return { possibleSkillsForNextChallenge: availableSkills, levelEstimated: 2 };
 };
 
-const getSkillsWithAddedInformations = ({ targetSkills, filteredChallenges, locale }) =>
-  targetSkills.map((skill) => {
-    const challenges = filteredChallenges.filter(
-      (challenge) => challenge.skill.id === skill.id && challenge.locales.includes(locale),
-    );
+const getSkillsWithAddedInformations = ({ targetSkills, filteredChallenges, locale }) => {
+  const locales = fallbackChallengeLocales(locale);
+
+  return targetSkills.map((skill) => {
+    const challenges = filteredChallenges.filter((challenge) => {
+      return challenge.skill.id === skill.id && challenge.locales.some((locale) => locales.includes(locale));
+    });
     const [firstChallenge] = challenges;
 
     skill.challenges = challenges;
@@ -94,6 +97,7 @@ const getSkillsWithAddedInformations = ({ targetSkills, filteredChallenges, loca
 
     return skill;
   });
+};
 
 const removeChallengesWithAnswer = ({ challenges, allAnswers }) => {
   const challengeIdsWithAnswer = allAnswers.map((answer) => answer.challengeId);

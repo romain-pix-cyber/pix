@@ -131,31 +131,31 @@ describe('Integration | UseCases | update-campaign-details', function () {
       const { isForAbsoluteNovice } = await knex.select('*').from('campaigns').first();
       expect(isForAbsoluteNovice).to.be.true;
     });
-  });
 
-  it('should throw an error on updating isAbsoluteNovice when user not super admin', async function () {
-    //given
-    await databaseBuilder.commit();
+    it('should throw an error on updating isAbsoluteNovice when user not super admin', async function () {
+      //given
+      await databaseBuilder.commit();
 
-    //when
-    const campaignAttributes = {
-      isForAbsoluteNovice: true,
-    };
+      //when
+      const campaignAttributes = {
+        isForAbsoluteNovice: true,
+      };
 
-    const error = await catchErr(usecases.updateCampaignDetails)({
-      campaignId,
-      isAuthorizedToUpdateIsForAbsoluteNovice: false,
-      ...campaignAttributes,
+      const error = await catchErr(usecases.updateCampaignDetails)({
+        campaignId,
+        isAuthorizedToUpdateIsForAbsoluteNovice: false,
+        ...campaignAttributes,
+      });
+
+      //then
+      const { isForAbsoluteNovice: actualIsForAbsoluteNovice } = await knex
+        .select('isForAbsoluteNovice')
+        .from('campaigns')
+        .where({ id: campaignId })
+        .first();
+
+      expect(error).to.be.an.instanceOf(IsForAbsoluteNoviceUpdateError);
+      expect(actualIsForAbsoluteNovice).to.be.false;
     });
-
-    //then
-    const { isForAbsoluteNovice: actualIsForAbsoluteNovice } = await knex
-      .select('isForAbsoluteNovice')
-      .from('campaigns')
-      .where({ id: campaignId })
-      .first();
-
-    expect(error).to.be.an.instanceOf(IsForAbsoluteNoviceUpdateError);
-    expect(actualIsForAbsoluteNovice).to.be.false;
   });
 });

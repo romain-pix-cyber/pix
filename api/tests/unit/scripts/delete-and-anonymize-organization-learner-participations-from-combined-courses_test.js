@@ -1,4 +1,4 @@
-import { DeleteAndAnonymizeOrganizationLearnerParticipationsScript } from '../../../scripts/prod/delete-and-anonymize-organization-learner-participations-from-combined-courses.js';
+import { DeleteAndAnonymizeOrganizationLearnerParticipationsScript } from '../../../src/prescription/scripts/delete-and-anonymize-organization-learner-participations-from-combined-courses.js';
 import { DomainTransaction } from '../../../src/shared/domain/DomainTransaction.js';
 import { catchErr, expect, sinon } from '../../test-helper.js';
 

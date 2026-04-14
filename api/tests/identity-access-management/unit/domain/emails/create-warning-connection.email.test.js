@@ -23,7 +23,6 @@ describe('Unit | Identity Access Management | Domain | Email | create-warning-co
 
     expect(variables).to.have.property('homeName').that.is.a('string');
     expect(variables).to.have.property('homeUrl').that.is.a('string');
-    expect(variables).to.have.property('displayNationalLogo').that.is.a('boolean');
     expect(variables).to.have.property('contactUs').that.is.a('string');
     expect(variables).to.have.property('doNotAnswer').that.is.a('string');
     expect(variables).to.have.property('moreOn').that.is.a('string');

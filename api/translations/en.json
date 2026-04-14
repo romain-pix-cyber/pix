@@ -525,7 +525,7 @@
   },
   "verification-code-email": {
     "body": {
-      "context": "You’ve requested to change the email address linked to your account. To continue, enter the following verification code on Pix:",
+      "context": "To verify your email address, you can enter the following code on Pix:",
       "doNotAnswer": "This is an automated email message, please do not reply.",
       "greeting": "Hi,",
       "moreOn": "More on",

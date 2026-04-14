@@ -6,15 +6,7 @@ import { repositories } from '../../../../../src/organizational-entities/infrast
 import { ORGANIZATION_FEATURE } from '../../../../../src/shared/domain/constants.js';
 import { MissingAttributesError, NotFoundError } from '../../../../../src/shared/domain/errors.js';
 import { OrganizationInvitation } from '../../../../../src/team/domain/models/OrganizationInvitation.js';
-import {
-  catchErr,
-  databaseBuilder,
-  domainBuilder,
-  expect,
-  insertMultipleSendingFeatureForNewOrganization,
-  knex,
-  sinon,
-} from '../../../../test-helper.js';
+import { catchErr, databaseBuilder, domainBuilder, expect, knex, sinon } from '../../../../test-helper.js';
 
 describe('Integration | Organizational Entities | Infrastructure | Repository | organization-for-admin', function () {
   let clock, byDefaultFeatureId, administrationTeam, organizationLearnerType, domainOrganizationLearnerType;
@@ -715,36 +707,47 @@ describe('Integration | Organizational Entities | Infrastructure | Repository | 
   });
 
   describe('#findChildrenByParentOrganizationId', function () {
-    let parentOrganizationId;
+    let parentOrganizationId, parentStructureId, networkId;
 
-    beforeEach(function () {
-      parentOrganizationId = databaseBuilder.factory.buildOrganization({
-        name: 'name_ok_1',
-        type: 'SCO',
-        externalId: '1234567A',
-      }).id;
+    beforeEach(async function () {
+      const {
+        organization: parentOrganization,
+        structure: parentStructure,
+        network,
+      } = databaseBuilder.factory.buildNetworkAndHeadOrganization({
+        headOrganization: { name: 'Parent Org', type: 'SCO', externalId: '1234567A' },
+      });
+      parentOrganizationId = parentOrganization.id;
+      parentStructureId = parentStructure.id;
+      networkId = network.id;
+      await databaseBuilder.commit();
     });
 
     context('when there is no child organization', function () {
       it('returns an empty array', async function () {
-        //given
-        //when
+        // given
+        // when
         const children = await repositories.organizationForAdminRepository.findChildrenByParentOrganizationId({
           parentOrganizationId,
         });
 
-        //then
+        // then
         expect(children).to.have.lengthOf(0);
       });
     });
 
     context('when there is at least one child organization', function () {
-      it('returns an array of organizations', async function () {
+      it('returns an array of OrganizationForAdmin instances ordered by name', async function () {
         // given
-        databaseBuilder.factory.buildOrganization({
-          name: 'First Child',
-          type: 'SCO',
-          parentOrganizationId,
+        databaseBuilder.factory.buildOrganizationInNetwork({
+          networkId,
+          parentStructureId,
+          organizationData: { name: 'Second Child', type: 'SCO' },
+        });
+        databaseBuilder.factory.buildOrganizationInNetwork({
+          networkId,
+          parentStructureId,
+          organizationData: { name: 'First Child', type: 'SCO' },
         });
 
         await databaseBuilder.commit();
@@ -755,9 +758,27 @@ describe('Integration | Organizational Entities | Infrastructure | Repository | 
         });
 
         // then
-        expect(children.length).to.be.greaterThanOrEqual(1);
+        expect(children).to.have.lengthOf(2);
         expect(children[0]).to.be.instanceOf(OrganizationForAdmin);
-        expect(_.map(children, 'name')).to.have.members(['First Child']);
+        expect(_.map(children, 'name')).to.deep.equal(['First Child', 'Second Child']);
+      });
+    });
+
+    context('when an organization has a structure but no parent', function () {
+      it('does not return it', async function () {
+        // given
+        databaseBuilder.factory.buildOrganizationWithStructure({
+          organizationData: { name: 'Unrelated Org', type: 'SCO' },
+        });
+        await databaseBuilder.commit();
+
+        // when
+        const children = await repositories.organizationForAdminRepository.findChildrenByParentOrganizationId({
+          parentOrganizationId,
+        });
+
+        // then
+        expect(children).to.have.lengthOf(0);
       });
     });
   });
@@ -767,39 +788,48 @@ describe('Integration | Organizational Entities | Infrastructure | Repository | 
       // given
       const superAdminUser = databaseBuilder.factory.buildUser({ firstName: 'Cécile', lastName: 'Encieux' });
       const organizationLearnerType = databaseBuilder.factory.buildOrganizationLearnerType({ name: 'Type Toto' });
-      const parentOrganization = databaseBuilder.factory.buildOrganization({
-        type: 'SCO',
-        name: 'Mother Of Dark Side',
-        logoUrl: 'another logo url',
-        externalId: 'DEF456',
-        provinceCode: '45',
-        isManagingStudents: true,
-        credit: 666,
-        email: 'sco.generic.account@example.net',
-        createdBy: superAdminUser.id,
-        documentationUrl: 'https://pix.fr/',
-        organizationLearnerTypeId: organizationLearnerType.id,
+      const {
+        network,
+        structure: parentStructure,
+        organization: parentOrganization,
+      } = databaseBuilder.factory.buildNetworkAndHeadOrganization({
+        headOrganization: {
+          type: 'SCO',
+          name: 'Mother Of Dark Side',
+          logoUrl: 'another logo url',
+          externalId: 'DEF456',
+          provinceCode: '45',
+          isManagingStudents: true,
+          credit: 666,
+          email: 'sco.generic.account@example.net',
+          createdBy: superAdminUser.id,
+          documentationUrl: 'https://pix.fr/',
+          organizationLearnerTypeId: organizationLearnerType.id,
+        },
       });
-      const organization = databaseBuilder.factory.buildOrganization({
-        type: 'SCO',
-        name: 'Organization of the dark side',
-        logoUrl: 'some logo url',
-        credit: 154,
-        externalId: '100',
-        provinceCode: '75',
-        isManagingStudents: 'true',
-        email: 'sco.generic.account@example.net',
-        documentationUrl: 'https://pix.fr/',
-        createdBy: superAdminUser.id,
-        createdAt: now,
-        showNPS: true,
-        formNPSUrl: 'https://pix.fr/',
-        showSkills: false,
-        identityProviderForCampaigns: 'genericOidcProviderCode',
-        parentOrganizationId: parentOrganization.id,
-        administrationTeamId: administrationTeam.id,
-        countryCode: 99100,
-        organizationLearnerTypeId: organizationLearnerType.id,
+      const { organization } = databaseBuilder.factory.buildOrganizationInNetwork({
+        networkId: network.id,
+        parentStructureId: parentStructure.id,
+        organizationData: {
+          type: 'SCO',
+          name: 'Organization of the dark side',
+          logoUrl: 'some logo url',
+          credit: 154,
+          externalId: '100',
+          provinceCode: '75',
+          isManagingStudents: 'true',
+          email: 'sco.generic.account@example.net',
+          documentationUrl: 'https://pix.fr/',
+          createdBy: superAdminUser.id,
+          createdAt: now,
+          showNPS: true,
+          formNPSUrl: 'https://pix.fr/',
+          showSkills: false,
+          identityProviderForCampaigns: 'genericOidcProviderCode',
+          administrationTeamId: administrationTeam.id,
+          countryCode: 99100,
+          organizationLearnerTypeId: organizationLearnerType.id,
+        },
       });
 
       databaseBuilder.factory.buildDataProtectionOfficer.withOrganizationId({
@@ -867,8 +897,10 @@ describe('Integration | Organizational Entities | Infrastructure | Repository | 
         parentOrganizationId: parentOrganization.id,
         parentOrganizationName: 'Mother Of Dark Side',
         countryCode: 99100,
-        networkId: null,
-        networkName: null,
+        networkId: network.id,
+        networkName: network.name,
+        networkHeadOrganizationId: parentOrganization.id,
+        networkHeadOrganizationName: 'Mother Of Dark Side',
       });
       expect(foundOrganizationForAdmin).to.deep.equal(expectedOrganizationForAdmin);
     });
@@ -1230,7 +1262,7 @@ describe('Integration | Organizational Entities | Infrastructure | Repository | 
       databaseBuilder.factory.buildCertificationCpfCountry({
         code: 99100,
       });
-      await insertMultipleSendingFeatureForNewOrganization();
+      databaseBuilder.factory.buildFeature(ORGANIZATION_FEATURE.MULTIPLE_SENDING_ASSESSMENT);
 
       await databaseBuilder.commit();
 
@@ -1265,7 +1297,7 @@ describe('Integration | Organizational Entities | Infrastructure | Repository | 
       databaseBuilder.factory.buildCertificationCpfCountry({
         code: 99100,
       });
-      await insertMultipleSendingFeatureForNewOrganization();
+      databaseBuilder.factory.buildFeature(ORGANIZATION_FEATURE.MULTIPLE_SENDING_ASSESSMENT);
 
       await databaseBuilder.commit();
 
@@ -1298,6 +1330,44 @@ describe('Integration | Organizational Entities | Infrastructure | Repository | 
       });
     });
 
+    context('when a parentOrganizationId is provided', function () {
+      it('creates a fct_structure linked to the parent structure and network', async function () {
+        // given
+        const superAdminUserId = databaseBuilder.factory.buildUser.withRole().id;
+        databaseBuilder.factory.buildCertificationCpfCountry({ code: 99100 });
+        databaseBuilder.factory.buildFeature(ORGANIZATION_FEATURE.MULTIPLE_SENDING_ASSESSMENT);
+
+        const {
+          network,
+          structure: parentStructure,
+          organization: parentOrganization,
+        } = databaseBuilder.factory.buildNetworkAndHeadOrganization();
+
+        await databaseBuilder.commit();
+
+        const organization = new OrganizationForAdmin({
+          name: 'Child Organization',
+          type: 'PRO',
+          createdBy: superAdminUserId,
+          administrationTeamId: administrationTeam.id,
+          countryCode: 99100,
+          parentOrganizationId: parentOrganization.id,
+          organizationLearnerType: new OrganizationLearnerType({
+            id: organizationLearnerType.id,
+            name: organizationLearnerType.name,
+          }),
+        });
+
+        // when
+        const savedOrganization = await repositories.organizationForAdminRepository.save({ organization });
+
+        // then
+        const fctStructure = await knex('fct_structures').where({ organization_id: savedOrganization.id }).first();
+        expect(fctStructure.parent_structure_id).to.equal(parentStructure.id);
+        expect(fctStructure.network_id).to.equal(network.id);
+      });
+    });
+
     context('when the organization type is SCO-1D', function () {
       it('adds mission_management, oralization and learner_import features to the organization', async function () {
         const superAdminUserId = databaseBuilder.factory.buildUser().id;
@@ -1313,7 +1383,7 @@ describe('Integration | Organizational Entities | Infrastructure | Repository | 
         const organizationLearnerImportOndeFormat = databaseBuilder.factory.buildOrganizationLearnerImportFormat({
           name: 'ONDE',
         });
-        byDefaultFeatureId = await insertMultipleSendingFeatureForNewOrganization();
+        byDefaultFeatureId = databaseBuilder.factory.buildFeature(ORGANIZATION_FEATURE.MULTIPLE_SENDING_ASSESSMENT).id;
 
         await databaseBuilder.commit();
 
@@ -1329,9 +1399,7 @@ describe('Integration | Organizational Entities | Infrastructure | Repository | 
         const savedOrganization = await repositories.organizationForAdminRepository.save({ organization });
 
         const savedOrganizationFeatures = await knex('organization-features')
-          .where({
-            organizationId: savedOrganization.id,
-          })
+          .where({ organizationId: savedOrganization.id })
           .whereNot({ featureId: byDefaultFeatureId });
 
         expect(savedOrganizationFeatures).to.have.lengthOf(3);
@@ -1355,7 +1423,7 @@ describe('Integration | Organizational Entities | Infrastructure | Repository | 
 
   describe('#update', function () {
     beforeEach(async function () {
-      byDefaultFeatureId = await insertMultipleSendingFeatureForNewOrganization();
+      byDefaultFeatureId = databaseBuilder.factory.buildFeature(ORGANIZATION_FEATURE.MULTIPLE_SENDING_ASSESSMENT).id;
     });
 
     it('updates organization detail', async function () {

@@ -157,10 +157,10 @@ describe('Certification | Evaluation | Integration | Domain | Usecases | Score v
         version: AlgorithmEngineVersion.V3,
       });
 
-      databaseBuilder.factory.buildCertificationCandidate({
+      const candidateId = databaseBuilder.factory.buildCertificationCandidate({
         sessionId: session.id,
         userId: certifiableUserId,
-      });
+      }).id;
 
       certificationCourseId = databaseBuilder.factory.buildCertificationCourse({
         completedAt: null,
@@ -168,6 +168,7 @@ describe('Certification | Evaluation | Integration | Domain | Usecases | Score v
         userId: certifiableUserId,
         createdAt: limitDate,
         version: AlgorithmEngineVersion.V3,
+        candidateId,
       }).id;
 
       completedCertificationAssessmentId = databaseBuilder.factory.buildAssessment({
@@ -377,10 +378,10 @@ describe('Certification | Evaluation | Integration | Domain | Usecases | Score v
         version: AlgorithmEngineVersion.V3,
       });
 
-      databaseBuilder.factory.buildCertificationCandidate({
+      const candidateId = databaseBuilder.factory.buildCertificationCandidate({
         sessionId: session.id,
         userId: certifiableUserId,
-      });
+      }).id;
 
       certificationCourseId = databaseBuilder.factory.buildCertificationCourse({
         completedAt: null,
@@ -388,6 +389,7 @@ describe('Certification | Evaluation | Integration | Domain | Usecases | Score v
         userId: certifiableUserId,
         createdAt: limitDate,
         version: AlgorithmEngineVersion.V3,
+        candidateId,
       }).id;
 
       complementaryCertificationCourseId = databaseBuilder.factory.buildComplementaryCertificationCourse({

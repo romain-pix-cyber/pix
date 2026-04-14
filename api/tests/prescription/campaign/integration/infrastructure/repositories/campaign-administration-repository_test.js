@@ -770,10 +770,9 @@ describe('Integration | Repository | Campaign Administration', function () {
 
     it('should not update other fields', async function () {
       // given
-      campaign1.updateFields({
-        multipleSendings: false,
-        type: 'PROFILE_COLLECTION',
-      });
+      campaign1.multipleSendings = false;
+      campaign1.type = 'PROFILE_COLLECTION';
+
       campaign1.delete(userId);
 
       // when

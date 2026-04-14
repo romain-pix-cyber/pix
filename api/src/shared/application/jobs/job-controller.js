@@ -10,6 +10,15 @@ export const JobGroup = {
   MADDO: 'maddo',
 };
 
+export function checkJobGroups(jobGroups) {
+  if (!jobGroups) throw new Error('Job groups are mandatory');
+  for (const jobGroup of jobGroups) {
+    if (!Object.values(JobGroup).includes(jobGroup)) {
+      throw new Error(`Job group invalid, allowed Job groups are [${Object.values(JobGroup)}]`);
+    }
+  }
+}
+
 export class JobController {
   constructor(jobName, options = {}) {
     this.jobName = jobName;

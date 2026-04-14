@@ -1,7 +1,7 @@
 import type { Page } from '@playwright/test';
 
 import { waitForVisibleWithReload } from '../../helpers/utils.ts';
-import { CertificationSessionPage } from './index.ts';
+import { CertificationInformationPage, CertificationSessionPage } from './index.ts';
 
 export class CertificationSessionsMainPage {
   constructor(public readonly page: Page) {}
@@ -46,5 +46,12 @@ export class CertificationSessionsMainPage {
       has: this.page.getByText(sessionNumber, { exact: true }),
     });
     await row.waitFor({ state: 'detached' });
+  }
+
+  async goToCertificationWithSearchBar(certificationNumber: string) {
+    await this.page.getByLabel('Rechercher une certification avec un identifiant').fill(certificationNumber);
+    await this.page.getByRole('button', { name: 'Charger' }).click();
+    await this.page.waitForURL(/\/sessions\/certification\/\d+$/);
+    return new CertificationInformationPage(this.page);
   }
 }

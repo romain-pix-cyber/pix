@@ -24,7 +24,7 @@ export default class CertificationInformationsController extends Controller {
       .get('defaultJuryOptions')
       .map((value) => ({
         value,
-        label: this.intl.t(`components.certifications.external-jury-select-options.${value}`),
+        label: this.intl.t(`components.certifications.edu-results.v2.external-jury-select-options.${value}`),
       }));
     return [
       ...this.certification.complementaryCertificationCourseResultWithExternal.get('allowedExternalLevels'),

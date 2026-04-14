@@ -2,15 +2,13 @@ import PixButton from '@1024pix/pix-ui/components/pix-button';
 import PixIcon from '@1024pix/pix-ui/components/pix-icon';
 import PixInput from '@1024pix/pix-ui/components/pix-input';
 import PixModal from '@1024pix/pix-ui/components/pix-modal';
-import PixTooltip from '@1024pix/pix-ui/components/pix-tooltip';
-import { on } from '@ember/modifier';
 import { action } from '@ember/object';
 import { service } from '@ember/service';
 import Component from '@glimmer/component';
 import { tracked } from '@glimmer/tracking';
-import CopyButton from 'ember-cli-clipboard/components/copy-button';
-import isClipboardSupported from 'ember-cli-clipboard/helpers/is-clipboard-supported';
 import { t } from 'ember-intl';
+
+import CopyPasteButton from '../copy-paste-button';
 
 export default class ManageAuthenticationMethodModal extends Component {
   @service store;
@@ -21,41 +19,7 @@ export default class ManageAuthenticationMethodModal extends Component {
 
   @tracked generatedPassword = null;
 
-  @tracked tooltipTextUsername = this._t('section.username.copy');
-  @tracked tooltipTextEmail = this._t('section.email.copy');
-  @tracked tooltipTextGeneratedPassword = this._t('section.password.copy');
-
   defaultErrorMessage = this._t('error.default');
-
-  @action
-  clipboardSuccessUsername() {
-    this.tooltipTextUsername = this._t('copied');
-  }
-
-  @action
-  clipboardSuccessEmail() {
-    this.tooltipTextEmail = this._t('copied');
-  }
-
-  @action
-  clipboardSuccessGeneratedPassword() {
-    this.tooltipTextGeneratedPassword = this._t('copied');
-  }
-
-  @action
-  clipboardOutUsername() {
-    this.tooltipTextUsername = this._t('section.username.copy');
-  }
-
-  @action
-  clipboardOutEmail() {
-    this.tooltipTextEmail = this._t('section.email.copy');
-  }
-
-  @action
-  clipboardOutGeneratedPassword() {
-    this.tooltipTextGeneratedPassword = this._t('section.password.copy');
-  }
 
   @action
   async resetPassword(event) {
@@ -190,27 +154,16 @@ export default class ManageAuthenticationMethodModal extends Component {
                           "pages.sco-organization-participants.manage-authentication-method-modal.section.email.label"
                         }}</:label>
                     </PixInput>
-                    {{#if (isClipboardSupported)}}
-                      <PixTooltip @id="copy-email-tooltip" @position="top" @isInline={{true}}>
-                        <:triggerElement>
-                          <CopyButton
-                            @text={{@student.email}}
-                            @onSuccess={{this.clipboardSuccessEmail}}
-                            {{on "mouseout" this.clipboardOutEmail}}
-                            aria-label="{{t
-                              'pages.sco-organization-participants.manage-authentication-method-modal.section.email.copy'
-                            }}"
-                            aria-describedby="copy-email-tooltip"
-                            class="pix-icon-button pix-icon-button--small pix-icon-button--dark-grey"
-                          >
-                            <PixIcon @name="copy" />
-                          </CopyButton>
-                        </:triggerElement>
-                        <:tooltip>
-                          {{this.tooltipTextEmail}}
-                        </:tooltip>
-                      </PixTooltip>
-                    {{/if}}
+                    <CopyPasteButton
+                      @clipBoardtext={{@student.email}}
+                      @successMessage={{t
+                        "pages.sco-organization-participants.manage-authentication-method-modal.copied"
+                      }}
+                      @defaultMessage={{t
+                        "pages.sco-organization-participants.manage-authentication-method-modal.section.email.copy"
+                      }}
+                      @tooltipPosition="top"
+                    />
                   </div>
                 </div>
               </div>
@@ -253,27 +206,16 @@ export default class ManageAuthenticationMethodModal extends Component {
                             "pages.sco-organization-participants.manage-authentication-method-modal.section.username.label"
                           }}</:label>
                       </PixInput>
-                      {{#if (isClipboardSupported)}}
-                        <PixTooltip @id="copy-username-tooltip" @position="top" @isInline={{true}}>
-                          <:triggerElement>
-                            <CopyButton
-                              @text={{@student.username}}
-                              @onSuccess={{this.clipboardSuccessUsername}}
-                              {{on "mouseout" this.clipboardOutUsername}}
-                              aria-label={{t
-                                "pages.sco-organization-participants.manage-authentication-method-modal.section.username.copy"
-                              }}
-                              aria-describedby="copy-username-tooltip"
-                              class="pix-icon-button pix-icon-button--small pix-icon-button--dark-grey"
-                            >
-                              <PixIcon @name="copy" />
-                            </CopyButton>
-                          </:triggerElement>
-                          <:tooltip>
-                            {{this.tooltipTextUsername}}
-                          </:tooltip>
-                        </PixTooltip>
-                      {{/if}}
+                      <CopyPasteButton
+                        @clipBoardtext={{@student.username}}
+                        @successMessage={{t
+                          "pages.sco-organization-participants.manage-authentication-method-modal.copied"
+                        }}
+                        @defaultMessage={{t
+                          "pages.sco-organization-participants.manage-authentication-method-modal.section.username.copy"
+                        }}
+                        @tooltipPosition="top"
+                      />
                     </div>
                   </div>
                 {{/if}}
@@ -308,27 +250,17 @@ export default class ManageAuthenticationMethodModal extends Component {
                             "pages.sco-organization-participants.manage-authentication-method-modal.section.password.label"
                           }}</:label>
                       </PixInput>
-                      {{#if (isClipboardSupported)}}
-                        <PixTooltip @id="copy-password-tooltip" @position="bottom-left" @isInline={{true}}>
-                          <:triggerElement>
-                            <CopyButton
-                              @text={{this.generatedPassword}}
-                              @onSuccess={{this.clipboardSuccessGeneratedPassword}}
-                              {{on "mouseout" this.clipboardOutGeneratedPassword}}
-                              aria-label={{t
-                                "pages.sco-organization-participants.manage-authentication-method-modal.section.password.copy"
-                              }}
-                              aria-describedby="copy-password-tooltip"
-                              class="pix-icon-button pix-icon-button--small manage-authentication-window__clipboard__copy-password-button"
-                            >
-                              <PixIcon @name="copy" class="fa-inverse" />
-                            </CopyButton>
-                          </:triggerElement>
-                          <:tooltip>
-                            {{this.tooltipTextGeneratedPassword}}
-                          </:tooltip>
-                        </PixTooltip>
-                      {{/if}}
+                      <CopyPasteButton
+                        @clipBoardtext={{this.generatedPassword}}
+                        @successMessage={{t
+                          "pages.sco-organization-participants.manage-authentication-method-modal.copied"
+                        }}
+                        @defaultMessage={{t
+                          "pages.sco-organization-participants.manage-authentication-method-modal.section.password.copy"
+                        }}
+                        @tooltipPosition="bottom-left"
+                        class="manage-authentication-window__clipboard__copy-password-button"
+                      />
                     </div>
                   </div>
 

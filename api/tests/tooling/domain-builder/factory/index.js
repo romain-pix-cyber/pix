@@ -96,8 +96,6 @@ import { buildFlashAlgorithmConfiguration } from './build-flash-algorithm-config
 import { buildFramework } from './build-framework.js';
 import { buildHabilitation } from './build-habilitation.js';
 import { buildHint } from './build-hint.js';
-import { buildJuryCertification } from './build-jury-certification.js';
-import { buildJuryCertificationSummary } from './build-jury-certification-summary.js';
 import { buildJurySession } from './build-jury-session.js';
 import { buildKnowledgeElement, buildKnowledgeElementSnapshot } from './build-knowledge-element.js';
 import { buildLearningContent } from './build-learning-content.js';
@@ -121,6 +119,7 @@ import { buildPrescriber } from './build-prescriber.js';
 import { buildPrivateCertificate } from './build-private-certificate.js';
 import { buildPrivateCertificate as buildPrivateCertificateWithCompetenceTree } from './build-private-certificate-with-competence-tree.js';
 import { buildProgression } from './build-progression.js';
+import { buildQuest } from './build-quest.js';
 import { buildReproducibilityRate } from './build-reproducibility-rate.js';
 import { buildResultCompetenceTree } from './build-result-competence-tree.js';
 import { buildSchoolAssessment } from './build-school-assessment.js';
@@ -213,6 +212,7 @@ import { buildCertificationResult as parcoursupCertificationResult } from './cer
 import { buildCompetence as parcoursupCompetence } from './certification/results/parcoursup/build-competence.js';
 import { buildParcoursupCertificationLevel } from './certification/results/parcoursup/build-parcoursup-certification-level.js';
 import { buildCertificationDetails } from './certification/session-management/build-certification-details.js';
+import { buildJuryCertification } from './certification/session-management/build-jury-certification.js';
 import { builders as sessionManagementBuilders } from './certification/session-management/index.js';
 import { buildCompetenceForScoring } from './certification/shared/build-competence-for-scoring.js';
 import { buildComplementaryCertification as buildSharedComplementaryCertification } from './certification/shared/build-complementary-certification.js';
@@ -456,7 +456,6 @@ export {
   buildFramework,
   buildHint,
   buildJuryCertification,
-  buildJuryCertificationSummary,
   buildJurySession,
   buildKnowledgeElement,
   buildKnowledgeElementSnapshot,
@@ -482,6 +481,7 @@ export {
   buildPrivateCertificate,
   buildPrivateCertificateWithCompetenceTree,
   buildProgression,
+  buildQuest,
   buildReproducibilityRate,
   buildResultCompetenceTree,
   buildSchoolAssessment,

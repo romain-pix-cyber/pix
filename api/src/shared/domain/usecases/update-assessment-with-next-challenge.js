@@ -1,3 +1,4 @@
+import { CampaignParticipationDeletedError } from '../../../prescription/campaign-participation/domain/errors.js';
 import { logger } from '../../infrastructure/utils/logger.js';
 import { AssessmentEndedError, AssessmentLackOfChallengesError, NotFoundError } from '../errors.js';
 
@@ -49,6 +50,10 @@ export async function updateAssessmentWithNextChallenge({
     }
 
     if (assessment.isForCampaign() && assessment.isStarted()) {
+      if (!assessment.campaignParticipationId)
+        throw new CampaignParticipationDeletedError(
+          `Cannot continue assessement: ${assessmentId} on deleted participation`,
+        );
       if (assessment.isForExamCampaign()) {
         const progression = await evaluationUsecases.getProgression({
           progressionId: assessmentId.toString(),
@@ -58,6 +63,7 @@ export async function updateAssessmentWithNextChallenge({
       }
       nextChallenge = await evaluationUsecases.getNextChallengeForCampaignAssessment({ assessment, locale });
     }
+
     if (assessment.isCompetenceEvaluation()) {
       assessment.title = await competenceRepository.getCompetenceName({ id: assessment.competenceId, locale });
       if (assessment.isStarted()) {

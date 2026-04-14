@@ -1,3 +1,5 @@
+import { PIX_PLUS_EDU_EXTERNAL_LEVELS } from '../../../../src/certification/shared/domain/constants/mesh-configuration.js';
+import { AlgorithmEngineVersion } from '../../../../src/certification/shared/domain/models/AlgorithmEngineVersion.js';
 import { Frameworks } from '../../../../src/certification/shared/domain/models/Frameworks.js';
 import {
   createServer,
@@ -66,6 +68,24 @@ describe('Acceptance | Controller | session-controller-get-jury-certification-su
           framework: Frameworks.CLEA,
         });
         databaseBuilder.factory.buildAssessment({ certificationCourseId: certificationCourse2.id });
+
+        const certificationCourse3 = databaseBuilder.factory.buildCertificationCourse({
+          sessionId,
+          lastName: 'DDD',
+          framework: Frameworks.EDU_1ER_DEGRE,
+          version: AlgorithmEngineVersion.V3,
+        });
+        const assessmentId3 = databaseBuilder.factory.buildAssessment({
+          certificationCourseId: certificationCourse2.id,
+        }).id;
+        const asr3 = databaseBuilder.factory.buildAssessmentResult.last({
+          certificationCourseId: certificationCourse3.id,
+          createdAt: new Date('2018-04-15T00:00:00Z'),
+          reachedMeshIndex: 0,
+          eduV3ExternalJuryResult: PIX_PLUS_EDU_EXTERNAL_LEVELS.EXPERT,
+          assessmentId: assessmentId3,
+        });
+
         await databaseBuilder.commit();
 
         const request = {
@@ -85,7 +105,7 @@ describe('Acceptance | Controller | session-controller-get-jury-certification-su
           status: asr1.status,
           'pix-score': asr1.pixScore,
           'algorithm-version': certificationCourse1.version,
-          'reached-mesh-index': asr1.reachedMeshIndex,
+          'reached-result-key': 'CLEA.NONE',
           'is-published': certificationCourse1.isPublished,
           'created-at': certificationCourse1.createdAt,
           'completed-at': certificationCourse1.completedAt,
@@ -101,7 +121,7 @@ describe('Acceptance | Controller | session-controller-get-jury-certification-su
           status: 'started',
           'pix-score': null,
           'algorithm-version': certificationCourse2.version,
-          'reached-mesh-index': null,
+          'reached-result-key': 'CLEA.NONE',
           'is-published': certificationCourse2.isPublished,
           'created-at': certificationCourse2.createdAt,
           'number-of-certification-issue-reports': 0,
@@ -110,6 +130,22 @@ describe('Acceptance | Controller | session-controller-get-jury-certification-su
           'examiner-comment': undefined,
           'is-flagged-aborted': false,
           'certification-framework': Frameworks.CLEA,
+        };
+        const expectedJuryCertificationSummary3 = {
+          'first-name': certificationCourse3.firstName,
+          'last-name': certificationCourse3.lastName,
+          status: asr3.status,
+          'pix-score': asr3.pixScore,
+          'algorithm-version': certificationCourse3.version,
+          'reached-result-key': 'EDU_1ER_DEGRE.EXPERT',
+          'is-published': certificationCourse3.isPublished,
+          'created-at': certificationCourse3.createdAt,
+          'completed-at': certificationCourse3.completedAt,
+          'number-of-certification-issue-reports': 0,
+          'number-of-certification-issue-reports-with-required-action': 0,
+          'examiner-comment': undefined,
+          'is-flagged-aborted': false,
+          'certification-framework': Frameworks.EDU_1ER_DEGRE,
         };
 
         expect(response.statusCode).to.equal(200);
@@ -123,6 +159,11 @@ describe('Acceptance | Controller | session-controller-get-jury-certification-su
             type: 'jury-certification-summaries',
             id: certificationCourse2.id.toString(),
             attributes: expectedJuryCertificationSummary2,
+          },
+          {
+            type: 'jury-certification-summaries',
+            id: certificationCourse3.id.toString(),
+            attributes: expectedJuryCertificationSummary3,
           },
         ]);
       });

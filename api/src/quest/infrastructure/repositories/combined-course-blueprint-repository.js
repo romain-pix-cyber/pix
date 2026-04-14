@@ -27,26 +27,30 @@ export async function save({ combinedCourseBlueprint }) {
 
   const questId = await questRepository.save({ quest: combinedCourseBlueprint.quest });
 
-  if (!combinedCourseBlueprint.id) {
-    const [insertedValues] = await knexConn('combined_course_blueprints')
-      .insert(_toDTO({ combinedCourseBlueprint, questId }))
-      .returning('*');
+  const blueprintToSave = {
+    id: combinedCourseBlueprint.id,
+    name: combinedCourseBlueprint.name,
+    internalName: combinedCourseBlueprint.internalName,
+    description: combinedCourseBlueprint.description,
+    illustration: combinedCourseBlueprint.illustration,
+    updatedAt: knexConn.fn.now(),
+    questId,
+  };
 
-    const quest = await questRepository.findById({ questId });
+  const createdBlueprint = await knexConn('combined_course_blueprints')
+    .insert(blueprintToSave)
+    .onConflict('id')
+    .merge(['updatedAt', 'name', 'internalName', 'description', 'illustration', 'questId'])
+    .returning('*');
 
-    return _toDomain(insertedValues, quest);
+  const doesCombinedCourseBlueprintExists = !!combinedCourseBlueprint.id;
+  if (doesCombinedCourseBlueprintExists) {
+    await updateShares({ combinedCourseBlueprint, knexConn });
   }
 
-  const [updatedValues] = await knexConn('combined_course_blueprints')
-    .update(_toDTO({ combinedCourseBlueprint, questId }))
-    .where({ id: combinedCourseBlueprint.id })
-    .returning('*');
-  await updateShares({ combinedCourseBlueprint, knexConn });
+  const quest = await questRepository.findById({ questId });
 
-  return _toDomain({
-    ...updatedValues,
-    organizationIds: combinedCourseBlueprint.organizationIds,
-  });
+  return _toDomain({ ...createdBlueprint[0], organizationIds: combinedCourseBlueprint.organizationIds }, quest);
 }
 
 async function updateShares({ combinedCourseBlueprint, knexConn }) {
@@ -112,20 +116,6 @@ export async function findByOrganizationId({ organizationId }) {
     .groupBy('combined_course_blueprints.id')
     .orderBy('combined_course_blueprints.id');
   return results.map((result) => _toDomain(result));
-}
-
-function _toDTO({ combinedCourseBlueprint, questId }) {
-  return {
-    id: combinedCourseBlueprint.id,
-    name: combinedCourseBlueprint.name,
-    internalName: combinedCourseBlueprint.internalName,
-    description: combinedCourseBlueprint.description,
-    illustration: combinedCourseBlueprint.illustration,
-    content: JSON.stringify(combinedCourseBlueprint.content),
-    createdAt: combinedCourseBlueprint.createdAt,
-    updatedAt: combinedCourseBlueprint.updatedAt,
-    questId,
-  };
 }
 
 function _toDomain(rawData, quest) {

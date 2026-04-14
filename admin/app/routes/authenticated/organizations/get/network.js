@@ -15,7 +15,7 @@ export default class Network extends Route {
     }
   }
 
-  async model() {
+  model() {
     const organization = this.modelFor('authenticated.organizations.get');
     return {
       organization,

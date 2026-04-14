@@ -1,6 +1,6 @@
 import { OrganizationForAdmin } from '../../../../../src/organizational-entities/domain/models/OrganizationForAdmin.js';
 import { usecases } from '../../../../../src/organizational-entities/domain/usecases/index.js';
-import { databaseBuilder, expect, insertUserWithRoleSuperAdmin } from '../../../../test-helper.js';
+import { databaseBuilder, expect } from '../../../../test-helper.js';
 
 describe('Integration | Organizational Entities | Domain | UseCase | get-organization-details', function () {
   it('should return the Organization matching the given organization ID', async function () {
@@ -11,7 +11,7 @@ describe('Integration | Organizational Entities | Domain | UseCase | get-organiz
       commonName: 'France',
       originalName: 'France',
     });
-    const superAdminUser = await insertUserWithRoleSuperAdmin();
+    const superAdmin = databaseBuilder.factory.buildUser.withRoleSuperAdmin();
     const organization = databaseBuilder.factory.buildOrganization({
       type: 'SCO',
       name: 'Organization of the dark side',
@@ -22,7 +22,7 @@ describe('Integration | Organizational Entities | Domain | UseCase | get-organiz
       isManagingStudents: 'true',
       email: 'sco.generic.account@example.net',
       documentationUrl: 'https://pix.fr/',
-      createdBy: superAdminUser.id,
+      createdBy: superAdmin.id,
       createdAt: dateNow,
       showNPS: true,
       formNPSUrl: 'https://pix.fr/',
@@ -44,13 +44,13 @@ describe('Integration | Organizational Entities | Domain | UseCase | get-organiz
   context('when country is not found', function () {
     it('should return the Organization without country name', async function () {
       // given
-      const superAdminUser = await insertUserWithRoleSuperAdmin();
+      const superAdmin = databaseBuilder.factory.buildUser.withRoleSuperAdmin();
       const organization = databaseBuilder.factory.buildOrganization({
         type: 'SCO',
         name: 'Organization of the dark side',
         externalId: '100',
         countryCode: 99999,
-        createdBy: superAdminUser.id,
+        createdBy: superAdmin.id,
       });
 
       await databaseBuilder.commit();
@@ -66,12 +66,12 @@ describe('Integration | Organizational Entities | Domain | UseCase | get-organiz
   context('when the organization is a SCO-1D type', function () {
     it('should return the code for the given organizationId', async function () {
       // given
-      const superAdminUser = await insertUserWithRoleSuperAdmin();
+      const superAdmin = databaseBuilder.factory.buildUser.withRoleSuperAdmin();
       const organization = databaseBuilder.factory.buildOrganization({
         type: 'SCO-1D',
         name: 'Organization of the dark side',
         externalId: '100',
-        createdBy: superAdminUser.id,
+        createdBy: superAdmin.id,
       });
 
       databaseBuilder.factory.buildSchool({

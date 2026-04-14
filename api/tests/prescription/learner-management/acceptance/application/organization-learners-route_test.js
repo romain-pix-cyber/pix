@@ -8,7 +8,6 @@ import {
   databaseBuilder,
   expect,
   generateAuthenticatedUserRequestHeaders,
-  insertUserWithRoleSuperAdmin,
 } from '../../../../test-helper.js';
 
 describe('Acceptance | Prescription | learner management | Application | organization-learners-management', function () {
@@ -22,7 +21,7 @@ describe('Acceptance | Prescription | learner management | Application | organiz
     context('When user has the role SUPER_ADMIN and organization learner can be dissociated', function () {
       it('should return an 204 status after having successfully dissociated user from organizationLearner', async function () {
         const organizationId = databaseBuilder.factory.buildOrganization({ isManagingStudents: true }).id;
-        const superAdmin = await insertUserWithRoleSuperAdmin();
+        const superAdmin = databaseBuilder.factory.buildUser.withRoleSuperAdmin();
         const userId = databaseBuilder.factory.buildUser().id;
         const organizationLearner = databaseBuilder.factory.buildOrganizationLearner({ organizationId, userId });
 

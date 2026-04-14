@@ -9,18 +9,8 @@ const getActiveVersionByScope = async function (request) {
   return certificationVersionSerializer.serialize(activeCertificationVersion);
 };
 
-const updateCertificationVersion = async function (request, h) {
-  const updatedVersion = certificationVersionSerializer.deserialize(request.payload);
-  updatedVersion.id = request.params.certificationVersionId;
-
-  await usecases.updateCertificationVersion({ updatedVersion });
-
-  return h.response().code(204);
-};
-
 const certificationVersionController = {
   getActiveVersionByScope,
-  updateCertificationVersion,
 };
 
 export { certificationVersionController };

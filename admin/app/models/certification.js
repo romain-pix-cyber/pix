@@ -47,7 +47,7 @@ export default class Certification extends Model {
   @attr('string') commentForOrganization;
   @attr('string') commentByJury;
   @attr() pixScore;
-  @attr() reachedMeshIndex;
+  @attr() reachedResultKey;
   @attr() competencesWithMark;
   @attr('boolean', { defaultValue: false }) isPublished;
   @attr('number') version;
@@ -87,13 +87,6 @@ export default class Certification extends Model {
     return this.status === assessmentResultStatus.CANCELLED;
   }
 
-  get hasComplementaryCertifications() {
-    return (
-      Boolean(this.commonComplementaryCertificationCourseResult.content) ||
-      Boolean(this.complementaryCertificationCourseResultWithExternal.get('pixResult'))
-    );
-  }
-
   get indexedCompetences() {
     const competencesWithMarks = this.competencesWithMark;
     return competencesWithMarks.reduce((result, value) => {
@@ -117,17 +110,13 @@ export default class Certification extends Model {
   }
 
   get result() {
-    if (this.isV3) {
-      const meshKey = this.reachedMeshIndex ?? 'BELOW_MINIMUM';
-
-      return this.intl.t(`common.certification.meshLevels.${this.certificationFramework}.${meshKey}`, {
-        pixScore: this.pixScore,
-      });
-    }
-
-    return this.intl.t(`common.certification.meshLevels.${this.certificationFramework}.NONE`, {
+    return this.intl.t(`common.certification.meshLevels.${this.reachedResultKey}`, {
       pixScore: this.pixScore,
     });
+  }
+
+  get isPixPlusEdu() {
+    return ['EDU_1ER_DEGRE', 'EDU_2ND_DEGRE', 'EDU_CPE'].includes(this.certificationFramework);
   }
 
   wasBornInFrance() {

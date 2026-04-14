@@ -1,4 +1,5 @@
 import * as certificationChallengeLiveAlertRepository from '../../../../certification/shared/infrastructure/repositories/certification-challenge-live-alert-repository.js';
+import * as correctionApi from '../../../../evaluation/application/api/correction-api.js';
 import * as placementProfileService from '../../../../shared/domain/services/placement-profile-service.js';
 import * as answerRepository from '../../../../shared/infrastructure/repositories/answer-repository.js';
 import * as assessmentRepository from '../../../../shared/infrastructure/repositories/assessment-repository.js';
@@ -34,6 +35,7 @@ import pickChallengeService from '../services/pick-challenge-service.js';
 import { completeCertificationAssessment } from './complete-certification-assessment.js';
 import { createCompanionAlert } from './create-companion-alert.js';
 import { deneutralizeChallenge } from './deneutralize-challenge.js';
+import { evaluateAndSaveAnswer } from './evaluate-and-save-answer.js';
 import { getCertificationCourse } from './get-certification-course.js';
 import { getNextChallenge } from './get-next-challenge.js';
 import { neutralizeChallenge } from './neutralize-challenge.js';
@@ -68,6 +70,7 @@ import { simulateScoreFromCapacity } from './simulate-score-from-capacity.js';
  * @typedef {calibratedChallengeRepository} CalibratedChallengeRepository
  * @typedef {sessionManagementCertificationChallengeRepository} SessionManagementCertificationChallengeRepository
  * @typedef {versionRepository} VersionRepository
+ * @typedef {correctionApi} CorrectionApi
  * @typedef {certificationCompletedJobRepository} CertificationCompletedJobRepository
  * @typedef {services} Services
  */
@@ -102,6 +105,7 @@ const dependencies = {
   certificationChallengeLiveAlertRepository,
   pixPlusCertificationCourseRepository,
   versionRepository,
+  correctionApi,
   certificationCompletedJobRepository,
   services,
 };
@@ -121,6 +125,7 @@ const usecasesWithoutInjectedDependencies = {
   saveCompetenceForScoringConfiguration,
   simulateCapacityFromScore,
   simulateScoreFromCapacity,
+  evaluateAndSaveAnswer,
 };
 const usecases = injectDependencies(usecasesWithoutInjectedDependencies, dependencies);
 

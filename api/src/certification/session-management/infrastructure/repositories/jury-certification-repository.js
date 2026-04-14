@@ -5,7 +5,7 @@ import { JuryCertification } from '../../domain/models/JuryCertification.js';
 import { ComplementaryCertificationCourseResultForJuryCertification } from '../../domain/read-models/ComplementaryCertificationCourseResultForJuryCertification.js';
 import { ComplementaryCertificationCourseResultForJuryCertificationWithExternal } from '../../domain/read-models/ComplementaryCertificationCourseResultForJuryCertificationWithExternal.js';
 
-const get = async function ({ certificationCourseId }) {
+export async function get({ certificationCourseId }) {
   const knexConn = DomainTransaction.getConnection();
   const juryCertificationDTO = await _selectJuryCertifications(knexConn)
     .where('certification-courses.id', certificationCourseId)
@@ -65,9 +65,29 @@ const get = async function ({ certificationCourseId }) {
     complementaryCertificationCourseResultDTOs,
     badgeIdAndLabels,
   });
-};
+}
 
-export { get };
+export async function update(juryCertification) {
+  const knexConn = DomainTransaction.getConnection();
+
+  await knexConn('assessment-results')
+    .update({
+      eduV3ExternalJuryResult: juryCertification.eduV3ExternalJuryResult,
+    })
+    .where('assessment-results.id', '=', function (qb) {
+      qb.select('certification-courses-last-assessment-results.lastAssessmentResultId')
+        .from('certification-courses-last-assessment-results')
+        .join(
+          'assessment-results',
+          'assessment-results.id',
+          'certification-courses-last-assessment-results.lastAssessmentResultId',
+        )
+        .where(
+          'certification-courses-last-assessment-results.certificationCourseId',
+          juryCertification.certificationCourseId,
+        );
+    });
+}
 
 function _selectJuryCertifications(knexConn) {
   return knexConn
@@ -92,6 +112,7 @@ function _selectJuryCertifications(knexConn) {
       assessmentResultId: 'assessment-results.id',
       pixScore: 'assessment-results.pixScore',
       reachedMeshIndex: 'assessment-results.reachedMeshIndex',
+      eduV3ExternalJuryResult: 'assessment-results.eduV3ExternalJuryResult',
       juryId: 'assessment-results.juryId',
       assessmentResultStatus: 'assessment-results.status',
       commentForCandidate: 'assessment-results.commentForCandidate',

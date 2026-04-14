@@ -1,7 +1,6 @@
 import { SUBSCRIPTION_TYPES } from '../../../../../src/certification/shared/domain/constants.js';
 import { CertificationCandidate } from '../../../../../src/certification/shared/domain/models/CertificationCandidate.js';
 import { ComplementaryCertificationKeys } from '../../../../../src/certification/shared/domain/models/ComplementaryCertificationKeys.js';
-import { clearResolveMx, setResolveMx } from '../../../../../src/shared/mail/infrastructure/services/mail-check.js';
 import {
   createServer,
   databaseBuilder,
@@ -9,23 +8,13 @@ import {
   expect,
   generateAuthenticatedUserRequestHeaders,
   knex,
-  sinon,
 } from '../../../../test-helper.js';
 
 describe('Acceptance | Controller | Certification | Enrolment | session-controller-post-certification-candidate', function () {
   let server;
-  let resolveMx;
 
   beforeEach(async function () {
     server = await createServer();
-    resolveMx = sinon.stub();
-    resolveMx.resolves();
-    setResolveMx(resolveMx);
-  });
-
-  afterEach(async function () {
-    server = await createServer();
-    clearResolveMx();
   });
 
   describe('#add', function () {

@@ -4,7 +4,6 @@ import {
   databaseBuilder,
   expect,
   generateAuthenticatedUserRequestHeaders,
-  insertUserWithRoleSuperAdmin,
   mockLearningContent,
 } from '../../../test-helper.js';
 
@@ -95,8 +94,10 @@ describe('Acceptance | Controller | users-controller-get-user-profile-for-admin'
 
     describe('Success case', function () {
       beforeEach(async function () {
-        const superAdmin = await insertUserWithRoleSuperAdmin();
-        options.headers = generateAuthenticatedUserRequestHeaders({ userId: superAdmin.id });
+        const superAdminUser = databaseBuilder.factory.buildUser.withRoleSuperAdmin();
+        await databaseBuilder.commit();
+
+        options.headers = generateAuthenticatedUserRequestHeaders({ userId: superAdminUser.id });
 
         await mockLearningContent(learningContent);
 

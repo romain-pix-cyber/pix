@@ -83,7 +83,7 @@ export default class LoginForm extends Component {
       return this._updateExpiredPassword(passwordResetToken);
     }
 
-    if (['MISSING_OR_INVALID_CREDENTIALS', 'USER_IS_TEMPORARY_BLOCKED'].includes(error?.code)) {
+    if (['MISSING_OR_INVALID_CREDENTIALS', 'USER_IS_TEMPORARY_BLOCKED', 'USER_IS_BLOCKED'].includes(error?.code)) {
       this.password = null;
     }
 

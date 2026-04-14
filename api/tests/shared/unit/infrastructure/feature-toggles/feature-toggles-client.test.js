@@ -1,12 +1,20 @@
+import { setImmediate } from 'node:timers/promises';
+
+import { createPubSub } from '@graphql-yoga/subscription';
 import Joi from 'joi';
 
-import { FeatureTogglesClient } from '../../../../../src/shared/infrastructure/feature-toggles/feature-toggles-client.js';
+import {
+  FeatureToggleRef,
+  FeatureTogglesClient,
+} from '../../../../../src/shared/infrastructure/feature-toggles/feature-toggles-client.js';
 import { InMemoryKeyValueStorage } from '../../../../../src/shared/infrastructure/key-value-storages/InMemoryKeyValueStorage.js';
-import { expect } from '../../../../test-helper.js';
+import { getTopic } from '../../../../../src/shared/infrastructure/pubsub.js';
+import { expect, sinon } from '../../../../test-helper.js';
 
 describe('Unit | Infrastructure | FeatureToggles | FeatureTogglesClient', function () {
   let config;
   let storage;
+  let topic;
 
   beforeEach(async function () {
     storage = new InMemoryKeyValueStorage();
@@ -15,12 +23,16 @@ describe('Unit | Infrastructure | FeatureToggles | FeatureTogglesClient', functi
       myToggle2: { description: 'Description 2', type: 'boolean', defaultValue: true },
       myToggle3: { description: 'Description 3', type: 'string', defaultValue: 'foo', tags: ['tag3'] },
     };
+    topic = {
+      publish: sinon.stub(),
+      subscribe: sinon.stub(),
+    };
   });
 
   describe('init', function () {
-    it('initialize the storage with config and default values', async function () {
+    it('initialize the storage with config and default values then subscribes to topic', async function () {
       // given
-      const featureToggles = new FeatureTogglesClient(storage);
+      const featureToggles = new FeatureTogglesClient(storage, undefined, topic);
 
       // when
       await featureToggles.init(config);
@@ -31,11 +43,15 @@ describe('Unit | Infrastructure | FeatureToggles | FeatureTogglesClient', functi
 
       const all = await featureToggles.all();
       expect(all).to.deep.equal({ myToggle1: false, myToggle2: true, myToggle3: 'foo' });
+
+      expect(topic.subscribe).to.have.been.calledOnce;
+      expect(topic.subscribe.firstCall.args).to.have.lengthOf(1);
+      expect(topic.subscribe.firstCall.firstArg).to.be.an.instanceOf(Function);
     });
 
     it('adds and removes in feature toggles storage from a new configuration ', async function () {
       // given
-      const featureToggles = new FeatureTogglesClient(storage);
+      const featureToggles = new FeatureTogglesClient(storage, undefined, topic);
       await featureToggles.init(config);
 
       // when
@@ -65,7 +81,7 @@ describe('Unit | Infrastructure | FeatureToggles | FeatureTogglesClient', functi
     context('when in test environement', function () {
       it('adds feature toggles with provided devDefaultValues.test', async function () {
         // given
-        const featureToggles = new FeatureTogglesClient(storage, 'test');
+        const featureToggles = new FeatureTogglesClient(storage, 'test', topic);
 
         // when
         await featureToggles.init({
@@ -87,7 +103,7 @@ describe('Unit | Infrastructure | FeatureToggles | FeatureTogglesClient', functi
     context('when in review app environement', function () {
       it('adds feature toggles with provided devDefaultValues.reviewApp', async function () {
         // given
-        const featureToggles = new FeatureTogglesClient(storage, 'reviewApp');
+        const featureToggles = new FeatureTogglesClient(storage, 'reviewApp', topic);
 
         // when
         await featureToggles.init({
@@ -110,7 +126,7 @@ describe('Unit | Infrastructure | FeatureToggles | FeatureTogglesClient', functi
   describe('get', function () {
     it('returns the value of a feature toggle', async function () {
       // given
-      const featureToggles = new FeatureTogglesClient(storage);
+      const featureToggles = new FeatureTogglesClient(storage, undefined, topic);
       await featureToggles.init(config);
 
       // when
@@ -124,7 +140,7 @@ describe('Unit | Infrastructure | FeatureToggles | FeatureTogglesClient', functi
 
     it('throws an error when feature toggle is not found', async function () {
       // given
-      const featureToggles = new FeatureTogglesClient(storage);
+      const featureToggles = new FeatureTogglesClient(storage, undefined, topic);
       await featureToggles.init(config);
 
       // when / then
@@ -135,9 +151,9 @@ describe('Unit | Infrastructure | FeatureToggles | FeatureTogglesClient', functi
   });
 
   describe('set', function () {
-    it('sets the value of a feature toggle', async function () {
+    it('sets the value of a feature toggle and publishes a message on topic', async function () {
       // given
-      const featureToggles = new FeatureTogglesClient(storage);
+      const featureToggles = new FeatureTogglesClient(storage, undefined, topic);
       await featureToggles.init(config);
 
       // when
@@ -146,11 +162,16 @@ describe('Unit | Infrastructure | FeatureToggles | FeatureTogglesClient', functi
 
       // then
       expect(myToggle1).to.equal(true);
+
+      expect(topic.publish).to.have.been.calledOnceWithExactly({
+        type: 'set',
+        key: 'myToggle1',
+      });
     });
 
     it('throws an error when feature toggle is not found', async function () {
       // given
-      const featureToggles = new FeatureTogglesClient(storage);
+      const featureToggles = new FeatureTogglesClient(storage, undefined, topic);
       await featureToggles.init(config);
 
       // when / then
@@ -160,10 +181,81 @@ describe('Unit | Infrastructure | FeatureToggles | FeatureTogglesClient', functi
     });
   });
 
+  describe('use', function () {
+    ['myToggle1', 'myToggle2', 'myToggle3'].forEach((key) => {
+      it(`returns a FeatureToggleRef tracking the value of "${key}"`, async function () {
+        // given
+        const featureToggles = new FeatureTogglesClient(storage, undefined, topic);
+        await featureToggles.init(config);
+
+        // when
+        const featureToggleRef = featureToggles.use(key);
+
+        // then
+        expect(featureToggleRef).to.be.an.instanceOf(FeatureToggleRef);
+        expect(featureToggleRef).to.have.property('value', config[key].defaultValue);
+      });
+    });
+
+    describe('FeatureToggleRef', function () {
+      const key = 'myToggle3';
+      let featureToggles, featureToggleRef;
+
+      beforeEach(async function () {
+        const pubSub = createPubSub();
+        featureToggles = new FeatureTogglesClient(storage, undefined, getTopic('feature-toggles', pubSub));
+        await featureToggles.init(config);
+        featureToggleRef = featureToggles.use(key);
+      });
+
+      describe('value', function () {
+        it('returns the up to date value of the feature toggle', async function () {
+          // given
+          const values = ['fizz', 'buzz', 'fizzbuzz'];
+
+          // when
+          const readValues = [];
+          for (const value of values) {
+            await featureToggles.set(key, value);
+            await setImmediate(); // let the event loop run pubsub
+            readValues.push(featureToggleRef.value);
+          }
+
+          // then
+          expect(readValues).to.deep.equal(values);
+        });
+      });
+
+      describe('watch', function () {
+        it('notifies new values of the feature toggle', async function () {
+          // given
+          const callback = sinon.stub();
+          const values = ['fizz', 'buzz', 'fizzbuzz'];
+
+          // when
+          const unwatch = featureToggleRef.watch(callback);
+          for (const value of values) {
+            await featureToggles.set(key, value);
+            await setImmediate(); // let the event loop run pubsub
+          }
+          unwatch();
+          await featureToggles.set(key, 'not received');
+          await setImmediate(); // let the event loop run pubsub
+
+          // then
+          expect(callback).to.have.been.calledThrice;
+          expect(callback.firstCall).to.have.been.calledWithExactly(values[0], config[key].defaultValue);
+          expect(callback.secondCall).to.have.been.calledWithExactly(values[1], values[0]);
+          expect(callback.thirdCall).to.have.been.calledWithExactly(values[2], values[1]);
+        });
+      });
+    });
+  });
+
   describe('all', function () {
     it('returns all feature toggles', async function () {
       // given
-      const featureToggles = new FeatureTogglesClient(storage);
+      const featureToggles = new FeatureTogglesClient(storage, undefined, topic);
       await featureToggles.init(config);
 
       // when
@@ -177,7 +269,7 @@ describe('Unit | Infrastructure | FeatureToggles | FeatureTogglesClient', functi
   describe('withTag', function () {
     it('returns all feature toggles with the specified tag', async function () {
       // given
-      const featureToggles = new FeatureTogglesClient(storage);
+      const featureToggles = new FeatureTogglesClient(storage, undefined, topic);
       await featureToggles.init(config);
 
       // when
@@ -191,7 +283,7 @@ describe('Unit | Infrastructure | FeatureToggles | FeatureTogglesClient', functi
   describe('resetDefaults', function () {
     it('resets all feature toggles to their default values', async function () {
       // given
-      const featureToggles = new FeatureTogglesClient(storage);
+      const featureToggles = new FeatureTogglesClient(storage, undefined, topic);
       await featureToggles.init(config);
       await featureToggles.set('myToggle1', true);
 
@@ -206,7 +298,7 @@ describe('Unit | Infrastructure | FeatureToggles | FeatureTogglesClient', functi
     context('when in test environement', function () {
       it('resets feature toggles with provided devDefaultValues.test', async function () {
         // given
-        const featureToggles = new FeatureTogglesClient(storage, 'test');
+        const featureToggles = new FeatureTogglesClient(storage, 'test', topic);
         await featureToggles.init({
           myToggle1: { description: 'Description 1', type: 'boolean', defaultValue: false },
           myToggle2: {
@@ -231,7 +323,7 @@ describe('Unit | Infrastructure | FeatureToggles | FeatureTogglesClient', functi
     context('when in review app environement', function () {
       it('resets feature toggles with provided devDefaultValues.reviewApp', async function () {
         // given
-        const featureToggles = new FeatureTogglesClient(storage, 'reviewApp');
+        const featureToggles = new FeatureTogglesClient(storage, 'reviewApp', topic);
         await featureToggles.init({
           myToggle1: { description: 'Description 1', type: 'boolean', defaultValue: false },
           myToggle2: {

@@ -14,7 +14,7 @@ const serialize = function ({ certificationDetails }) {
     'assessmentResultStatus',
     'abortReason',
     'pixScore',
-    'reachedMeshIndex',
+    'reachedResultKey',
     'numberOfChallenges',
     'certificationFramework',
   ];
@@ -24,6 +24,7 @@ const serialize = function ({ certificationDetails }) {
     transform: (record) => {
       return {
         ...record,
+        reachedResultKey: record.reachedResultKey,
         certificationChallengesForAdministration: record.certificationChallengesForAdministration.map(
           (certificationChallenge) => ({
             ...certificationChallenge,

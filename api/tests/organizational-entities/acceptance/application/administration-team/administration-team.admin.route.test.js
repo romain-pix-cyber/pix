@@ -3,7 +3,6 @@ import {
   databaseBuilder,
   expect,
   generateAuthenticatedUserRequestHeaders,
-  insertUserWithRoleSuperAdmin,
 } from '../../../../test-helper.js';
 
 describe('Acceptance | Organizational Entities | Application | Route | Admin | AdministrationTeam', function () {
@@ -13,14 +12,19 @@ describe('Acceptance | Organizational Entities | Application | Route | Admin | A
       const server = await createServer();
       const team1 = databaseBuilder.factory.buildAdministrationTeam({ name: 'Team1' });
       const team2 = databaseBuilder.factory.buildAdministrationTeam({ name: 'Team2' });
+      const superAdmin = databaseBuilder.factory.buildUser.withRoleSuperAdmin();
       await databaseBuilder.commit();
-      const userId = (await insertUserWithRoleSuperAdmin()).id;
-      const options = {
+
+      // when
+      const response = await server.inject({
         method: 'GET',
         url: '/api/admin/administration-teams',
-        headers: generateAuthenticatedUserRequestHeaders({ userId }),
-      };
-      const expectedTeams = [
+        headers: generateAuthenticatedUserRequestHeaders({ userId: superAdmin.id }),
+      });
+
+      // then
+      expect(response.statusCode).to.equal(200);
+      expect(response.result.data).to.deep.equal([
         {
           attributes: {
             name: team1.name,
@@ -35,14 +39,7 @@ describe('Acceptance | Organizational Entities | Application | Route | Admin | A
           id: team2.id.toString(),
           type: 'administration-teams',
         },
-      ];
-
-      // when
-      const response = await server.inject(options);
-
-      // then
-      expect(response.statusCode).to.equal(200);
-      expect(response.result.data).to.deep.equal(expectedTeams);
+      ]);
     });
   });
 });

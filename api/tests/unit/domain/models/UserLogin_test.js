@@ -24,13 +24,25 @@ describe('Unit | Domain | Models | UserLogin', function () {
       const remainingAttempts = userLogin.remainingAttempts;
 
       // then
-      expect(remainingAttempts).to.equal(blockingLimitFailureCount + 1);
+      expect(remainingAttempts).to.equal(blockingLimitFailureCount);
     });
 
     it('returns 0 when failure count is greater than blocking limit', function () {
       // given
       const { blockingLimitFailureCount } = config.login;
       const userLogin = new UserLogin({ userId: 666, failureCount: blockingLimitFailureCount + 1 });
+
+      // when
+      const remainingAttempts = userLogin.remainingAttempts;
+
+      // then
+      expect(remainingAttempts).to.equal(0);
+    });
+
+    it('returns 0 when failure count is equal to blocking limit', function () {
+      // given
+      const { blockingLimitFailureCount } = config.login;
+      const userLogin = new UserLogin({ userId: 666, failureCount: blockingLimitFailureCount });
 
       // when
       const remainingAttempts = userLogin.remainingAttempts;

@@ -116,6 +116,8 @@ async function _createOrganizations({
         organizationId: parentOrganizationId,
       });
 
+      // TODO: _assertOrganizationIsNotChildOrganization doit vérifier via fct_structures (parent_structure_id)
+      // et non organizations.parentOrganizationId. Également mettre à jour fct_structures lors de la création.
       _assertOrganizationIsNotChildOrganization(organization);
     }
 

@@ -68,6 +68,22 @@ export const selectNextCertificationChallenge = withTransaction(
 
 /**
  * @function
+ * @name evaluateAndSaveAnswer
+ *
+ * @param {object} params
+ * @param {Answer} params.answer
+ * @param {number} params.userId
+ * @param {number} params.certificationCourseId
+ * @param {boolean} params.forceOKAnswer
+ *
+ * @returns {Promise<Answer>} evaluated answer
+ */
+export async function evaluateAndSaveAnswer({ answer, userId, certificationCourseId, forceOKAnswer }) {
+  return usecases.evaluateAndSaveAnswer({ answer, userId, certificationCourseId, forceOKAnswer });
+}
+
+/**
+ * @function
  * @name completeCertificationAssessment
  *
  * @param {object} params

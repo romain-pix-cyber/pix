@@ -80,6 +80,7 @@ describe('CampaignManagement', function () {
       sharedParticipationsCount: 5,
       totalParticipationsCount: 10,
       isPartOfCombinedCourse: undefined,
+      recommendationEngine: false,
     };
 
     const campaignManagement = new CampaignManagement(input);

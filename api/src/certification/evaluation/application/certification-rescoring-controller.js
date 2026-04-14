@@ -14,15 +14,6 @@ const rescoreCertification = async function (
   const certificationCourseId = request.params.certificationCourseId;
 
   const certificationCourse = await dependencies.certificationCourseRepository.get({ id: certificationCourseId });
-
-  const latestAssessmentResult = await dependencies.courseAssessmentResultRepository.getLatestAssessmentResult({
-    certificationCourseId,
-  });
-
-  if (_isAssessmentResultNotRescorable(latestAssessmentResult)) {
-    throw new CertificationRescoringNotAllowedError();
-  }
-
   if (AlgorithmEngineVersion.isV3(certificationCourse.getVersion())) {
     await usecases.scoreV3Certification({
       certificationCourseId,
@@ -31,6 +22,13 @@ const rescoreCertification = async function (
   }
 
   if (AlgorithmEngineVersion.isV2(certificationCourse.getVersion())) {
+    const latestAssessmentResult = await dependencies.courseAssessmentResultRepository.getLatestAssessmentResult({
+      certificationCourseId,
+    });
+
+    if (_isAssessmentResultNotRescorable(latestAssessmentResult)) {
+      throw new CertificationRescoringNotAllowedError();
+    }
     await usecases.rescoreV2Certification({
       event: new CertificationRescored({ certificationCourseId, juryId }),
     });

@@ -3,7 +3,6 @@ import {
   databaseBuilder,
   expect,
   generateAuthenticatedUserRequestHeaders,
-  insertUserWithRoleSuperAdmin,
 } from '../../../../test-helper.js';
 
 describe('Certification | Session Management | Acceptance | Application | Route | Session', function () {
@@ -11,7 +10,6 @@ describe('Certification | Session Management | Acceptance | Application | Route 
 
   beforeEach(async function () {
     server = await createServer();
-    await insertUserWithRoleSuperAdmin();
   });
 
   describe('GET /api/admin/sessions', function () {
@@ -28,8 +26,10 @@ describe('Certification | Session Management | Acceptance | Application | Route 
     });
 
     context('when user is Super Admin', function () {
-      beforeEach(function () {
-        options.headers = generateAuthenticatedUserRequestHeaders();
+      beforeEach(async function () {
+        const superAdmin = databaseBuilder.factory.buildUser.withRoleSuperAdmin();
+        await databaseBuilder.commit();
+        options.headers = generateAuthenticatedUserRequestHeaders({ userId: superAdmin.id });
       });
 
       it('should return a 200 status code response with JSON API serialized', async function () {
@@ -146,8 +146,10 @@ describe('Certification | Session Management | Acceptance | Application | Route 
     });
 
     context('when user is Super Admin', function () {
-      beforeEach(function () {
-        options.headers = generateAuthenticatedUserRequestHeaders();
+      beforeEach(async function () {
+        const superAdmin = databaseBuilder.factory.buildUser.withRoleSuperAdmin();
+        await databaseBuilder.commit();
+        options.headers = generateAuthenticatedUserRequestHeaders({ userId: superAdmin.id });
       });
 
       it('should return a 200 status code response with JSON API serialized', async function () {

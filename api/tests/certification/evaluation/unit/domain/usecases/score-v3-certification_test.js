@@ -11,10 +11,6 @@ describe('Unit | Certification | Evaluation | Domain | UseCase | Score V3 Certif
     });
   });
 
-  afterEach(function () {
-    sinon.restore();
-  });
-
   context('when certification course does not exist', function () {
     it('should throw an error', async function () {
       const dependencies = createDependencies({

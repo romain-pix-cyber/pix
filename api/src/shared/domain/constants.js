@@ -65,6 +65,10 @@ const CAMPAIGN_FEATURES = {
     key: 'EXTERNAL_ID',
     description: "Permet d'activer la saisie d'un identifiant externe lors de la participation à une campagne",
   },
+  RECOMMENDATION_ENGINE: {
+    key: 'RECOMMENDATION_ENGINE',
+    description: "Permet d'identifier les campagnes qui seront proposées par le moteur de reco",
+  },
 };
 
 const VALIDATION_ERRORS = {

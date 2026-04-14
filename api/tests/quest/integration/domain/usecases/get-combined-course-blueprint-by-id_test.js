@@ -1,7 +1,6 @@
-import {
-  COMBINED_COURSE_BLUEPRINT_ITEMS,
-  CombinedCourseBlueprint,
-} from '../../../../../src/quest/domain/models/CombinedCourseBlueprint.js';
+import { REWARD_TYPES } from '../../../../../src/quest/domain/constants.js';
+import { AdminCombinedCourseBlueprint } from '../../../../../src/quest/domain/models/AdminCombinedCourseBlueprint.js';
+import { CombinedCourseBlueprint } from '../../../../../src/quest/domain/models/CombinedCourseBlueprint.js';
 import { usecases } from '../../../../../src/quest/domain/usecases/index.js';
 import { NotFoundError } from '../../../../../src/shared/domain/errors.js';
 import { catchErr, databaseBuilder, expect, sinon } from '../../../../test-helper.js';
@@ -20,24 +19,35 @@ describe('Integration | Quest | Domain | UseCases | get-combined-course-blueprin
 
   it('should return a combined course blueprint for a given id', async function () {
     //given
-    const targetProfile = await databaseBuilder.factory.buildTargetProfile({ name: 'Mon profil cible' });
+    const { id: targetProfileId } = await databaseBuilder.factory.buildTargetProfile({ name: 'Mon profil cible' });
 
+    const { id: rewardId, key: attestationKey } = await databaseBuilder.factory.buildAttestation();
+
+    const quest = databaseBuilder.factory.buildQuest({
+      rewardType: REWARD_TYPES.ATTESTATION,
+      rewardId,
+      successRequirements: [
+        CombinedCourseBlueprint.buildRequirementForCombinedCourse({ targetProfileId }).toDTO(),
+        CombinedCourseBlueprint.buildRequirementForCombinedCourse({
+          moduleId: '9beb922f-4d8e-495d-9c85-0e7265ca78d6',
+        }).toDTO(),
+      ],
+    });
     await databaseBuilder.factory.buildCombinedCourseBlueprint({
       id: 1,
-      content: [
-        { type: COMBINED_COURSE_BLUEPRINT_ITEMS.EVALUATION, value: targetProfile.id },
-        { type: COMBINED_COURSE_BLUEPRINT_ITEMS.MODULE, value: 'e074af34' },
-      ],
+      questId: quest.id,
     });
 
     await databaseBuilder.commit();
 
     //when
-    const result = await usecases.getCombinedCourseBlueprintById({ id: 1 });
+    const adminCombinedCourseBlueprint = await usecases.getCombinedCourseBlueprintById({
+      id: 1,
+    });
 
     //then
-    expect(result).to.be.instanceOf(CombinedCourseBlueprint);
-    expect(result).deep.contain({
+    expect(adminCombinedCourseBlueprint).to.be.instanceOf(AdminCombinedCourseBlueprint);
+    expect(adminCombinedCourseBlueprint).deep.contain({
       id: 1,
       name: 'Mon parcours combiné',
       internalName: 'Mon schéma de parcours combiné',
@@ -45,16 +55,12 @@ describe('Integration | Quest | Domain | UseCases | get-combined-course-blueprin
       illustration: 'images/illustration.svg',
       createdAt: now,
       updatedAt: now,
-      content: [
-        { type: COMBINED_COURSE_BLUEPRINT_ITEMS.EVALUATION, value: targetProfile.id, label: targetProfile.name },
-        {
-          type: COMBINED_COURSE_BLUEPRINT_ITEMS.MODULE,
-          value: 'e074af34',
-          label: 'Au-delà des mots de passe : comment s’authentifier ?',
-        },
-      ],
       organizationIds: [],
+      attestationKey,
     });
+    expect(adminCombinedCourseBlueprint.content).to.deep.equal(
+      AdminCombinedCourseBlueprint.buildContentItems([{ targetProfileId }, { moduleShortId: 'e074af34' }]),
+    );
   });
 
   it('should throw when no combined course blueprint is found for a given id', async function () {

@@ -1,18 +1,12 @@
 import 'dayjs/locale/fr.js';
 
-import * as fs from 'node:fs';
-import * as path from 'node:path';
 import querystring from 'node:querystring';
-import { Readable } from 'node:stream';
-import * as url from 'node:url';
 
-import { Assertion, AssertionError, expect, use as chaiUse, util as chaiUtil } from 'chai';
+import { expect, use as chaiUse } from 'chai';
 import chaiAsPromised from 'chai-as-promised';
 import chaiSorted from 'chai-sorted';
 import dayjs from 'dayjs';
 import localizedFormat from 'dayjs/plugin/localizedFormat.js';
-import iconv from 'iconv-lite';
-import _ from 'lodash';
 import MockDate from 'mockdate';
 import nock from 'nock';
 import sinon from 'sinon';
@@ -25,15 +19,13 @@ import { DatabaseBuilder } from '../db/database-builder/database-builder.js';
 import { disconnect, knex } from '../db/knex-database-connection.js';
 import { createServer } from '../server.js';
 import { createMaddoServer } from '../server.maddo.js';
-import { PIX_ADMIN } from '../src/authorization/domain/constants.js';
 import * as tutorialRepository from '../src/devcomp/infrastructure/repositories/tutorial-repository.js';
 import { ApplicationAccessToken } from '../src/identity-access-management/domain/models/ApplicationAccessToken.js';
 import { UserAccessToken } from '../src/identity-access-management/domain/models/UserAccessToken.js';
 import { UserReconciliationSamlIdToken } from '../src/identity-access-management/domain/models/UserReconciliationSamlIdToken.js';
 import * as missionRepository from '../src/school/infrastructure/repositories/mission-repository.js';
-import { ORGANIZATION_FEATURE } from '../src/shared/domain/constants.js';
-import { Membership } from '../src/shared/domain/models/Membership.js';
 import { featureToggles } from '../src/shared/infrastructure/feature-toggles/index.js';
+import { JobClient } from '../src/shared/infrastructure/jobs/JobClient.js';
 import { clearMutex, quitMutex } from '../src/shared/infrastructure/mutex/RedisMutex.js';
 import * as areaRepository from '../src/shared/infrastructure/repositories/area-repository.js';
 import * as challengeRepository from '../src/shared/infrastructure/repositories/challenge-repository.js';
@@ -45,24 +37,25 @@ import * as thematicRepository from '../src/shared/infrastructure/repositories/t
 import * as tubeRepository from '../src/shared/infrastructure/repositories/tube-repository.js';
 import * as customChaiHelpers from './tooling/chai-custom-helpers/index.js';
 import * as domainBuilder from './tooling/domain-builder/factory/index.js';
+import { AttestationTemplateFixture } from './tooling/fixtures/index.js';
 import { jobChai } from './tooling/jobs/expect-job.js';
 import { buildLearningContent as learningContentBuilder } from './tooling/learning-content-builder/index.js';
 import { increaseCurrentTestTimeout } from './tooling/mocha-tools.js';
 import { HttpTestServer } from './tooling/server/http-test-server.js';
-import { createTempFile, removeTempFile } from './tooling/temporary-file.js';
+import { createTempFile, isSameBinary, removeTempFile } from './tooling/test-utils/file.js';
+import { parseNDJSON } from './tooling/test-utils/json.js';
 
-const __dirname = url.fileURLToPath(new URL('.', import.meta.url));
-
+// Init Dayjs configuration
 dayjs.extend(localizedFormat);
 
+// Extends Chai helpers
 chaiUse(chaiAsPromised);
 chaiUse(chaiSorted);
 chaiUse(sinonChai);
+chaiUse(jobChai());
+Object.values(customChaiHelpers).forEach(chaiUse);
 
-_.each(customChaiHelpers, chaiUse);
-
-chaiUse(jobChai(knex));
-
+// Init Database builders
 const databaseBuilder = await DatabaseBuilder.create({
   knex,
   beforeEmptyDatabase: () => {
@@ -83,9 +76,14 @@ nock.disableNetConnect();
 nock.enableNetConnect('localhost:9090');
 const EMPTY_BLANK_AND_NULL = ['', '\t \n', null];
 
-const { ROLES } = PIX_ADMIN;
-
 /* eslint-disable mocha/no-top-level-hooks */
+before(async function () {
+  try {
+    await JobClient.instance.initialize();
+  } catch {
+    // pgBoss is not available on unit tests
+  }
+});
 
 afterEach(async function () {
   sinon.restore();
@@ -103,24 +101,25 @@ afterEach(async function () {
   await featureToggles.resetDefaults();
   await datamartBuilder.clean();
   await clearMutex();
+  try {
+    await JobClient.instance.flushJobs();
+  } catch {
+    // pgBoss is not available on unit tests
+  }
   return databaseBuilder.clean();
 });
 
 after(async function () {
   await quitMutex();
+  try {
+    await JobClient.instance.stop();
+  } catch {
+    // pgBoss is not available on unit tests
+  }
   return await disconnect();
 });
 
 /* eslint-enable mocha/no-top-level-hooks */
-
-function toStream(data, encoding = 'utf8') {
-  return new Readable({
-    read() {
-      this.push(iconv.encode(data, encoding));
-      this.push(null);
-    },
-  });
-}
 
 /**
  * For acceptance tests. To be used as `const options = generateInjectOptions; await server.inject(options);`
@@ -210,76 +209,6 @@ function generateIdTokenForExternalUser(externalUser) {
   return UserReconciliationSamlIdToken.generate(externalUser);
 }
 
-async function insertUserWithRoleSuperAdmin() {
-  const user = databaseBuilder.factory.buildUser.withRole({
-    id: 1234,
-    firstName: 'Super',
-    lastName: 'Papa',
-    email: 'super.papa@example.net',
-    password: 'Password123',
-  });
-
-  await databaseBuilder.commit();
-
-  return user;
-}
-
-async function insertUserWithRoleCertif() {
-  const user = databaseBuilder.factory.buildUser.withRole({
-    id: 1234,
-    firstName: 'Certif',
-    lastName: 'Power',
-    email: 'certif.power@example.net',
-    password: 'Pix123',
-    role: ROLES.CERTIF,
-  });
-
-  await databaseBuilder.commit();
-
-  return user;
-}
-
-async function insertOrganizationUserWithRoleAdmin() {
-  const adminUser = databaseBuilder.factory.buildUser();
-  const organization = databaseBuilder.factory.buildOrganization();
-  databaseBuilder.factory.buildMembership({
-    userId: adminUser.id,
-    organizationId: organization.id,
-    organizationRole: Membership.roles.ADMIN,
-  });
-
-  await databaseBuilder.commit();
-
-  return { adminUser, organization };
-}
-
-// We insert a multiple sending feature by default for each new organization created.
-// It is under feature for now because we want to be able to deactivate it when asked.
-async function insertMultipleSendingFeatureForNewOrganization() {
-  const feature = databaseBuilder.factory.buildFeature(ORGANIZATION_FEATURE.MULTIPLE_SENDING_ASSESSMENT);
-  await databaseBuilder.commit();
-  return feature.id;
-}
-
-async function insertLearnerImportFeatureForNewOrganization() {
-  const featureId = databaseBuilder.factory.buildFeature(ORGANIZATION_FEATURE.LEARNER_IMPORT).id;
-  databaseBuilder.factory.buildOrganizationLearnerImportFormat({
-    name: ORGANIZATION_FEATURE.LEARNER_IMPORT.FORMAT.ONDE,
-  });
-  await databaseBuilder.commit();
-  return featureId;
-}
-
-async function insertPixJuniorFeatureForNewOrganization() {
-  databaseBuilder.factory.buildFeature(ORGANIZATION_FEATURE.LEARNER_IMPORT);
-  databaseBuilder.factory.buildFeature(ORGANIZATION_FEATURE.MISSIONS_MANAGEMENT);
-  databaseBuilder.factory.buildFeature(ORGANIZATION_FEATURE.ORALIZATION_MANAGED_BY_PRESCRIBER);
-  databaseBuilder.factory.buildOrganizationLearnerImportFormat({
-    name: ORGANIZATION_FEATURE.LEARNER_IMPORT.FORMAT.ONDE,
-  });
-  await databaseBuilder.commit();
-}
-
 // Hapi
 const hFake = {
   response(source) {
@@ -326,26 +255,6 @@ const hFake = {
   continue: Symbol('continue'),
 };
 
-function streamToPromise(stream) {
-  return new Promise((resolve, reject) => {
-    let totalData = '';
-    stream.on('data', (data) => {
-      totalData += data;
-    });
-    stream.on('end', () => {
-      resolve(totalData);
-    });
-    stream.on('error', reject);
-  });
-}
-
-function parseJsonStream(response) {
-  return response.result
-    .split('\n')
-    .filter((row) => row !== '')
-    .map((r) => JSON.parse(r));
-}
-
 function catchErr(promiseFn, ctx) {
   return async (...args) => {
     try {
@@ -368,77 +277,14 @@ function catchErrSync(fn, ctx) {
   };
 }
 
-chaiUse(function () {
-  Assertion.addMethod('exactlyContain', function (expectedElements) {
-    const errorMessage = `expect [${this._obj}] to exactly contain [${expectedElements}]`;
-    new Assertion(this._obj, errorMessage).to.deep.have.members(expectedElements);
-  });
-});
-
-chaiUse(function () {
-  Assertion.addMethod('exactlyContainInOrder', function (expectedElements) {
-    const errorMessage = `expect [${this._obj}] to exactly contain in order [${expectedElements}]`;
-
-    new Assertion(this._obj, errorMessage).to.deep.equal(expectedElements);
-  });
-});
-
-chaiUse(function () {
-  Assertion.addMethod('equalWithGetter', function (expectedElement) {
-    if (Array.isArray(expectedElement)) {
-      expectedElement.forEach((element, index) => {
-        expect(this._obj[index]).equalWithGetter(element);
-      });
-    } else {
-      Object.keys(expectedElement).forEach((property) => {
-        if (Array.isArray(expectedElement[property])) {
-          expectedElement[property].forEach((subelement, index) => {
-            expect(this._obj[property][index]).equalWithGetter(subelement);
-          });
-        } else {
-          const errorMessage = `expect ${this._obj} with key ${property} to equal ${expectedElement[property]} (found ${this._obj[property]})`;
-          new Assertion(this._obj[property], errorMessage).to.deep.equal(expectedElement[property]);
-        }
-      });
-    }
-  });
-});
-
 async function mockLearningContent(learningContent) {
   const scope = databaseBuilder.factory.learningContent.build(learningContent);
   await databaseBuilder.commit();
   return scope;
 }
 
-// Inspired by what is done within chai project itself to test assertions
-// https://github.com/chaijs/chai/blob/main/test/bootstrap/index.js
-global.chaiErr = function globalErr(fn, val) {
-  if (chaiUtil.type(fn) !== 'Function') throw new AssertionError('Invalid fn');
-
-  try {
-    fn();
-  } catch (err) {
-    switch (chaiUtil.type(val).toLowerCase()) {
-      case 'undefined':
-        return;
-      case 'string':
-        return expect(err.message).to.equal(val);
-      case 'regexp':
-        return expect(err.message).to.match(val);
-      case 'object':
-        return Object.keys(val).forEach(function (key) {
-          expect(err).to.have.property(key).and.to.deep.equal(val[key]);
-        });
-    }
-
-    throw new AssertionError('Invalid val');
-  }
-
-  throw new AssertionError('Expected an error');
-};
-
 function mockAttestationStorage(attestation) {
-  const template = fs.createReadStream(path.join(__dirname, 'attestation-template.pdf'));
+  const template = AttestationTemplateFixture.getStream();
 
   nock('http://attestations.fake.endpoint.example.net:80')
     .get(`/attestations.bucket/${attestation.templateName}.pdf?x-id=GetObject`)
@@ -452,10 +298,6 @@ function mockAttestationStorageUpload({ attestation, isFailed = false }) {
     .put(`/attestations.bucket/${attestation.templateName}.pdf?x-id=PutObject`)
     .reply(isFailed ? 500 : 200)
     .persist();
-}
-
-function getFakeAttestationTemplate() {
-  return fs.createReadStream(path.join(__dirname, 'attestation-template.pdf'));
 }
 
 const preventStubsToBeCalledUnexpectedly = (stubs) => {
@@ -479,6 +321,7 @@ function wait(ms) {
 function waitForStreamFinalizationToBeDone() {
   return wait(300);
 }
+
 // eslint-disable-next-line mocha/no-exports
 export {
   catchErr,
@@ -494,19 +337,12 @@ export {
   EMPTY_BLANK_AND_NULL,
   expect,
   generateAuthenticatedUserRequestHeaders,
-  generateForwardedHeaders,
   generateIdTokenForExternalUser,
   generateInjectOptions,
   generateValidRequestAuthorizationHeaderForApplication,
-  getFakeAttestationTemplate,
   hFake,
   HttpTestServer,
-  insertLearnerImportFeatureForNewOrganization,
-  insertMultipleSendingFeatureForNewOrganization,
-  insertOrganizationUserWithRoleAdmin,
-  insertPixJuniorFeatureForNewOrganization,
-  insertUserWithRoleCertif,
-  insertUserWithRoleSuperAdmin,
+  isSameBinary,
   knex,
   learningContentBuilder,
   mockAttestationStorage,
@@ -514,12 +350,10 @@ export {
   MockDate,
   mockLearningContent,
   nock,
-  parseJsonStream,
+  parseNDJSON,
   preventStubsToBeCalledUnexpectedly,
   removeTempFile,
   sinon,
-  streamToPromise,
-  toStream,
   wait,
   waitForStreamFinalizationToBeDone,
 };

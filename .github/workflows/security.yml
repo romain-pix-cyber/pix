@@ -25,7 +25,7 @@ jobs:
           # change these variables for each project
           projectName: Monorepo
           projectVersion: dev
-          bomFilename: "pix-app-sbom.json"
+          bomFilename: "pix-repo-sbom.json"
           autoCreate: true
 
       - name: Pix App - Create SBOM

@@ -29,6 +29,7 @@ module('Unit | Component | user-account | email-with-validation-form', function 
       const component = createGlimmerComponent('user-account/email-with-validation-form');
       const newEmail = 'toto@example.net';
       const password = 'pix123';
+      const action = 'update-email';
       const sendNewEmail = sinon.stub();
       component.store = { createRecord: () => ({ sendNewEmail }) };
       component.newEmail = newEmail;
@@ -39,7 +40,11 @@ module('Unit | Component | user-account | email-with-validation-form', function 
       await component.onSubmit();
 
       // then
-      sinon.assert.calledWith(component.store.createRecord, 'email-verification-code', { password, newEmail });
+      sinon.assert.calledWith(component.store.createRecord, 'email-verification-code', {
+        password,
+        newEmail,
+        action: action,
+      });
       sinon.assert.calledOnce(sendNewEmail);
       assert.ok(true);
     });

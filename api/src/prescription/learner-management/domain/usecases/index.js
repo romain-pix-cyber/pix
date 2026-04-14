@@ -26,6 +26,7 @@ import { validateCommonOrganizationImportFileJobRepository } from '../../infrast
 import { validateCsvOrganizationImportFileJobRepository } from '../../infrastructure/repositories/jobs/validate-csv-organization-learners-import-file-job-repository.js';
 import { validateOrganizationImportFileJobRepository } from '../../infrastructure/repositories/jobs/validate-organization-learners-import-file-job-repository.js';
 import * as organizationImportRepository from '../../infrastructure/repositories/organization-import-repository.js';
+import * as organizationLearnerFilterRepository from '../../infrastructure/repositories/organization-learner-filter-repository.js';
 import * as organizationLearnerImportFormatRepository from '../../infrastructure/repositories/organization-learner-import-format-repository.js';
 import * as organizationLearnerRepository from '../../infrastructure/repositories/organization-learner-repository.js';
 import * as studentRepository from '../../infrastructure/repositories/student-repository.js';
@@ -56,6 +57,7 @@ const dependencies = {
   organizationFeatureApi,
   organizationFeatureRepository: repositories.organizationFeatureRepository,
   organizationImportRepository,
+  organizationLearnerFilterRepository,
   organizationLearnerImportFormatRepository,
   organizationLearnerRepository,
   organizationRepository,

@@ -21,7 +21,7 @@ export default class V3CertificationCourseDetailsForAdministration extends Model
   @attr('string') assessmentState;
   @attr('string') abortReason;
   @attr('number') pixScore;
-  @attr('number') reachedMeshIndex;
+  @attr('string') reachedResultKey;
   @attr('number') numberOfChallenges;
   @attr('string') certificationFramework;
   @hasMany('certification-challenges-for-administration', { async: true, inverse: null })
@@ -86,9 +86,7 @@ export default class V3CertificationCourseDetailsForAdministration extends Model
   }
 
   get result() {
-    const meshKey = this.reachedMeshIndex ?? 'BELOW_MINIMUM';
-
-    return this.intl.t(`common.certification.meshLevels.${this.certificationFramework}.${meshKey}`, {
+    return this.intl.t(`common.certification.meshLevels.${this.reachedResultKey}`, {
       pixScore: this.pixScore,
     });
   }

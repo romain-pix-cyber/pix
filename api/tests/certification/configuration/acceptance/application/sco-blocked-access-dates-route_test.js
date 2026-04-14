@@ -4,7 +4,6 @@ import {
   databaseBuilder,
   expect,
   generateAuthenticatedUserRequestHeaders,
-  insertUserWithRoleSuperAdmin,
   knex,
 } from '../../../../test-helper.js';
 
@@ -18,15 +17,16 @@ describe('Certification | Configuration | Acceptance | API | sco-blocked-access-
   describe('PATCH /api/admin/sco-blocked-access-dates', function () {
     it('should return 200 HTTP status code when updating valid entry', async function () {
       // given
-      const superAdmin = await insertUserWithRoleSuperAdmin();
+      const superAdmin = databaseBuilder.factory.buildUser.withRoleSuperAdmin();
+      databaseBuilder.factory.buildDefaultScoBlockedAccessDates();
+      await databaseBuilder.commit();
+
       const options = {
         method: 'PATCH',
         url: '/api/admin/sco-blocked-access-dates/LYCEE',
         headers: generateAuthenticatedUserRequestHeaders({ userId: superAdmin.id }),
         payload: { data: { attributes: { value: '2025-12-15' } } },
       };
-      databaseBuilder.factory.buildDefaultScoBlockedAccessDates();
-      await databaseBuilder.commit();
 
       // when
       const response = await server.inject(options);
@@ -40,7 +40,9 @@ describe('Certification | Configuration | Acceptance | API | sco-blocked-access-
     });
     it('should return 404 HTTP status code when updating invalid entry', async function () {
       // given
-      const superAdmin = await insertUserWithRoleSuperAdmin();
+      const superAdmin = databaseBuilder.factory.buildUser.withRoleSuperAdmin();
+      await databaseBuilder.commit();
+
       const options = {
         method: 'PATCH',
         url: '/api/admin/sco-blocked-access-dates/LYCEE',
@@ -59,18 +61,18 @@ describe('Certification | Configuration | Acceptance | API | sco-blocked-access-
   describe('GET /api/admin/sco-blocked-access-dates', function () {
     it('should return 200 HTTP status code and values', async function () {
       // given
-      const superAdmin = await insertUserWithRoleSuperAdmin();
-      const options = {
-        method: 'GET',
-        url: '/api/admin/sco-blocked-access-dates',
-        headers: generateAuthenticatedUserRequestHeaders({ userId: superAdmin.id }),
-      };
-
+      const superAdmin = databaseBuilder.factory.buildUser.withRoleSuperAdmin();
       const collegeReopeningDate = new Date('2025-10-23');
       const lyceeReopeningDate = new Date('2025-12-23');
       databaseBuilder.factory.buildCollegeScoBlockedAccessDate(collegeReopeningDate);
       databaseBuilder.factory.buildLyceeScoBlockedAccessDate(lyceeReopeningDate);
       await databaseBuilder.commit();
+
+      const options = {
+        method: 'GET',
+        url: '/api/admin/sco-blocked-access-dates',
+        headers: generateAuthenticatedUserRequestHeaders({ userId: superAdmin.id }),
+      };
 
       // when
       const response = await server.inject(options);

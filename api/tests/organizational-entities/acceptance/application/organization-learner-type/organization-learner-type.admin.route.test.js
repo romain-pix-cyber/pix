@@ -3,7 +3,6 @@ import {
   databaseBuilder,
   expect,
   generateAuthenticatedUserRequestHeaders,
-  insertUserWithRoleSuperAdmin,
 } from '../../../../test-helper.js';
 
 describe('Acceptance | Organizational Entities | Application | Route | Admin | OrganizationLearnerTypes', function () {
@@ -19,14 +18,19 @@ describe('Acceptance | Organizational Entities | Application | Route | Admin | O
         id: 456,
         name: 'Public 2',
       });
+      const superAdmin = databaseBuilder.factory.buildUser.withRoleSuperAdmin();
       await databaseBuilder.commit();
-      const userId = (await insertUserWithRoleSuperAdmin()).id;
-      const options = {
+
+      // when
+      const response = await server.inject({
         method: 'GET',
         url: '/api/admin/organization-learner-types',
-        headers: generateAuthenticatedUserRequestHeaders({ userId }),
-      };
-      const expectedOrganizationLearnerTypes = [
+        headers: generateAuthenticatedUserRequestHeaders({ userId: superAdmin.id }),
+      });
+
+      // then
+      expect(response.statusCode).to.equal(200);
+      expect(response.result.data).to.deep.equal([
         {
           attributes: {
             name: organizationLearnerType1.name,
@@ -41,14 +45,7 @@ describe('Acceptance | Organizational Entities | Application | Route | Admin | O
           id: '456',
           type: 'organization-learner-types',
         },
-      ];
-
-      // when
-      const response = await server.inject(options);
-
-      // then
-      expect(response.statusCode).to.equal(200);
-      expect(response.result.data).to.deep.equal(expectedOrganizationLearnerTypes);
+      ]);
     });
   });
 });

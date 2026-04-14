@@ -1,4 +1,3 @@
-import { isFranceLocale } from '../../../shared/domain/services/locale-service.js';
 import { getPixWebsiteDomain, getPixWebsiteUrl } from '../../../shared/domain/services/url-service.js';
 import { EmailFactory } from '../../../shared/mail/domain/models/EmailFactory.js';
 import { mailer } from '../../../shared/mail/infrastructure/services/mailer.js';
@@ -28,7 +27,6 @@ export function emailChangeVerificationCodeEmail({ email, code, locale }) {
       code,
       homeName: getPixWebsiteDomain(locale),
       homeUrl: getPixWebsiteUrl(locale),
-      displayNationalLogo: isFranceLocale(locale),
       context: i18n.__('verification-code-email.body.context'),
       doNotAnswer: i18n.__('verification-code-email.body.doNotAnswer'),
       greeting: i18n.__('verification-code-email.body.greeting'),

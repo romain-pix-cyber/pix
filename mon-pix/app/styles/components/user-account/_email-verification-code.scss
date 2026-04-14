@@ -7,7 +7,7 @@
   &__title {
     @extend %pix-title-s;
 
-    padding-bottom: var(--pix-spacing-4x);
+    padding-bottom: var(--pix-spacing-6x);
     color: var(--pix-neutral-900);
     text-align: center;
 
@@ -17,18 +17,22 @@
   }
 
   &__description {
-    font-size: 0.875rem;
+    @extend %pix-body-m;
+
+    gap: var(--pix-spacing-6x);
+    padding-top: var(--pix-spacing-6x);
+    border-top: 1px solid var(--pix-neutral-100);
   }
 
   &__email {
-    font-weight: bold;
-    font-size: 0.875rem;
+    @extend %pix-body-m;
   }
 
   &__time-code-validation {
+    @extend %pix-body-m;
+
     margin-top: var(--pix-spacing-4x);
     font-weight: bold;
-    font-size: 0.875rem;
   }
 
   &__input-code {
@@ -68,6 +72,13 @@
   }
 
   &__resend-confirmation-message {
-    margin-bottom: var(--pix-spacing-3x);
+    margin-bottom: var(--pix-spacing-6x);
+  }
+
+  &__actions {
+    display: flex;
+    flex-direction: row;
+    gap: var(--pix-spacing-3x);
+    margin-top: var(--pix-spacing-6x)
   }
 }

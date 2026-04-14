@@ -9,7 +9,6 @@ import { service } from '@ember/service';
 import Component from '@glimmer/component';
 import { tracked } from '@glimmer/tracking';
 import dayjs from 'dayjs';
-import utc from 'dayjs/plugin/utc';
 import t from 'ember-intl/helpers/t';
 import Content from 'pix-certif/components/dropdown/content';
 import Item from 'pix-certif/components/dropdown/item';
@@ -21,8 +20,6 @@ import formatPercentage from 'pix-certif/helpers/format-percentage';
 
 import dayjsUtcFormatHelper from '../../helpers/dayjs-utc-format';
 import { dayjsUtcFormat } from '../../helpers/dayjs-utc-format';
-
-dayjs.extend(utc);
 
 const Modals = {
   Confirmation: 'Confirmation',
@@ -132,17 +129,17 @@ export default class CandidateInList extends Component {
   }
 
   get candidateStartTime() {
-    return dayjsUtcFormat([this.args.candidate.startDateTime, 'HH:mm'], {});
+    return dayjs(this.args.candidate.startDateTime).format('HH:mm');
   }
 
   get candidateTheoricalEndDateTime() {
     const pixPlusDuration = this._getPixPlusDurationInMinutes();
 
     if (pixPlusDuration !== null) {
-      return dayjs.utc(this.args.candidate.startDateTime).add(pixPlusDuration, 'minute').format('HH:mm');
+      return dayjs(this.args.candidate.startDateTime).add(pixPlusDuration, 'minute').format('HH:mm');
     }
 
-    return dayjsUtcFormat([this.args.candidate.theoricalEndDateTime, 'HH:mm'], {});
+    return dayjs(this.args.candidate.theoricalEndDateTime).format('HH:mm');
   }
 
   get currentLiveAlertLabel() {

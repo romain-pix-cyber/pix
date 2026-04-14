@@ -47,7 +47,12 @@ async function _getJuryCertificationSummaries(results) {
 async function _getByCertificationCourseIds(orderedCertificationCourseIds) {
   const knexConn = DomainTransaction.getConnection();
   const results = await knexConn
-    .select('certification-courses.*', 'assessment-results.pixScore', 'assessment-results.reachedMeshIndex')
+    .select(
+      'certification-courses.*',
+      'assessment-results.pixScore',
+      'assessment-results.reachedMeshIndex',
+      'assessment-results.eduV3ExternalJuryResult',
+    )
     .select({
       assessmentResultStatus: 'assessment-results.status',
       assessmentState: 'assessments.state',

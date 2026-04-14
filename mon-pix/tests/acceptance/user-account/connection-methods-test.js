@@ -25,7 +25,7 @@ module('Acceptance | user-account | connection-methods', function (hooks) {
   });
 
   module('connection method details', function () {
-    test("should display user's email and username", async function (assert) {
+    test("displays user's email and username", async function (assert) {
       // given
       const userDetails = {
         email: 'john.doe@example.net',
@@ -43,7 +43,7 @@ module('Acceptance | user-account | connection-methods', function (hooks) {
       assert.ok(screen.getByText(user.username));
     });
 
-    test("should display user's GAR authentication method", async function (assert) {
+    test("displays user's GAR authentication method", async function (assert) {
       // given
       const garUser = server.create('user', 'external');
       server.create('authentication-method', 'withGarIdentityProvider', { user: garUser });
@@ -59,7 +59,7 @@ module('Acceptance | user-account | connection-methods', function (hooks) {
       assert.ok(screen.getByText(t('pages.user-account.connexion-methods.authentication-methods.gar')));
     });
 
-    test("should display user's OIDC authentication methods", async function (assert) {
+    test("displays user's OIDC authentication methods", async function (assert) {
       // given
       const userDetails = {
         email: 'john.doe@example.net',
@@ -118,6 +118,40 @@ module('Acceptance | user-account | connection-methods', function (hooks) {
       });
     });
 
+    module('when user does not have an email', function () {
+      test('does not display email', async function (assert) {
+        // given
+        const userDetails = {
+          username: 'john.doe0101',
+        };
+        const user = server.create('user', 'withUsername', userDetails);
+        await authenticateByUsername(user);
+
+        // when
+        const screen = await visit('/mon-compte/methodes-de-connexion');
+
+        // then
+        assert.notOk(screen.queryByText(t('pages.user-account.connexion-methods.email')));
+      });
+    });
+
+    module('when user does not have a username', function () {
+      test('does not display username', async function (assert) {
+        // given
+        const userDetails = {
+          email: 'john.doe@example.net',
+        };
+        const user = server.create('user', 'withEmail', userDetails);
+        await authenticate(user);
+
+        // when
+        const screen = await visit('/mon-compte/methodes-de-connexion');
+
+        // then
+        assert.notOk(screen.queryByText(t('pages.user-account.connexion-methods.username')));
+      });
+    });
+
     module('when canAddEmailConnectionMethod conditions are true', function () {
       test('displays empty email label and add email button', async function (assert) {
         // given
@@ -136,7 +170,13 @@ module('Acceptance | user-account | connection-methods', function (hooks) {
         // then
         assert.dom(screen.getByText(t('pages.user-account.connexion-methods.email'))).exists();
         assert.dom(screen.getByText('—')).exists();
-        assert.dom(screen.getByRole('button', { name: t('pages.user-account.connexion-methods.add-email') })).exists();
+        assert
+          .dom(
+            screen.getByRole('button', {
+              name: t('pages.user-account.account-add-or-update-email-with-validation.title.add-email'),
+            }),
+          )
+          .exists();
         // other connection methods
         assert
           .dom(
@@ -149,42 +189,8 @@ module('Acceptance | user-account | connection-methods', function (hooks) {
     });
   });
 
-  module('when user does not have an email', function () {
-    test('should not display email', async function (assert) {
-      // given
-      const userDetails = {
-        username: 'john.doe0101',
-      };
-      const user = server.create('user', 'withUsername', userDetails);
-      await authenticateByUsername(user);
-
-      // when
-      const screen = await visit('/mon-compte/methodes-de-connexion');
-
-      // then
-      assert.notOk(screen.queryByText(t('pages.user-account.connexion-methods.email')));
-    });
-  });
-
-  module('when user does not have a username', function () {
-    test('should not display username', async function (assert) {
-      // given
-      const userDetails = {
-        email: 'john.doe@example.net',
-      };
-      const user = server.create('user', 'withEmail', userDetails);
-      await authenticate(user);
-
-      // when
-      const screen = await visit('/mon-compte/methodes-de-connexion');
-
-      // then
-      assert.notOk(screen.queryByText(t('pages.user-account.connexion-methods.username')));
-    });
-  });
-
   module('email editing', function () {
-    test('should reset email editing process when changing page', async function (assert) {
+    test('resets email editing process when changing page', async function (assert) {
       // given
       const user = server.create('user', 'withEmail');
       server.create('authentication-method', 'withPixIdentityProvider', { user });
@@ -201,7 +207,7 @@ module('Acceptance | user-account | connection-methods', function (hooks) {
       assert.dom(screen.getByRole('button', { name: 'Modifier' })).exists();
     });
 
-    test('should be able to edit the email, enter the code received, and be successfully redirected to account page', async function (assert) {
+    test('is able to edit the email, enter the code received, and be successfully redirected to account page', async function (assert) {
       // given
       const user = server.create('user', 'withEmail');
       server.create('authentication-method', 'withPixIdentityProvider', { user });
@@ -219,12 +225,50 @@ module('Acceptance | user-account | connection-methods', function (hooks) {
       await triggerEvent(screen.getByRole('spinbutton', { name: 'Champ 1' }), 'paste', {
         clipboardData: { getData: () => '123456' },
       });
+      await click(
+        screen.getByRole('button', {
+          name: t('pages.user-account.email-verification.validate-new-email'),
+        }),
+      );
       // eslint-disable-next-line ember/no-settled-after-test-helper
       await settled();
 
       // then
       assert.ok(screen.getByText(t('pages.user-account.connexion-methods.email')));
       assert.ok(screen.getByText(t('pages.user-account.email-verification.update-successful')));
+      assert.ok(screen.getByText(newEmail));
+    });
+  });
+
+  module('email adding', function () {
+    test('displays verification code component after submitting the add email form', async function (assert) {
+      // given
+      server.create('feature-toggle', { id: '0', addEmailConnectionMethodEnabled: true });
+      const user = server.create('user', 'withCanAddEmailConnectionMethod');
+      server.create('authentication-method', 'withGenericOidcIdentityProvider', { user });
+      await authenticate(user);
+      const newEmail = 'new-email@example.net';
+      const screen = await visit('/mon-compte/methodes-de-connexion');
+
+      // when
+      await click(
+        screen.getByRole('button', {
+          name: t('pages.user-account.account-add-or-update-email-with-validation.title.add-email'),
+        }),
+      );
+      await fillIn(screen.getByRole('textbox', { name: 'Adresse e-mail' }), newEmail);
+      await fillIn(screen.getByLabelText('Mot de passe'), 'someValidPassword1!');
+      await click(
+        screen.getByRole('button', {
+          name: t('pages.user-account.account-add-or-update-email-with-validation.save-button'),
+        }),
+      );
+      // eslint-disable-next-line ember/no-settled-after-test-helper
+      await settled();
+
+      // then
+      assert.ok(screen.getByText(t('pages.user-account.email-verification.title')));
+      assert.ok(screen.getByText(t('pages.user-account.email-verification.description')));
       assert.ok(screen.getByText(newEmail));
     });
   });

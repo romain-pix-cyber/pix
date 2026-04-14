@@ -3,15 +3,15 @@ import {
   databaseBuilder,
   expect,
   generateAuthenticatedUserRequestHeaders,
-  insertUserWithRoleSuperAdmin,
 } from '../../../../test-helper.js';
 
 describe('Acceptance | API | Badges', function () {
-  let server, options, userId, badge;
+  let server, options, badge, superAdmin;
 
   beforeEach(async function () {
     server = await createServer();
-    userId = (await insertUserWithRoleSuperAdmin()).id;
+    superAdmin = databaseBuilder.factory.buildUser.withRoleSuperAdmin();
+    await databaseBuilder.commit();
   });
 
   describe('PATCH /api/admin/badges/{id}', function () {
@@ -26,7 +26,6 @@ describe('Acceptance | API | Badges', function () {
         isCertifiable: false,
         isAlwaysVisible: true,
       });
-
       await databaseBuilder.commit();
     });
 
@@ -45,7 +44,7 @@ describe('Acceptance | API | Badges', function () {
       options = {
         method: 'PATCH',
         url: `/api/admin/badges/${badge.id}`,
-        headers: generateAuthenticatedUserRequestHeaders({ userId }),
+        headers: generateAuthenticatedUserRequestHeaders({ userId: superAdmin.id }),
         payload: {
           data: {
             type: 'badges',
@@ -79,7 +78,7 @@ describe('Acceptance | API | Badges', function () {
       options = {
         method: 'DELETE',
         url: `/api/admin/badges/${badge.id}`,
-        headers: generateAuthenticatedUserRequestHeaders({ userId }),
+        headers: generateAuthenticatedUserRequestHeaders({ userId: superAdmin.id }),
       };
 
       // when
@@ -92,13 +91,13 @@ describe('Acceptance | API | Badges', function () {
     it('should not delete the existing badge if associated to a badge acquisition', async function () {
       // given
       badge = databaseBuilder.factory.buildBadge({ id: 1 });
-      databaseBuilder.factory.buildBadgeAcquisition({ badgeId: badge.id, userId });
+      databaseBuilder.factory.buildBadgeAcquisition({ badgeId: badge.id, userId: superAdmin.id });
       await databaseBuilder.commit();
 
       options = {
         method: 'DELETE',
         url: `/api/admin/badges/${badge.id}`,
-        headers: generateAuthenticatedUserRequestHeaders({ userId }),
+        headers: generateAuthenticatedUserRequestHeaders({ userId: superAdmin.id }),
       };
 
       // when

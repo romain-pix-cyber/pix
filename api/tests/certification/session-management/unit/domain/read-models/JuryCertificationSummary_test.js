@@ -1,4 +1,5 @@
 import { JuryCertificationSummary } from '../../../../../../src/certification/session-management/domain/read-models/JuryCertificationSummary.js';
+import { PIX_PLUS_EDU_EXTERNAL_LEVELS } from '../../../../../../src/certification/shared/domain/constants/mesh-configuration.js';
 import { AlgorithmEngineVersion } from '../../../../../../src/certification/shared/domain/models/AlgorithmEngineVersion.js';
 import { Frameworks } from '../../../../../../src/certification/shared/domain/models/Frameworks.js';
 import { Assessment } from '../../../../../../src/shared/domain/models/Assessment.js';
@@ -23,6 +24,7 @@ describe('Unit | Domain | Models | JuryCertificationSummary', function () {
         pixScore: 751,
         reachedMeshIndex: 6,
         status: 'started',
+        eduV3ExternalJuryResult: 'coucou',
         certificationFramework: Frameworks.CORE,
       };
 
@@ -44,6 +46,7 @@ describe('Unit | Domain | Models | JuryCertificationSummary', function () {
         reachedMeshIndex: 6,
         status: 'started',
         certificationFramework: Frameworks.CORE,
+        eduV3ExternalJuryResult: 'coucou',
       });
     });
   });
@@ -242,6 +245,149 @@ describe('Unit | Domain | Models | JuryCertificationSummary', function () {
 
           // then
           expect(hasCompletedAssessment).to.be.false;
+        });
+      });
+    });
+  });
+
+  describe('#get reachedResultKey', function () {
+    context('when certification is not v3', function () {
+      it('returns the certification framework label followed by NONE', function () {
+        const juryCertificationSummaryV1 = domainBuilder.certification.sessionManagement.buildJuryCertificationSummary({
+          algorithmVersion: AlgorithmEngineVersion.V1,
+          certificationFramework: Frameworks.CORE,
+        });
+        const juryCertificationSummaryV2 = domainBuilder.certification.sessionManagement.buildJuryCertificationSummary({
+          algorithmVersion: AlgorithmEngineVersion.V2,
+          certificationFramework: Frameworks.EDU_1ER_DEGRE,
+        });
+
+        const reachedResultKeyV1 = juryCertificationSummaryV1.reachedResultKey;
+        const reachedResultKeyV2 = juryCertificationSummaryV2.reachedResultKey;
+
+        expect(reachedResultKeyV1).to.equal('CORE.NONE');
+        expect(reachedResultKeyV2).to.equal('EDU_1ER_DEGRE.NONE');
+      });
+    });
+
+    context('when certification is v3', function () {
+      context('CORE', function () {
+        [
+          { reachedMeshIndex: null, expectedReachedResultKey: 'CORE.BELOW_MINIMUM' },
+          { reachedMeshIndex: 0, expectedReachedResultKey: 'CORE.0' },
+          { reachedMeshIndex: 1, expectedReachedResultKey: 'CORE.1' },
+          { reachedMeshIndex: 2, expectedReachedResultKey: 'CORE.2' },
+          { reachedMeshIndex: 3, expectedReachedResultKey: 'CORE.3' },
+          { reachedMeshIndex: 4, expectedReachedResultKey: 'CORE.4' },
+          { reachedMeshIndex: 5, expectedReachedResultKey: 'CORE.5' },
+          { reachedMeshIndex: 6, expectedReachedResultKey: 'CORE.6' },
+          { reachedMeshIndex: 7, expectedReachedResultKey: 'CORE.7' },
+          { reachedMeshIndex: 8, expectedReachedResultKey: 'CORE.8' },
+        ].forEach(({ reachedMeshIndex, expectedReachedResultKey }) => {
+          context(`when reachedMeshIndex is ${reachedMeshIndex}`, function () {
+            it(`returns ${expectedReachedResultKey}`, function () {
+              const juryCertificationSummary =
+                domainBuilder.certification.sessionManagement.buildJuryCertificationSummary({
+                  certificationFramework: Frameworks.CORE,
+                  algorithmVersion: AlgorithmEngineVersion.V3,
+                  reachedMeshIndex,
+                });
+
+              const reachedResultKey = juryCertificationSummary.reachedResultKey;
+
+              expect(reachedResultKey).to.equal(expectedReachedResultKey);
+            });
+          });
+        });
+      });
+
+      context('EDU', function () {
+        [
+          {
+            reachedMeshIndex: null,
+            eduV3ExternalJuryResult: null,
+            expectedReachedResultKey: 'EDU_1ER_DEGRE.BELOW_MINIMUM',
+          },
+          { reachedMeshIndex: 0, eduV3ExternalJuryResult: null, expectedReachedResultKey: 'EDU_1ER_DEGRE.0' },
+          {
+            reachedMeshIndex: 0,
+            eduV3ExternalJuryResult: PIX_PLUS_EDU_EXTERNAL_LEVELS.ADVANCED,
+            expectedReachedResultKey: 'EDU_1ER_DEGRE.ADVANCED',
+          },
+          {
+            reachedMeshIndex: 0,
+            eduV3ExternalJuryResult: PIX_PLUS_EDU_EXTERNAL_LEVELS.EXPERT,
+            expectedReachedResultKey: 'EDU_1ER_DEGRE.EXPERT',
+          },
+        ].forEach(({ reachedMeshIndex, eduV3ExternalJuryResult, expectedReachedResultKey }) => {
+          context(
+            `when reachedMeshIndex is ${reachedMeshIndex} and eduV3ExternalJuryResult is ${eduV3ExternalJuryResult}`,
+            function () {
+              it(`returns ${expectedReachedResultKey}`, function () {
+                const juryCertificationSummary =
+                  domainBuilder.certification.sessionManagement.buildJuryCertificationSummary({
+                    certificationFramework: Frameworks.EDU_1ER_DEGRE,
+                    algorithmVersion: AlgorithmEngineVersion.V3,
+                    eduV3ExternalJuryResult,
+                    reachedMeshIndex,
+                  });
+
+                const reachedResultKey = juryCertificationSummary.reachedResultKey;
+
+                expect(reachedResultKey).to.equal(expectedReachedResultKey);
+              });
+            },
+          );
+        });
+      });
+
+      context('DROIT', function () {
+        [
+          {
+            reachedMeshIndex: null,
+            expectedReachedResultKey: 'DROIT.BELOW_MINIMUM',
+          },
+          { reachedMeshIndex: 0, expectedReachedResultKey: 'DROIT.0' },
+        ].forEach(({ reachedMeshIndex, expectedReachedResultKey }) => {
+          context(`when reachedMeshIndex is ${reachedMeshIndex}`, function () {
+            it(`returns ${expectedReachedResultKey}`, function () {
+              const juryCertificationSummary =
+                domainBuilder.certification.sessionManagement.buildJuryCertificationSummary({
+                  certificationFramework: Frameworks.DROIT,
+                  algorithmVersion: AlgorithmEngineVersion.V3,
+                  reachedMeshIndex,
+                });
+
+              const reachedResultKey = juryCertificationSummary.reachedResultKey;
+
+              expect(reachedResultKey).to.equal(expectedReachedResultKey);
+            });
+          });
+        });
+      });
+
+      context('PRO SANTÉ', function () {
+        [
+          {
+            reachedMeshIndex: null,
+            expectedReachedResultKey: 'PRO_SANTE.BELOW_MINIMUM',
+          },
+          { reachedMeshIndex: 0, expectedReachedResultKey: 'PRO_SANTE.0' },
+        ].forEach(({ reachedMeshIndex, expectedReachedResultKey }) => {
+          context(`when reachedMeshIndex is ${reachedMeshIndex}`, function () {
+            it(`returns ${expectedReachedResultKey}`, function () {
+              const juryCertificationSummary =
+                domainBuilder.certification.sessionManagement.buildJuryCertificationSummary({
+                  certificationFramework: Frameworks.PRO_SANTE,
+                  algorithmVersion: AlgorithmEngineVersion.V3,
+                  reachedMeshIndex,
+                });
+
+              const reachedResultKey = juryCertificationSummary.reachedResultKey;
+
+              expect(reachedResultKey).to.equal(expectedReachedResultKey);
+            });
+          });
         });
       });
     });

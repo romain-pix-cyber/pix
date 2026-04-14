@@ -3,7 +3,6 @@ import {
   databaseBuilder,
   expect,
   generateAuthenticatedUserRequestHeaders,
-  insertUserWithRoleSuperAdmin,
   knex,
 } from '../../../../test-helper.js';
 
@@ -12,7 +11,7 @@ describe('Acceptance | Organizational Entities | Application | Route | Admin | N
   let server;
 
   beforeEach(async function () {
-    superAdmin = await insertUserWithRoleSuperAdmin();
+    superAdmin = databaseBuilder.factory.buildUser.withRoleSuperAdmin();
     await databaseBuilder.commit();
 
     server = await createServer();
@@ -28,7 +27,7 @@ describe('Acceptance | Organizational Entities | Application | Route | Admin | N
       const options = {
         method: 'GET',
         url: '/api/admin/networks',
-        headers: generateAuthenticatedUserRequestHeaders(superAdmin),
+        headers: generateAuthenticatedUserRequestHeaders({ userId: superAdmin.id }),
       };
       const expectedNetworks = [
         {
@@ -69,7 +68,7 @@ describe('Acceptance | Organizational Entities | Application | Route | Admin | N
       const options = {
         method: 'GET',
         url: '/api/admin/networks/1',
-        headers: generateAuthenticatedUserRequestHeaders(superAdmin),
+        headers: generateAuthenticatedUserRequestHeaders({ userId: superAdmin.id }),
       };
       const expectedNetwork = {
         attributes: {
@@ -101,7 +100,7 @@ describe('Acceptance | Organizational Entities | Application | Route | Admin | N
       const request = {
         method: 'PATCH',
         url: `/api/admin/networks/${network.id}`,
-        headers: generateAuthenticatedUserRequestHeaders(superAdmin),
+        headers: generateAuthenticatedUserRequestHeaders({ userId: superAdmin.id }),
         payload: {
           data: {
             attributes: {
@@ -130,7 +129,7 @@ describe('Acceptance | Organizational Entities | Application | Route | Admin | N
       const options = {
         method: 'GET',
         url: '/api/admin/networks?filter[name]=Bretagne',
-        headers: generateAuthenticatedUserRequestHeaders(superAdmin),
+        headers: generateAuthenticatedUserRequestHeaders({ userId: superAdmin.id }),
       };
 
       // when
@@ -153,7 +152,7 @@ describe('Acceptance | Organizational Entities | Application | Route | Admin | N
       const request = {
         method: 'POST',
         url: '/api/admin/networks',
-        headers: generateAuthenticatedUserRequestHeaders(superAdmin),
+        headers: generateAuthenticatedUserRequestHeaders({ userId: superAdmin.id }),
         payload: {
           data: {
             attributes: {

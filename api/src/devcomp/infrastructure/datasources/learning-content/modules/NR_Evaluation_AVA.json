@@ -1,0 +1,1079 @@
+{
+  "id": "17592ba2-c3ed-4273-88fa-a3715067e875",
+  "shortId": "80f5e3b1",
+  "slug": "effets-environnementaux-indirects",
+  "title": "Les effets environnementaux indirects du numérique",
+  "isBeta": true,
+  "visibility": "public",
+  "details": {
+    "image": "https://assets.pix.org/modules/deepfakes/picto-deepfakes.svg",
+    "description": "<p>Le numérique a d’importants effets directs sur l’environnement, mais provoque aussi de nombreux changements de comportements individuels et collectifs. Ce sont des effets indirects, et ils peuvent aussi avoir des impacts sur l’environnement. Dans ce module, vous allez découvrir comment il est possible de les évaluer et de les limiter s’ils sont négatifs.</p>",
+    "duration": 10,
+    "level": "advanced",
+    "objectives": [
+      "<p>Identifier les effets environnementaux indirects du numérique</p>",
+      "<p>Comprendre le mécanisme de l’effet rebond et de son évaluation</p>",
+      "<p>Éveiller son esprit critique et encourager la sobriété</p>"
+    ],
+    "tabletSupport": "comfortable"
+  },
+  "sections": [
+    {
+      "id": "d770fdad-f9f6-42a1-885b-870a4d0fc9b5",
+      "type": "question-yourself",
+      "grains": [
+        {
+          "id": "3a4b8517-43a2-4e08-93d3-c93625e759e0",
+          "type": "discovery",
+          "title": "conversation-accroche",
+          "components": [
+            {
+              "type": "element",
+              "element": {
+                "id": "37a9e342-ceee-494e-ae50-1690aea3b6bb",
+                "type": "custom",
+                "title": "",
+                "instruction": "<p>Paul et Martine s'interrogent à propos des compteurs électriques connectés.</p>",
+                "functionalInstruction": "",
+                "tagName": "message-conversation",
+                "props": {
+                  "conversationTitle": "",
+                  "messages": [
+                    {
+                      "userName": "Paul",
+                      "direction": "outgoing",
+                      "type": "Texte",
+                      "content": "Mon fournisseur d’électricité vient d’annoncer qu’il allait installer des compteurs électriques connectés chez tous ses clients ! C’est terrible ! 😱"
+                    },
+                    {
+                      "userName": "Martine",
+                      "direction": "incoming",
+                      "type": "Texte",
+                      "content": "Pourquoi est-ce que tu trouves ça terrible ?"
+                    },
+                    {
+                      "userName": "Paul",
+                      "direction": "outgoing",
+                      "type": "Texte",
+                      "content": "Il faut plein de métaux rares pour construire le matériel électronique. Avec tous ces compteurs, l’impact sur l’environnement va être énorme !"
+                    },
+                    {
+                      "userName": "Martine",
+                      "direction": "incoming",
+                      "type": "Texte",
+                      "content": "Au contraire, je pense que ces compteurs vont permettre de faire des économies d’électricité, donc d’avoir moins d’impacts négatifs sur l’environnement."
+                    }
+                  ],
+                  "animationSpeed": 0
+                }
+              }
+            }
+          ]
+        },
+        {
+          "id": "d17cc053-1334-4bb1-b400-1bfbbee14eb4",
+          "type": "transition",
+          "title": "qcu-declarative-accroche",
+          "components": [
+            {
+              "type": "element",
+              "element": {
+                "id": "39525a43-8739-4c06-a43e-cbc108716e6f",
+                "type": "qcu-discovery",
+                "instruction": "<p>Avec qui êtes-vous le plus d'accord ?</p>",
+                "hasShortProposals": true,
+                "proposals": [
+                  {
+                    "id": "1",
+                    "content": "Paul",
+                    "feedback": {
+                      "diagnosis": "<p>En fait, les deux ont raison. </p>\n<p>Le numérique a des <strong>effets directs</strong> sur l'environnement, produits notamment par la fabrication des appareils et leur consommation d'énergie, mais aussi des <strong>effets indirects</strong>.<br>Paul parle d'effets directs, Martine d'effets indirects.</p>"
+                    }
+                  },
+                  {
+                    "id": "2",
+                    "content": "Martine",
+                    "feedback": {
+                      "diagnosis": "<p>En fait, les deux ont raison. </p>\n<p>Le numérique a des <strong>effets directs</strong> sur l'environnement, produits notamment par la fabrication des appareils et leur consommation d'énergie, mais aussi des <strong>effets indirects</strong>.<br>Paul parle d'effets directs, Martine d'effets indirects.</p>"
+                    }
+                  },
+                  {
+                    "id": "3",
+                    "content": "les deux",
+                    "feedback": {
+                      "diagnosis": "<p>Bien vu !</p>\n<p>Le numérique a des <strong>effets directs </strong>sur l'environnement, produits notamment par la fabrication des appareils et leur consommation d'énergie, mais aussi des <strong>effets indirects.</strong><br>Paul parle d'effets directs, Martine d'effets indirects.</p>\n"
+                    }
+                  },
+                  {
+                    "id": "4",
+                    "content": "aucun",
+                    "feedback": {
+                      "diagnosis": "<p>En fait, les deux ont raison.</p>\n<p>Le numérique a des <strong>effets directs</strong> sur l'environnement, produits notamment par la fabrication des appareils et leur consommation d'énergie, mais aussi des <strong>effets indirects</strong>.<br>Paul parle d'effets directs, Martine d'effets indirects.</p>"
+                    }
+                  }
+                ],
+                "solution": "3"
+              }
+            }
+          ]
+        },
+        {
+          "id": "6eb887d9-64b9-4a0a-acb8-9c603a9d89df",
+          "type": "transition",
+          "title": "transition-accroche",
+          "components": [
+            {
+              "type": "element",
+              "element": {
+                "id": "a8a69700-d558-4d44-91b7-b4d1b009f3d1",
+                "type": "text",
+                "tag": " ",
+                "content": "<p>Voyons ensemble ce que sont les <strong>effets indirects du numérique</strong>.</p>"
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "0dec63ee-7b73-4339-b8f6-856b710fb296",
+      "type": "explore-to-understand",
+      "grains": [
+        {
+          "id": "d27c0a1d-16a1-474f-a3b0-4d5ace58e4ae",
+          "type": "discovery",
+          "title": "Les effets directs et indirects du numérique",
+          "components": [
+            {
+              "type": "element",
+              "element": {
+                "id": "e20bb153-32f2-48a6-b0d1-9822125ff3b0",
+                "type": "custom",
+                "title": "",
+                "instruction": "<p>Observez les effets de l’installation du compteur d’électricite connecté, puis répondez aux questions.</p>",
+                "functionalInstruction": "",
+                "tagName": "clickable-image",
+                "props": {
+                  "image": {
+                    "src": "https://assets.pix.org/draft/modules/NR_Eval_Ava/schema-effets-indirects.png",
+                    "alt": "image provisoire",
+                    "width": 0,
+                    "height": 0
+                  },
+                  "areas": [
+                    {
+                      "coords": {
+                        "x1": 100,
+                        "y1": 450,
+                        "x2": 10,
+                        "y2": 500
+                      },
+                      "spot": {
+                        "x": 0,
+                        "y": 0
+                      },
+                      "info": "Compteur : Installation du compteur connecté pour suivre la consommation d’énergie à distance.",
+                      "tooltipPosition": "bottom"
+                    },
+                    {
+                      "coords": {
+                        "x1": 320,
+                        "y1": 450,
+                        "x2": 400,
+                        "y2": 500
+                      },
+                      "spot": {
+                        "x": 0,
+                        "y": 0
+                      },
+                      "info": "Ménage : La famille a un meilleur suivi de consommation et réduit sa consommation.",
+                      "tooltipPosition": "bottom"
+                    },
+                    {
+                      "coords": {
+                        "x1": 600,
+                        "y1": 300,
+                        "x2": 650,
+                        "y2": 300
+                      },
+                      "spot": {
+                        "x": 0,
+                        "y": 0
+                      },
+                      "info": "Maintenance : Certaines opérations faisables à distance, donc moins de déplacements des agents.",
+                      "tooltipPosition": "bottom"
+                    },
+                    {
+                      "coords": {
+                        "x1": 850,
+                        "y1": 200,
+                        "x2": 900,
+                        "y2": 250
+                      },
+                      "spot": {
+                        "x": 0,
+                        "y": 0
+                      },
+                      "info": "Fournisseur d'électricité : L’entreprise a un meilleur suivi et optimise sa production.",
+                      "tooltipPosition": "bottom"
+                    }
+                  ]
+                }
+              }
+            },
+            {
+              "type": "stepper",
+              "instruction": "<p><br></p>",
+              "steps": [
+                {
+                  "elements": [
+                    {
+                      "id": "38c04097-96ce-430a-9350-0ccde106a9bc",
+                      "type": "text",
+                      "tag": " ",
+                      "content": "<p>Le meilleur suivi de consommation des ménages est un effet d'efficacité.</p>"
+                    },
+                    {
+                      "id": "4d9696fa-083f-4f3c-8354-b1c259e0046e",
+                      "type": "qcu-discovery",
+                      "instruction": "<p>Selon vous, qu'est-ce qu'un effet d'efficacité ?</p>",
+                      "hasShortProposals": false,
+                      "proposals": [
+                        {
+                          "id": "1",
+                          "content": "<p>C'est lorsqu'un processus devient plus facile à réaliser, ou donne de meilleures performances.</p>",
+                          "feedback": {
+                            "diagnosis": "<p>Bien vu !&nbsp;  </p><p>L’<strong>effet d’efficacité</strong> est un exemple d’<strong>effet indirect.</strong></p>"
+                          }
+                        },
+                        {
+                          "id": "2",
+                          "content": "<p>C'est lorsqu'une nouvelle technologie remplace une ancienne.</p>",
+                          "feedback": {
+                            "diagnosis": "<p>Eh non, il s’agissait d’un processus qui donne de meilleur performances.  </p><p>L’<strong>effet d’efficacité</strong> est un exemple d’<strong>effet indirect</strong>.</p>"
+                          }
+                        },
+                        {
+                          "id": "3",
+                          "content": "<p>Je ne sais pas.</p>",
+                          "feedback": {
+                            "diagnosis": "<p>Il s’agissait d’un processus qui donne de meilleur performances. L’<strong>effet d’efficacité</strong> est un exemple d’<strong>effet indirect.</strong></p>"
+                          }
+                        }
+                      ],
+                      "solution": "1"
+                    }
+                  ]
+                },
+                {
+                  "elements": [
+                    {
+                      "id": "766b1dbd-00ed-404b-b202-c4ded882a002",
+                      "type": "text",
+                      "tag": " ",
+                      "content": "<p>La réalisation de certaines opérations à distance plutôt que sur place est un effet de substitution.</p>"
+                    },
+                    {
+                      "id": "17dee555-4c04-4121-bb5f-3707ae6c600e",
+                      "type": "qcu-discovery",
+                      "instruction": "<p>Selon vous, qu'est-ce qu'un effet de substitution ?</p>",
+                      "hasShortProposals": false,
+                      "proposals": [
+                        {
+                          "id": "1",
+                          "content": "<p>C'est lorsqu'un processus devient plus facile à réaliser, ou donne de meilleures performances</p>",
+                          "feedback": {
+                            "diagnosis": "<p>Eh non, il s'agissant d'une nouvelle technologie qui remplace une ancienne.</p><p> L’effet de <strong>subsitution </strong>est un exemple d’<strong>effet indirect.</strong></p>"
+                          }
+                        },
+                        {
+                          "id": "2",
+                          "content": "<p>C'est lorsqu'une nouvelle technologie remplace une ancienne.</p>",
+                          "feedback": {
+                            "diagnosis": "<p>Bien vu !&nbsp;  </p><p>L’<strong>effet de subsitution </strong>est un exemple d<strong>’effet indirect.</strong></p>"
+                          }
+                        },
+                        {
+                          "id": "3",
+                          "content": "<p>Je ne sais pas.</p>",
+                          "feedback": {
+                            "diagnosis": "<p>Eh non, il s'agissant d'une nouvelle technologie qui remplace une ancienne.</p><p> L’<strong>effet de subsitution</strong> est un exemple d’<strong>effet indirect</strong>.</p>"
+                          }
+                        }
+                      ],
+                      "solution": "2"
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "id": "8e6d3ae7-cfc6-42af-aa50-09119884145d",
+          "type": "short-lesson",
+          "title": "Leçon 1 : les effets indirects du numérique",
+          "components": [
+            {
+              "type": "element",
+              "element": {
+                "id": "7220f599-478a-4942-8950-9ae3503dbf38",
+                "type": "text",
+                "tag": " ",
+                "content": "<p>L’usage du numérique peut provoquer des <strong>changements de comportements</strong>, individuels ou collectifs. Ces nouveaux comportements peuvent avoir des effets sur l’environnement, on parle donc d’<strong>effets indirects du numérique</strong> sur l’environnement.</p><p><br></p><h5>Est-ce que les effets indirects sont positifs ou négatifs ?</h5><p>Ça dépend. Certains effets indirects peuvent être <strong>positifs</strong> pour l’environnement, d’autres peuvent être <strong>négatifs</strong>.</p>"
+              }
+            }
+          ]
+        },
+        {
+          "id": "17684cad-e1eb-49b4-a8dc-f575c77c9897",
+          "type": "transition",
+          "title": "Transition , suite de la conversation",
+          "components": [
+            {
+              "type": "element",
+              "element": {
+                "id": "8c4658b0-3daf-40b2-9a62-a3cccb9073a9",
+                "type": "custom",
+                "title": "",
+                "instruction": "<p><br></p>",
+                "functionalInstruction": "",
+                "tagName": "message-conversation",
+                "props": {
+                  "conversationTitle": "",
+                  "messages": [
+                    {
+                      "userName": "Martine",
+                      "direction": "incoming",
+                      "type": "Texte",
+                      "content": "Tu vois ! Certes, ce nouveau compteur est un peu plus polluant à fabriquer, mais il va te permettre de réduire ta consommation d’électricité, donc de moins polluer au final."
+                    },
+                    {
+                      "userName": "Paul",
+                      "direction": "outgoing",
+                      "type": "Texte",
+                      "content": "Okay, ce compteur a des effets indirects positifs ... mais peut-être qu’il provoque aussi d’autres effets indirects, plus difficiles à voir, et qui sont négatifs !"
+                    }
+                  ],
+                  "animationSpeed": 0
+                }
+              }
+            }
+          ]
+        },
+        {
+          "id": "cf41ba53-f52e-4521-80be-8a9b46fba54d",
+          "type": "discovery",
+          "title": "Découverte 2 : Les effets rebonds",
+          "components": [
+            {
+              "type": "element",
+              "element": {
+                "id": "c6e4f6f0-76d7-4ff5-84fb-bacb1902d2dd",
+                "type": "text",
+                "tag": " ",
+                "content": "<p>Ces dernières décennies, les technologies de batteries ont été grandement améliorées. Pour la même taille, une batterie moderne coûte moins cher et stocke plus d’énergie qu’une batterie ancienne.</p>"
+              }
+            },
+            {
+              "type": "element",
+              "element": {
+                "id": "0117d5dc-b950-479c-8c51-d4b58a43547e",
+                "type": "image",
+                "url": "https://assets.pix.org/draft/modules/NR_Eval_Ava/batteries.png",
+                "alt": "Une photo qui montre une diversité de batterie",
+                "alternativeText": "",
+                "legend": "Image brouillon ",
+                "licence": ""
+              }
+            },
+            {
+              "type": "element",
+              "element": {
+                "id": "10eb3f27-86a8-45e8-8043-f35a558c6de3",
+                "type": "qcu-discovery",
+                "instruction": "<p>Selon-vous, quels ont été les effets de cette amélioration ?</p>",
+                "hasShortProposals": false,
+                "proposals": [
+                  {
+                    "id": "1",
+                    "content": "<p>Au total, on utilise moins de batteries qu’avant, car elles sont plus performantes.</p>",
+                    "feedback": {
+                      "diagnosis": "<p>Eh non ! </p><p>L’amélioration des batteries a rendu possible de nouveaux usages. Or, avec le développement de ces nouveaux usages, la consommation totale de batterie à augmentée.</p>"
+                    }
+                  },
+                  {
+                    "id": "2",
+                    "content": "<p>Au total, on utilise autant de batteries qu’avant, mais elles permettent de faire plus.</p>",
+                    "feedback": {
+                      "diagnosis": "<p>Eh non !</p><p>L’amélioration des batteries a rendu possible de nouveaux usages. Or, avec le développement de ces nouveaux usages, la consommation totale de batterie à augmentée.</p>"
+                    }
+                  },
+                  {
+                    "id": "3",
+                    "content": "<p>Au total, on utilise plus de batteries car leur faible coût et leur bonne performance ont permis de nouveaux usages.</p>",
+                    "feedback": {
+                      "diagnosis": "<p>Bien vu ! </p><p>L’amélioration des batteries a rendu possible de nouveaux usages. Or, avec le développement de ces nouveaux usages, la consommation totale de batterie à augmentée.</p>"
+                    }
+                  },
+                  {
+                    "id": "4",
+                    "content": "<p>Je ne sais pas.<br></p>",
+                    "feedback": {
+                      "diagnosis": "<p>En fait, l’amélioration des batteries a rendu possible de nouveaux usages. Or, avec le développement de ces nouveaux usages, la consommation totale de batterie à augmentée.</p>"
+                    }
+                  }
+                ],
+                "solution": "3"
+              }
+            }
+          ]
+        },
+        {
+          "id": "3bd07713-f81b-4646-80ce-906aa3e0b26b",
+          "type": "short-lesson",
+          "title": "Leçon 2 : les effets rebond",
+          "components": [
+            {
+              "type": "stepper",
+              "instruction": "",
+              "steps": [
+                {
+                  "elements": [
+                    {
+                      "id": "f03f5137-a79c-41a0-a2d7-69019d815759",
+                      "type": "text",
+                      "tag": " ",
+                      "content": "<p>Dans certains cas, des effets positifs peuvent entraîner une hausse de la consommation globale&nbsp;: c’est l’<strong>effet rebond.</strong></p>"
+                    }
+                  ]
+                },
+                {
+                  "elements": [
+                    {
+                      "id": "96f917f3-39ae-42d6-9b1d-94ee179a7b0f",
+                      "type": "text",
+                      "tag": " ",
+                      "content": "<h5>C’est un peu paradoxal, non ?</h5><p>Effectivement, ça peut être contre-intuitif. L’amélioration de l’<strong>efficacité</strong> d’une technologie peut sembler être une bonne chose, mais elle provoque parfois une <strong>augmentation de son usage</strong> ou une <strong>augmentation de l’usage d’autres technologies</strong>. Ces augmentations annulent une partie, voire tout ce qui a été gagné avec l’amélioration.</p>"
+                    }
+                  ]
+                },
+                {
+                  "elements": [
+                    {
+                      "id": "8fe5ab08-321a-4298-b69c-6fc7b519100d",
+                      "type": "image",
+                      "url": "https://assets.pix.org/draft/modules/NR_Eval_Ava/schema-effet-rebond.png",
+                      "alt": "Schéma de l'effet rebond",
+                      "alternativeText": "<p>Schéma de l’effet rebond&nbsp;: lorsque la consommation ou les émissions actuelles baissent, la réduction réelle est moins importante que la réduction attendue. C’est l’effet rebond.</p>",
+                      "legend": "Schéma brouillon",
+                      "licence": ""
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "id": "a7412205-6211-4488-b0e6-d266f512ec78",
+          "type": "discovery",
+          "title": "Découverte 3 - Le GPS",
+          "components": [
+            {
+              "type": "element",
+              "element": {
+                "id": "1d708f09-ff47-4585-8292-6e4504d31f2a",
+                "type": "text",
+                "tag": " ",
+                "content": "<p>Poursuivons avec un autre exemple : celui de ce GPS.</p>"
+              }
+            },
+            {
+              "type": "element",
+              "element": {
+                "id": "7ddd2bc6-5ae0-47f1-9300-fd57a4664a57",
+                "type": "image",
+                "url": "https://assets.pix.org/draft/modules/NR_Eval_Ava/gps.png",
+                "alt": "Une publicité pour un GPS",
+                "alternativeText": "<p>Une publicité pour un GPS :&nbsp;</p><p>- Le GPS qui vous emmène à bon port.</p><p>- Moins de détours, moins de carburant.</p><p>- Moins de cartes, moins de papier.</p>",
+                "legend": "Image brouillon",
+                "licence": ""
+              }
+            },
+            {
+              "type": "element",
+              "element": {
+                "id": "0b350beb-139d-4a38-ab89-eb7ba2fe23bc",
+                "type": "qcu-discovery",
+                "instruction": "<p>À votre avis, ce GPS a-t-il un impact positif ou négatif sur l’environnement ?</p>",
+                "hasShortProposals": false,
+                "proposals": [
+                  {
+                    "id": "1",
+                    "content": "<p>L'impact est positif.<br></p>",
+                    "feedback": {
+                      "diagnosis": "<p><strong>C’est possible, mais ce n'est pas sûr.&nbsp;</strong></p><p>Même si cet appareil évite la fabrication de nombreuses cartes en papie et qu’il promet des économies de carburant,&nbsp; sa fabrication est polluante … Sans une étude scientifique rigoureuse, on ne peut pas savoir si son impact total sur l’environnement est meilleur des cartes en papier.</p>"
+                    }
+                  },
+                  {
+                    "id": "2",
+                    "content": "<p>L'impact est négatif.<br></p>",
+                    "feedback": {
+                      "diagnosis": "<p><strong>C’est possible, mais ce n'est pas sûr.&nbsp;</strong></p><p>Même si cet appareil évite la fabrication de nombreuses cartes en papier et qu’il promet des économies de carburant, sa fabrication est polluante … Sans une étude scientifique rigoureuse, on ne peut pas savoir si son impact total sur l’environnement est meilleur des cartes en papier.</p>"
+                    }
+                  },
+                  {
+                    "id": "3",
+                    "content": "<p>Je ne peux pas savoir.</p>",
+                    "feedback": {
+                      "diagnosis": "<p><strong>Effectivement !&nbsp;</strong></p><p>Même si cet appareil évite la fabrication de nombreuses cartes en papier et qu’il promet des économies de carburant, sa fabrication est polluante … Sans une étude scientifique rigoureuse, on ne peut pas savoir si son impact total sur l’environnement est meilleur des cartes en papier.<br></p>"
+                    }
+                  }
+                ],
+                "solution": "3"
+              }
+            }
+          ]
+        },
+        {
+          "id": "e8ba773f-b682-475a-8faa-903fc270dc9a",
+          "type": "transition",
+          "title": "Transition vers la leçon 3",
+          "components": [
+            {
+              "type": "element",
+              "element": {
+                "id": "25b0d11a-ac23-4edc-9642-db3c9d1b6f6c",
+                "type": "text",
+                "tag": " ",
+                "content": "<p>Certains industriels ne mentionnent que les effets indirects positifs de leurs produits, pour se donner une meilleure image. C’est ce qu’on appelle du greenwashing, ou écoblanchiment en français. Pourtant, l’amélioration d’une technologie peut avoir des effets indirects négatifs sur l’environnement, comme des effets rebond.</p>"
+              }
+            }
+          ]
+        },
+        {
+          "id": "fbae7bd8-35ae-4ea4-bbdb-01162afa95cb",
+          "type": "short-lesson",
+          "title": "Leçon 3 : éveiller son esprit critique et encourager la sobriété",
+          "components": [
+            {
+              "type": "stepper",
+              "instruction": "",
+              "steps": [
+                {
+                  "elements": [
+                    {
+                      "id": "80274868-d57d-4afc-983b-44731965ec87",
+                      "type": "text",
+                      "tag": " ",
+                      "content": "<p>Comme nous l’avons vu, il faut gardr un esprit critique sur les nouvelles technologies et leurs améliorations,  pour éviter de se faire avoir par le greenwashing.</p>"
+                    }
+                  ]
+                },
+                {
+                  "elements": [
+                    {
+                      "id": "71741a0f-9a72-4a76-8f0e-f4e58c7d09f3",
+                      "type": "text",
+                      "tag": " ",
+                      "content": "<p>Chercher à mesurer les effets indirects du numérique est aussi une bonne manière de les anticiper et de les limiter. Pour cela, il existe des méthodes scientifiques comme l’<strong>ACV conséquentielle</strong>. C’est une <strong>méthode de mesure </strong>normée qui prend en compte les <strong>effets directs et indirects </strong>sur l’environnement, sur plusieurs <strong>critères </strong>environnementaux et pour l’ensemble du <strong>cycle de vie</strong>.</p>"
+                    }
+                  ]
+                },
+                {
+                  "elements": [
+                    {
+                      "id": "33156355-4318-4504-8db1-2e6645d4e23a",
+                      "type": "text",
+                      "tag": " ",
+                      "content": "<h5><strong>Est-ce qu’il est possible de réduire les effets négatifs du numérique ?</strong></h5><p>Oui ! Adopter collectivement une démarche de sobriété, c’est-à-dire<strong> réduire autant que possible les usages du numérique</strong>, est la seule façon fiable de réduire les effets directs et indirects du numérique.</p>"
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "b617e866-f300-4923-af8e-81d867d140e6",
+      "type": "retain-the-essentials",
+      "grains": [
+        {
+          "id": "bbc2a366-7249-4a61-bf14-909238a936d5",
+          "type": "summary",
+          "title": "",
+          "components": [
+            {
+              "type": "element",
+              "element": {
+                "id": "8f7d6c5f-a651-4800-82ff-1f5943d291f8",
+                "type": "text",
+                "tag": " ",
+                "content": "<ul>\n    <li>🤨Le numérique a des effets directs sur l’environnement, mais aussi des <strong>effets indirects</strong> provoqués par l’usage du numérique dans la société. Ces effets indirects peuvent être positifs ou négatifs pour l’environnement. </li>\n    <li>🏀L’amélioration d’une technologie amène parfois une <strong>augmentation de son usage</strong>, ce qui peut annuler les bénéfices pour l’environnement. C’est l’<strong>effet rebond</strong>. </li>\n    <li> 🌼Certains industriels communiquent uniquement sur les effets positifs de leurs produits pour se donner une bonne image&nbsp;: c’est du <strong>greenwashing</strong>. </li>\n    <li> 🔎Il faut donc garder un <strong>regard critique</strong> sur les technologies et leurs améliorations, et s’appuyer sur des <strong>études scientifiques qui prennent en compte les effets indirects</strong> pour pouvoir les limiter. </li>\n    <li> ↘️Adopter une démarche de <strong>sobriété</strong>, en réduisant les usages du numérique, permet de réduire efficacement les effets négatifs sur l’environnement. </li>\n</ul>"
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "623c0ab4-6f76-424b-be31-6acebb00945a",
+      "type": "practise",
+      "grains": [
+        {
+          "id": "58a019da-82a5-437b-a752-effdcd0f8929",
+          "type": "transition",
+          "title": "Voyons si vous avez retenu l'essentiel.",
+          "components": [
+            {
+              "type": "element",
+              "element": {
+                "id": "a56c113f-5ea3-4895-bd93-9fefca9ebe42",
+                "type": "text",
+                "tag": " ",
+                "content": "<p>Voyons si vous avez retenu l'essentiel.</p>"
+              }
+            }
+          ]
+        },
+        {
+          "id": "bbd3fe05-01ea-481d-9dff-01f020c9cada",
+          "type": "activity",
+          "title": "Activité 1 :  Identifier les effets environnementaux indirects du numérique",
+          "components": [
+            {
+              "type": "element",
+              "element": {
+                "id": "3372b912-338d-4b7f-a88d-8e81c01b686d",
+                "type": "qab",
+                "instruction": "<p>Pour chacune des propositions suivantes, choisissez s’il s’agit d’un effet direct ou indirect du numérique.</p>",
+                "cards": [
+                  {
+                    "id": "5c72ec41-1f17-40e0-ad63-4bf867fbe896",
+                    "text": "\"La fabrication des équipements numériques nécessite l’extraction intensive de métaux rares",
+                    "image": {
+                      "url": "",
+                      "altText": ""
+                    },
+                    "proposalA": "Effet direct",
+                    "proposalB": "Effet indirect",
+                    "solution": "A"
+                  },
+                  {
+                    "id": "346880e1-e3ee-4385-abca-4acf92635e2e",
+                    "text": "Les infrastructures numériques génèrent des émissions de gaz à effet de serre.",
+                    "image": {
+                      "url": "",
+                      "altText": ""
+                    },
+                    "proposalA": "Effet direct",
+                    "proposalB": "Effet indirect",
+                    "solution": "A"
+                  },
+                  {
+                    "id": "ae24ed0e-6901-4e27-a814-d6694e65bf81",
+                    "text": "Le commerce en ligne modifie les flux logistiques et les transports.",
+                    "image": {
+                      "url": "",
+                      "altText": ""
+                    },
+                    "proposalA": "Effet direct",
+                    "proposalB": "Effet indirect",
+                    "solution": "B"
+                  }
+                ],
+                "feedback": {
+                  "diagnosis": "Les <strong>effets directs </strong>sur l'environnement sont&nbsp; notamment liés à la fabrication des appareils et leur consommation d'énergie tandis que&nbsp;les <strong>effets indirects</strong> sont produits par des changements de comportements ou d'usage."
+                }
+              }
+            }
+          ]
+        },
+        {
+          "id": "9cabfd8f-5e36-41c2-80bb-ab2ab2a1df31",
+          "type": "activity",
+          "title": " Activité #2 : Comprendre le mécanisme de l’effet rebond et de son évaluation",
+          "components": [
+            {
+              "type": "element",
+              "element": {
+                "id": "88b8d12d-e9e9-43f1-b4ba-9d22a4cd406a",
+                "type": "text",
+                "tag": " ",
+                "content": "<p>Légendez le schéma ci-dessous.</p>"
+              }
+            },
+            {
+              "type": "element",
+              "element": {
+                "id": "41b465c3-68da-4a18-a1d2-88e270656e76",
+                "type": "image",
+                "url": "https://assets.pix.org/draft/modules/NR_Eval_Ava/schema-a-completer.png",
+                "alt": "Schéma à compléter",
+                "alternativeText": "<p>Schéma à compléter</p>",
+                "legend": "Schéma brouillon",
+                "licence": ""
+              }
+            },
+            {
+              "type": "element",
+              "element": {
+                "id": "d00b9b39-c4f3-42b1-86ca-da5696dae024",
+                "type": "qrocm",
+                "instruction": "<p>À quoi correspond chaque point du schéma ?</p>",
+                "proposals": [
+                  {
+                    "type": "text",
+                    "content": "<ul><li>Point n°1 :<br></li></ul>"
+                  },
+                  {
+                    "type": "select",
+                    "input": "point1",
+                    "display": "inline",
+                    "placeholder": "- Sélectionnez -",
+                    "ariaLabel": "- Sélectionnez -",
+                    "tolerances": [],
+                    "options": [
+                      {
+                        "id": "1",
+                        "content": "l’amélioration de l’efficacité"
+                      },
+                      {
+                        "id": "2",
+                        "content": "l’augmentation des usages"
+                      },
+                      {
+                        "id": "3",
+                        "content": "le cycle de vie"
+                      },
+                      {
+                        "id": "4",
+                        "content": "la diminution des usages"
+                      },
+                      {
+                        "id": "5",
+                        "content": "l’effet rebond"
+                      },
+                      {
+                        "id": "6",
+                        "content": "la perte énergétique"
+                      }
+                    ],
+                    "solutions": [
+                      "5"
+                    ]
+                  },
+                  {
+                    "type": "text",
+                    "content": "<br>\n<ul>\n    <li>Point n°2 :<br></li>\n</ul>"
+                  },
+                  {
+                    "type": "select",
+                    "input": "point2",
+                    "display": "inline",
+                    "placeholder": "- Sélectionnez -",
+                    "ariaLabel": "- Sélectionnez -",
+                    "tolerances": [],
+                    "options": [
+                      {
+                        "id": "1",
+                        "content": "l’amélioration de l’efficacité"
+                      },
+                      {
+                        "id": "2",
+                        "content": "l’augmentation des usages"
+                      },
+                      {
+                        "id": "3",
+                        "content": "le cycle de vie"
+                      },
+                      {
+                        "id": "4",
+                        "content": "la diminution des usages"
+                      },
+                      {
+                        "id": "5",
+                        "content": "la diminution des usages"
+                      },
+                      {
+                        "id": "6",
+                        "content": "la perte énergétique"
+                      }
+                    ],
+                    "solutions": [
+                      "1"
+                    ]
+                  },
+                  {
+                    "type": "text",
+                    "content": "<br> <ul>\n    <li>Point n°3 :<br></li>\n</ul>"
+                  },
+                  {
+                    "type": "select",
+                    "input": "point3",
+                    "display": "inline",
+                    "placeholder": "- Sélectionnez -",
+                    "ariaLabel": "- Sélectionnez -",
+                    "tolerances": [],
+                    "options": [
+                      {
+                        "id": "1",
+                        "content": "l’amélioration de l’efficacité"
+                      },
+                      {
+                        "id": "2",
+                        "content": "l’augmentation des usages"
+                      },
+                      {
+                        "id": "3",
+                        "content": "le cycle de vie"
+                      },
+                      {
+                        "id": "4",
+                        "content": "la diminution des usages"
+                      },
+                      {
+                        "id": "5",
+                        "content": "l’effet rebond"
+                      },
+                      {
+                        "id": "6",
+                        "content": "la perte énergétique"
+                      }
+                    ],
+                    "solutions": [
+                      "2"
+                    ]
+                  }
+                ],
+                "feedbacks": {
+                  "valid": {
+                    "state": "<p>Bien vu !<br></p>",
+                    "diagnosis": "<p>L’<strong>effet rebond</strong> a lieu lorsque l’<strong>amélioration de l’efficacité</strong> entraîne paradoxalement une <strong>augmentation des usages,</strong> qui entraîne une hausse de la consommation.</p>"
+                  },
+                  "invalid": {
+                    "state": "<p>Mauvaise réponse.<br></p>",
+                    "diagnosis": "<p>Vous pouvez remonter dans le module pour voir le schéma correspondant.&nbsp;⬆️</p>"
+                  }
+                }
+              }
+            }
+          ]
+        },
+        {
+          "id": "e728bdef-a9dc-46dd-9993-9589bc22e4b7",
+          "type": "activity",
+          "title": "Activité #3 : Éveiller son esprit critique et encourager la sobriété",
+          "components": [
+            {
+              "type": "stepper",
+              "instruction": "",
+              "steps": [
+                {
+                  "elements": [
+                    {
+                      "id": "438714c4-b689-4a91-a823-8a37d37d5323",
+                      "type": "text",
+                      "tag": " ",
+                      "content": "<p>Yann est en télétravail. Grâce à cela, il a réduit ses dépenses d’essence.</p>"
+                    },
+                    {
+                      "id": "e072829e-6be6-45ff-88a2-e7e883b77b56",
+                      "type": "qcu",
+                      "instruction": "<p>Que peut-il faire de l’argent gagné, en limitant l’effet rebond ?</p>",
+                      "hasShortProposals": false,
+                      "proposals": [
+                        {
+                          "id": "1",
+                          "content": "<p>Acheter des lunettes connectées pour prendre des photos de la vie quotidienne.</p>",
+                          "feedback": {
+                            "state": "<p>Mauvaise réponse.</p>",
+                            "diagnosis": "<p>Il s’agit d’un exemple de gain de revenus&nbsp; : on dispose de plus de revenus qu’on consacre à une consommation supplémentaire. Quel achat est le moins consommateur ?</p>"
+                          }
+                        },
+                        {
+                          "id": "2",
+                          "content": "<p>Acheter une plus grande télévision pour les soirées cinéma.</p>",
+                          "feedback": {
+                            "state": "<p>Mauvaise réponse.</p>",
+                            "diagnosis": "<p>Il s’agit d’un exemple de gain de revenus&nbsp; : on dispose de plus de revenus qu’on consacre à une consommation supplémentaire. Quel achat est le moins consommateur ?</p>"
+                          }
+                        },
+                        {
+                          "id": "3",
+                          "content": "<p>Acheter de la mémoire RAM pour augmenter les performances de son PC.</p>",
+                          "feedback": {
+                            "state": "<p>Bonne réponse.<br></p>",
+                            "diagnosis": "<p>Il s’agit d’un exemple de gain de revenus&nbsp; : on dispose de plus de revenus qu’on consacre à une consommation supplémentaire.</p>"
+                          }
+                        }
+                      ],
+                      "solution": "3"
+                    }
+                  ]
+                },
+                {
+                  "elements": [
+                    {
+                      "id": "e4fc49a6-3fe7-43c5-b078-b82e126cb2ca",
+                      "type": "text",
+                      "tag": " ",
+                      "content": "<p>Laure est freelance.&nbsp;Elle a automatisé l’envoi de devis et a gagné du temps grâce au numérique.</p>"
+                    },
+                    {
+                      "id": "a2f0c776-2c25-4e73-bbc8-095f0a1116ae",
+                      "type": "qcu",
+                      "instruction": "<p>Que peut-elle faire du temps gagné, en limitant l’effet rebond ?</p>",
+                      "hasShortProposals": false,
+                      "proposals": [
+                        {
+                          "id": "1",
+                          "content": "<p>Regarder un film en streaming.</p>",
+                          "feedback": {
+                            "state": "<p>Mauvaise réponse.<br></p>",
+                            "diagnosis": "<p>Il s’agit d’un exemple de <strong>gain de temps</strong> : on dispose de plus de temps qu’on consacre à une consommation supplémentaire.&nbsp;</p><p>Quelle activité est la moins consommatrice ?</p>"
+                          }
+                        },
+                        {
+                          "id": "2",
+                          "content": "<p>Faire une balade autour de chez elle.</p>",
+                          "feedback": {
+                            "state": "<p>Bonne réponse.</p>",
+                            "diagnosis": "<p>Il s’agit d’un exemple de gain de temps : on dispose de plus de temps qu’on consacre à une consommation supplémentaire.</p>"
+                          }
+                        },
+                        {
+                          "id": "3",
+                          "content": "<p>Générer une vidéo avec l’IA.</p>",
+                          "feedback": {
+                            "state": "<p>Mauviase réponse.<br></p>",
+                            "diagnosis": "<p>Il s’agit d’un exemple de <strong>gain de temps</strong> : on dispose de plus de temps qu’on consacre à une consommation supplémentaire.&nbsp;</p><p>Quelle activité est la moins consommatrice ?</p>"
+                          }
+                        }
+                      ],
+                      "solution": "2"
+                    }
+                  ]
+                },
+                {
+                  "elements": [
+                    {
+                      "id": "e343bc92-4dcf-496e-bbd1-0888e1720179",
+                      "type": "text",
+                      "tag": " ",
+                      "content": "<p>La banque Banquix a fermé plusieurs agences car les gens gèrent maintenant leurs comptes en ligne. Elle a revendu les locaux de ces agences.</p>"
+                    },
+                    {
+                      "id": "c605d337-e249-43eb-9b3f-f68d100396f6",
+                      "type": "qcu",
+                      "instruction": "<p>Que peut faire la banque Banquix de cette économie, en évitant l’effet rebond ?&nbsp;<br></p>",
+                      "hasShortProposals": false,
+                      "proposals": [
+                        {
+                          "id": "1",
+                          "content": "<p>Offrir à ses employés un week-end en avion à New-York.</p>",
+                          "feedback": {
+                            "state": "Mauvaise réponse.<br><p></p>",
+                            "diagnosis": "p&gt;Il s’agit d’un exemple de<strong> gain</strong> <strong>de revenus,</strong> à l'échelle d'une entreprise. <p></p><p>Quelle action est le moins consommatrice de resssources ?</p>"
+                          }
+                        },
+                        {
+                          "id": "2",
+                          "content": "<p>Offrir à ses meilleurs clients une montre connectée.</p>",
+                          "feedback": {
+                            "state": "<p>Mauvaise réponse.<br></p>",
+                            "diagnosis": "<p>Il s’agit d’un exemple de <strong>gain de revenus</strong>, à l'échelle d'une entreprise.  Quelle action est le moins consommatrice de resssources ?</p>"
+                          }
+                        },
+                        {
+                          "id": "3",
+                          "content": "Offrir une réduction sur les frais bancaires de ses clients.",
+                          "feedback": {
+                            "state": "<p>Bonne réponse !<br></p>",
+                            "diagnosis": "Il s’agit d’un exemple de <strong>gain de revenus</strong>, à l'échelle d'une entreprise."
+                          }
+                        }
+                      ],
+                      "solution": "3"
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "8c7f04d9-7b2b-4c3f-ba50-297536192ab7",
+      "type": "go-further",
+      "grains": [
+        {
+          "id": "edfb4225-2c6f-448c-a689-81cba44cfbb0",
+          "type": "challenge",
+          "title": "L'analyse conséquentielle de l'Ademe sur le télétravail",
+          "components": [
+            {
+              "type": "element",
+              "element": {
+                "id": "89825fe0-aff8-43c4-9ad0-4d433810ed96",
+                "type": "text",
+                "tag": " ",
+                "content": "<p>Cette <a href=\"\\&quot;https://librairie.ademe.fr/economie-circulaire-et-dechets/7785-evaluation-environnementale-des-effets-directs-et-indirects-du-numerique-pour-des-cas-d-usage.html\\&quot;\" target=\"\\&quot;_blank\\&quot;\">étude de l’ADEME</a>, datant de 2025, a analysé la numérisation de plusieurs cas d’usage, afin d’étudier leurs effets directs et indirects.</p>"
+              }
+            },
+            {
+              "type": "element",
+              "element": {
+                "id": "c482307d-6b24-458a-92a0-b6cd8f95d51e",
+                "type": "qcm",
+                "instruction": "Dans cette étude, quels effets ont été <strong>quantifiés </strong>pour le <strong>télétravail </strong>?<br><p></p>",
+                "hasShortProposals": false,
+                "proposals": [
+                  {
+                    "id": "1",
+                    "content": "<p>L’évolution de la distance parcourus pour les trajets domicile- travail.</p>"
+                  },
+                  {
+                    "id": "2",
+                    "content": "<p>Les problèmes de santé physique et mentale.</p>"
+                  },
+                  {
+                    "id": "3",
+                    "content": "<p>La réduction des besoins en espaces de travail.</p>"
+                  },
+                  {
+                    "id": "4",
+                    "content": "<p>La réaffectation des économies réalisées par les employeurs.</p>"
+                  },
+                  {
+                    "id": "5",
+                    "content": "<p>La relocalisation potentielle du domicile des travailleurs.</p>"
+                  }
+                ],
+                "feedbacks": {
+                  "valid": {
+                    "state": "<p>Bonne réponse !</p>",
+                    "diagnosis": "<p>Effectivement, ces impacts ont bien été identifiés mais n'ont pas été quantifiés dans cette étude. Ils pourraient l'être dans d'autres études.</p>"
+                  },
+                  "invalid": {
+                    "state": "<p>Mauvaise réponse.<br></p>",
+                    "diagnosis": "<p>Avez-vous trouvé dans l'étude, disponible en pdf à télécharger, la section consacrée au télétravail ?</p>"
+                  }
+                },
+                "solutions": [
+                  "1",
+                  "3"
+                ]
+              }
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "glossary": []
+}

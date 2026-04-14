@@ -196,120 +196,100 @@ describe('Unit | Certification | Evaluation | Domain | Services | Scoring V3', f
     });
 
     context('when scoring a Pix + scoped certification', function () {
-      context('when Pix + is EDU', function () {
-        it('should return an AssessmentResult without pixScore', function () {
-          // given
-          const assessmentId = 1214;
-          const certificationCourseId = 1234;
+      it('should return an AssessmentResult without pixScore', function () {
+        // given
+        const assessmentId = 1214;
+        const certificationCourseId = 1234;
 
-          const candidate = domainBuilder.certification.evaluation.buildCandidate({
-            subscriptionScope: SCOPES.PIX_PLUS_EDU_1ER_DEGRE,
-            hasCleaSubscription: false,
-            reconciledAt: new Date('2021-01-01'),
-          });
-          const assessmentSheet = domainBuilder.certification.evaluation.buildAssessmentSheet({
-            assessmentId,
-            certificationCourseId,
-          });
-
-          const event = new CertificationCompletedJob({
-            certificationCourseId,
-          });
-
-          const v3CertificationScoring = domainBuilder.buildV3CertificationScoring();
-          const challenges = generateChallengeList({
-            length: maximumAssessmentLength,
-          });
-          const { answers } = _buildDataFromAnsweredChallenges(challenges);
-
-          assessmentSheet.answers = answers;
-
-          // when
-          const score = handleV3CertificationScoring({
-            event,
-            assessmentSheet,
-            candidate,
-            allChallenges: challenges,
-            askedChallengesWithoutLiveAlerts: challenges,
-            algorithm,
-            v3CertificationScoring,
-            cleaScoringCriteria: null,
-            scoringDegradationService,
-          });
-
-          // then
-          expect(score.coreAssessmentResult).to.be.instanceOf(AssessmentResult);
-          expect(score.coreAssessmentResult.competenceMarks).to.have.lengthOf(0);
-          expect(score.coreAssessmentResult.pixScore).to.be.null;
-          expect(score.doubleCertificationScoring).to.be.null;
+        const candidate = domainBuilder.certification.evaluation.buildCandidate({
+          subscriptionScope: SCOPES.PIX_PLUS_PRO_SANTE,
+          hasCleaSubscription: false,
+          reconciledAt: new Date('2021-01-01'),
+        });
+        const assessmentSheet = domainBuilder.certification.evaluation.buildAssessmentSheet({
+          assessmentId,
+          certificationCourseId,
         });
 
-        it('should return a REJECTED AssessmentResult when capacity is not included in any mesh', function () {
-          // given
-          const assessmentId = 1214;
-          const certificationCourseId = 1234;
-
-          const candidate = domainBuilder.certification.evaluation.buildCandidate({
-            subscriptionScope: SCOPES.PIX_PLUS_EDU_1ER_DEGRE,
-            hasCleaSubscription: false,
-            reconciledAt: new Date('2021-01-01'),
-          });
-          const assessmentSheet = domainBuilder.certification.evaluation.buildAssessmentSheet({
-            assessmentId,
-            certificationCourseId,
-          });
-
-          const event = new CertificationCompletedJob({
-            certificationCourseId,
-          });
-
-          const v3CertificationScoring = domainBuilder.buildV3CertificationScoring({
-            certificationScoringConfiguration: [
-              { bounds: { max: 20, min: 10 }, meshLevel: 0 },
-              { bounds: { max: 30, min: 20 }, meshLevel: 1 },
-            ],
-          });
-          const challenges = generateChallengeList({
-            length: maximumAssessmentLength,
-          });
-          const { answers } = _buildDataFromAnsweredChallenges(challenges);
-
-          assessmentSheet.answers = answers;
-
-          // when
-          const score = handleV3CertificationScoring({
-            event,
-            assessmentSheet,
-            candidate,
-            allChallenges: challenges,
-            askedChallengesWithoutLiveAlerts: challenges,
-            algorithm,
-            v3CertificationScoring,
-            cleaScoringCriteria: null,
-            scoringDegradationService,
-          });
-
-          // then
-          expect(score.coreAssessmentResult.status).to.equal(AssessmentResult.status.REJECTED);
+        const event = new CertificationCompletedJob({
+          certificationCourseId,
         });
+
+        const v3CertificationScoring = domainBuilder.buildV3CertificationScoring();
+        const challenges = generateChallengeList({
+          length: maximumAssessmentLength,
+        });
+        const { answers } = _buildDataFromAnsweredChallenges(challenges);
+
+        assessmentSheet.answers = answers;
+
+        // when
+        const score = handleV3CertificationScoring({
+          event,
+          assessmentSheet,
+          candidate,
+          allChallenges: challenges,
+          askedChallengesWithoutLiveAlerts: challenges,
+          algorithm,
+          v3CertificationScoring,
+          cleaScoringCriteria: null,
+          scoringDegradationService,
+        });
+
+        // then
+        expect(score.coreAssessmentResult).to.be.instanceOf(AssessmentResult);
+        expect(score.coreAssessmentResult.competenceMarks).to.have.lengthOf(0);
+        expect(score.coreAssessmentResult.pixScore).to.be.null;
+        expect(score.doubleCertificationScoring).to.be.null;
       });
 
-      context('when Pix + is not EDU', function () {
-        it('should return undefined because no scoring occurred', function () {
-          const candidate = domainBuilder.certification.evaluation.buildCandidate({
-            subscriptionScope: SCOPES.PIX_PLUS_DROIT,
-            hasCleaSubscription: false,
-          });
+      it('should return a REJECTED AssessmentResult when capacity is not included in any mesh', function () {
+        // given
+        const assessmentId = 1214;
+        const certificationCourseId = 1234;
 
-          const hasScored = handleV3CertificationScoring({
-            candidate,
-          });
-
-          expect(hasScored).to.deep.equal({
-            coreAssessmentResult: null,
-            doubleCertificationScoring: null,
-          });
+        const candidate = domainBuilder.certification.evaluation.buildCandidate({
+          subscriptionScope: SCOPES.PIX_PLUS_EDU_1ER_DEGRE,
+          hasCleaSubscription: false,
+          reconciledAt: new Date('2021-01-01'),
         });
+        const assessmentSheet = domainBuilder.certification.evaluation.buildAssessmentSheet({
+          assessmentId,
+          certificationCourseId,
+        });
+
+        const event = new CertificationCompletedJob({
+          certificationCourseId,
+        });
+
+        const v3CertificationScoring = domainBuilder.buildV3CertificationScoring({
+          certificationScoringConfiguration: [
+            { bounds: { max: 20, min: 10 }, meshLevel: 0 },
+            { bounds: { max: 30, min: 20 }, meshLevel: 1 },
+          ],
+        });
+        const challenges = generateChallengeList({
+          length: maximumAssessmentLength,
+        });
+        const { answers } = _buildDataFromAnsweredChallenges(challenges);
+
+        assessmentSheet.answers = answers;
+
+        // when
+        const score = handleV3CertificationScoring({
+          event,
+          assessmentSheet,
+          candidate,
+          allChallenges: challenges,
+          askedChallengesWithoutLiveAlerts: challenges,
+          algorithm,
+          v3CertificationScoring,
+          cleaScoringCriteria: null,
+          scoringDegradationService,
+        });
+
+        // then
+        expect(score.coreAssessmentResult.status).to.equal(AssessmentResult.status.REJECTED);
       });
     });
   });

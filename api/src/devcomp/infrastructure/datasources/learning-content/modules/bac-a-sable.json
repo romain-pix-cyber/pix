@@ -26,15 +26,6 @@
             {
               "type": "element",
               "element": {
-                "id": "ffc22686-e788-415b-a456-a5a691687b2c",
-                "type": "text",
-                "tag": "key-points",
-                "content": "<p>Ceci&nbsp;est un contenu avec le tag \"Points clés\".</p>"
-              }
-            },
-            {
-              "type": "element",
-              "element": {
                 "id": "d5e369ec-2a5e-4692-ac46-5be5a49f2acd",
                 "type": "text",
                 "tag": "context",

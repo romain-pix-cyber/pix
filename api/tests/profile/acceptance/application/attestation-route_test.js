@@ -3,7 +3,6 @@ import {
   databaseBuilder,
   expect,
   generateAuthenticatedUserRequestHeaders,
-  insertUserWithRoleSuperAdmin,
   mockAttestationStorage,
 } from '../../../test-helper.js';
 
@@ -17,14 +16,14 @@ describe('Profile | Acceptance | Application | Attestation Route ', function () 
   describe('GET /api/admin/attestations', function () {
     it('should return 200 with the list of attestations', async function () {
       // given
-      const adminUser = await insertUserWithRoleSuperAdmin();
+      const superAdmin = databaseBuilder.factory.buildUser.withRoleSuperAdmin();
       databaseBuilder.factory.buildAttestation({ key: 'PARENTHOOD' });
       databaseBuilder.factory.buildAttestation({ key: 'SIXTH_GRADE' });
       await databaseBuilder.commit();
 
       const options = {
         method: 'GET',
-        headers: generateAuthenticatedUserRequestHeaders({ userId: adminUser.id }),
+        headers: generateAuthenticatedUserRequestHeaders({ userId: superAdmin.id }),
         url: '/api/admin/attestations',
       };
 

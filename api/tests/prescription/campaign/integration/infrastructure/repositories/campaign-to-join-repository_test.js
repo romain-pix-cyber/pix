@@ -28,12 +28,23 @@ describe('Integration | Repository | CampaignToJoin', function () {
         organizationId: organization.id,
         targetProfileId: targetProfile.id,
       });
-      const featureId = databaseBuilder.factory.buildFeature(CAMPAIGN_FEATURES.EXTERNAL_ID).id;
+
+      const featureExternalId = databaseBuilder.factory.buildFeature(CAMPAIGN_FEATURES.EXTERNAL_ID).id;
       databaseBuilder.factory.buildCampaignFeature({
         campaignId: expectedCampaign.id,
-        featureId,
+        featureId: featureExternalId,
         params: { label: 'Id Ex', type: CampaignExternalIdTypes.STRING },
       });
+
+      const featureRecommendationEngineId = databaseBuilder.factory.buildFeature(
+        CAMPAIGN_FEATURES.RECOMMENDATION_ENGINE,
+      ).id;
+      databaseBuilder.factory.buildCampaignFeature({
+        campaignId: expectedCampaign.id,
+        featureId: featureRecommendationEngineId,
+        params: {},
+      });
+
       databaseBuilder.factory.buildCampaign();
       await databaseBuilder.commit();
 
@@ -51,6 +62,7 @@ describe('Integration | Repository | CampaignToJoin', function () {
       expect(actualCampaign.alternativeTextToExternalIdHelpImage).to.equal(
         expectedCampaign.alternativeTextToExternalIdHelpImage,
       );
+      expect(actualCampaign.recommendationEngine).to.be.true;
       expect(actualCampaign.archivedAt).to.equal(expectedCampaign.archivedAt);
       expect(actualCampaign.type).to.equal(expectedCampaign.type);
       expect(actualCampaign.organizationId).to.equal(organization.id);
@@ -64,6 +76,32 @@ describe('Integration | Repository | CampaignToJoin', function () {
       expect(actualCampaign.targetProfileImageUrl).to.equal(targetProfile.imageUrl);
       expect(actualCampaign.isSimplifiedAccess).to.equal(targetProfile.isSimplifiedAccess);
       expect(actualCampaign.identityProvider).to.equal(OidcIdentityProviders.POLE_EMPLOI.code);
+    });
+
+    it('should return true for recommendationEngine when campaign has RECOMMENDATION_ENGINE feature', async function () {
+      // given
+      const { code, id: campaignId } = databaseBuilder.factory.buildCampaign();
+      const featureId = databaseBuilder.factory.buildFeature(CAMPAIGN_FEATURES.RECOMMENDATION_ENGINE).id;
+      databaseBuilder.factory.buildCampaignFeature({ campaignId, featureId });
+      await databaseBuilder.commit();
+
+      // when
+      const actualCampaign = await campaignToJoinRepository.getByCode({ code, organizationFeatureAPI });
+
+      // then
+      expect(actualCampaign.recommendationEngine).to.be.true;
+    });
+
+    it('should return false for recommendationEngine when campaign has no RECOMMENDATION_ENGINE feature', async function () {
+      // given
+      const { code } = databaseBuilder.factory.buildCampaign();
+      await databaseBuilder.commit();
+
+      // when
+      const actualCampaign = await campaignToJoinRepository.getByCode({ code, organizationFeatureAPI });
+
+      // then
+      expect(actualCampaign.recommendationEngine).to.be.false;
     });
 
     it('should return restricted access if organization has learner import feature', async function () {

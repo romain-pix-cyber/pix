@@ -18,7 +18,6 @@ import {
   databaseBuilder,
   expect,
   generateAuthenticatedUserRequestHeaders,
-  insertUserWithRoleSuperAdmin,
   learningContentBuilder,
   mockLearningContent,
 } from '../../../../test-helper.js';
@@ -851,7 +850,7 @@ describe('Certification | Results | Acceptance | Application | Certification', f
     context('when the session version is V2', function () {
       it('should return 200 HTTP status code and the certification', async function () {
         // given
-        const superAdmin = await insertUserWithRoleSuperAdmin();
+        const superAdmin = databaseBuilder.factory.buildUser.withRoleSuperAdmin();
         const { session } = await _buildDatabaseForV2Certification({ userId: superAdmin.id });
         await databaseBuilder.commit();
 
@@ -877,8 +876,8 @@ describe('Certification | Results | Acceptance | Application | Certification', f
     context('when the session version is V3', function () {
       it('should return 200 HTTP status code and the certification', async function () {
         // given
-        const superAdmin = await insertUserWithRoleSuperAdmin();
-        const { session, userId } = await _buildDatabaseForV2Certification({ userId: superAdmin.id });
+        const superAdmin = databaseBuilder.factory.buildUser.withRoleSuperAdmin();
+        const { session } = await _buildDatabaseForV2Certification({ userId: superAdmin.id });
         await databaseBuilder.commit();
 
         const server = await createServer();
@@ -887,7 +886,7 @@ describe('Certification | Results | Acceptance | Application | Certification', f
         const response = await server.inject({
           method: 'GET',
           url: `/api/admin/sessions/${session.id}/attestations`,
-          headers: generateAuthenticatedUserRequestHeaders({ userId }),
+          headers: generateAuthenticatedUserRequestHeaders({ userId: superAdmin.id }),
         });
 
         // then

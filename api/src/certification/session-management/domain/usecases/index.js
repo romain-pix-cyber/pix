@@ -178,6 +178,7 @@ import { uncancel } from './uncancel.js';
 import { unfinalizeSession } from './unfinalize-session.js';
 import { unpublishSession } from './unpublish-session.js';
 import { unrejectCertificationCourse } from './unreject-certification-course.js';
+import { updateEduV3ExternalJuryResult } from './update-edu-v3-external-jury-result.js';
 import { updateJuryComment } from './update-jury-comment.js';
 import { uploadCpfFiles } from './upload-cpf-files.js';
 import { validateLiveAlert } from './validate-live-alert.js';
@@ -225,6 +226,7 @@ const usecasesWithoutInjectedDependencies = {
   updateJuryComment,
   uploadCpfFiles,
   validateLiveAlert,
+  updateEduV3ExternalJuryResult,
 };
 
 const usecases = injectDependencies(usecasesWithoutInjectedDependencies, dependencies);

@@ -5,7 +5,7 @@ import {
   expect,
   generateAuthenticatedUserRequestHeaders,
   mockLearningContent,
-  parseJsonStream,
+  parseNDJSON,
 } from '../../../test-helper.js';
 
 const {
@@ -207,7 +207,7 @@ describe('Acceptance | Controller | scenario-simulator-controller', function () 
 
       // then
       expect(response).to.have.property('statusCode', 200);
-      const parsedResponse = parseJsonStream(response);
+      const parsedResponse = parseNDJSON(response.result);
       expect(parsedResponse[0].simulationReport).to.have.lengthOf(2);
       expect(parsedResponse[0].simulationReport[0].challengeId).to.exist;
       expect(parsedResponse[0].simulationReport[0].capacity).to.exist;
@@ -233,7 +233,7 @@ describe('Acceptance | Controller | scenario-simulator-controller', function () 
 
         // then
         expect(response).to.have.property('statusCode', 200);
-        const parsedResponse = parseJsonStream(response);
+        const parsedResponse = parseNDJSON(response.result);
         expect(parsedResponse[0].simulationReport).to.have.lengthOf(1);
       });
     });
@@ -252,7 +252,7 @@ describe('Acceptance | Controller | scenario-simulator-controller', function () 
 
         // then
         expect(response).to.have.property('statusCode', 200);
-        const parsedResponse = parseJsonStream(response);
+        const parsedResponse = parseNDJSON(response.result);
         expect(parsedResponse[0].simulationReport).to.have.lengthOf(2);
         expect(['challenge3', 'challenge4', 'challenge5', 'challenge6']).to.include(
           parsedResponse[0].simulationReport[0].challengeId,

@@ -103,14 +103,6 @@ class Assessment {
     return this.state === Assessment.states.STARTED;
   }
 
-  isEndedByInvigilator() {
-    return this.state === Assessment.states.ENDED_BY_INVIGILATOR;
-  }
-
-  hasBeenEndedDueToFinalization() {
-    return this.state === Assessment.states.ENDED_DUE_TO_FINALIZATION;
-  }
-
   setCompleted() {
     this.state = Assessment.states.COMPLETED;
   }

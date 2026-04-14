@@ -5,6 +5,19 @@ import { oidcProviderAdminController } from './oidc-provider.admin.controller.js
 
 export const oidcProviderAdminRoutes = [
   {
+    method: 'GET',
+    path: '/api/admin/oidc-providers/import/template',
+    config: {
+      pre: [{ method: (request, h) => securityPreHandlers.checkAdminMemberHasRoleSuperAdmin(request, h) }],
+      handler: (request, h) => oidcProviderAdminController.getImportTemplate(request, h),
+      tags: ['identity-access-management', 'api', 'admin', 'oidc', 'import'],
+      notes: [
+        "- **Cette route est restreinte aux utilisateurs authentifiés ayant un rôle SUPER_ADMIN permettant un accès à l'application d'administration de Pix**\n" +
+          '- Elle permet de télécharger un template pour importer une liste de fournisseurs d’identité',
+      ],
+    },
+  },
+  {
     method: 'POST',
     path: '/api/admin/oidc-providers/import',
     config: {

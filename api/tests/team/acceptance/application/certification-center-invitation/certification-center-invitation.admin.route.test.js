@@ -4,7 +4,6 @@ import {
   databaseBuilder,
   expect,
   generateAuthenticatedUserRequestHeaders,
-  insertUserWithRoleSuperAdmin,
   sinon,
 } from '../../../../test-helper.js';
 
@@ -18,8 +17,7 @@ describe('Acceptance | Team | Application | Route | Admin | Certification Center
   describe('GET /api/admin/certification-centers/{certificationCenterId}/invitations', function () {
     it('should return 200 HTTP status code and the list of invitations', async function () {
       // given
-      const adminUser = await insertUserWithRoleSuperAdmin();
-
+      const superAdmin = databaseBuilder.factory.buildUser.withRoleSuperAdmin();
       const certificationCenterId = databaseBuilder.factory.buildCertificationCenter().id;
       const now = new Date();
       const certificationCenterInvitation1 = databaseBuilder.factory.buildCertificationCenterInvitation({
@@ -46,7 +44,7 @@ describe('Acceptance | Team | Application | Route | Admin | Certification Center
       const response = await server.inject({
         method: 'GET',
         url: `/api/admin/certification-centers/${certificationCenterId}/invitations`,
-        headers: generateAuthenticatedUserRequestHeaders({ userId: adminUser.id }),
+        headers: generateAuthenticatedUserRequestHeaders({ userId: superAdmin.id }),
       });
 
       // then
@@ -94,13 +92,13 @@ describe('Acceptance | Team | Application | Route | Admin | Certification Center
 
     it('returns 201 HTTP status code with created invitation', async function () {
       // given
-      const adminMember = await insertUserWithRoleSuperAdmin();
+      const superAdmin = databaseBuilder.factory.buildUser.withRoleSuperAdmin();
       const certificationCenterId = databaseBuilder.factory.buildCertificationCenter().id;
       await databaseBuilder.commit();
 
       // when
       const { result, statusCode } = await server.inject({
-        headers: generateAuthenticatedUserRequestHeaders({ userId: adminMember.id }),
+        headers: generateAuthenticatedUserRequestHeaders({ userId: superAdmin.id }),
         method: 'POST',
         payload: {
           data: {
@@ -130,7 +128,7 @@ describe('Acceptance | Team | Application | Route | Admin | Certification Center
   describe('DELETE /api/admin/certification-centers/{id}/invitations/{certificationCenterInvitationId}', function () {
     it('should return 204 HTTP status code', async function () {
       // given
-      const adminMember = await insertUserWithRoleSuperAdmin();
+      const superAdmin = databaseBuilder.factory.buildUser.withRoleSuperAdmin();
       const certificationCenterInvitation = databaseBuilder.factory.buildCertificationCenterInvitation({
         certificationCenterId: databaseBuilder.factory.buildCertificationCenter().id,
         status: CertificationCenterInvitation.StatusType.PENDING,
@@ -142,7 +140,7 @@ describe('Acceptance | Team | Application | Route | Admin | Certification Center
       const response = await server.inject({
         method: 'DELETE',
         url: `/api/admin/certification-center-invitations/${certificationCenterInvitation.id}`,
-        headers: generateAuthenticatedUserRequestHeaders({ userId: adminMember.id }),
+        headers: generateAuthenticatedUserRequestHeaders({ userId: superAdmin.id }),
       });
 
       // then

@@ -1,6 +1,6 @@
 {
   "name": "pix-admin",
-  "version": "5.379.0",
+  "version": "5.386.0",
   "private": false,
   "description": "Interface d'administration pour les membres de Pix.",
   "license": "AGPL-3.0",
@@ -44,7 +44,7 @@
   "devDependencies": {
     "@1024pix/ember-testing-library": "^3.0.27",
     "@1024pix/eslint-plugin": "^2.1.19",
-    "@1024pix/pix-ui": "^60.2.0",
+    "@1024pix/pix-ui": "^60.4.1",
     "@1024pix/stylelint-config": "^5.1.37",
     "@babel/eslint-parser": "^7.28.5",
     "@ember-intl/v1-compat": "^1.0.0",
@@ -75,7 +75,7 @@
     "ember-qunit": "^9.0.4",
     "ember-resolver": "^13.1.1",
     "ember-simple-auth": "^8.2.0",
-    "ember-source": "~6.11.0",
+    "ember-source": "~6.12.0",
     "ember-template-imports": "^4.3.0",
     "ember-template-lint": "^7.9.3",
     "ember-template-lint-plugin-prettier": "^5.0.0",
@@ -111,6 +111,9 @@
     "tracked-built-ins": "^4.0.0",
     "webpack": "^5.103.0",
     "xss": "^1.0.15"
+  },
+  "overrides": {
+    "handlebars": ">=4.7.9"
   },
   "exports": {
     "./tests/*": "./tests/*",

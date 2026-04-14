@@ -4,6 +4,7 @@ import {
   databaseBuilder,
   expect,
   generateAuthenticatedUserRequestHeaders,
+  generateInjectOptions,
   knex,
   learningContentBuilder,
   mockLearningContent,
@@ -41,19 +42,21 @@ const learningContent = [
               {
                 id: skillWeb2Id,
                 nom: '@web2',
-                challenges: [{ id: firstChallengeId, alpha: 2.8, delta: 1.1, langues: ['Franco Français'] }],
+                challenges: [{ id: firstChallengeId, langues: ['Franco Français'] }],
               },
               {
                 id: skillWeb3Id,
                 nom: '@web3',
-                challenges: [{ id: secondChallengeId, langues: ['Franco Français'], alpha: -1.2, delta: 3.3 }],
+                challenges: [{ id: secondChallengeId, langues: ['Franco Français'] }],
               },
               {
                 id: skillWeb1Id,
                 nom: '@web1',
                 challenges: [
-                  { id: thirdChallengeId, alpha: -0.2, delta: 2.7, langues: ['Franco Français'] },
-                  { id: otherChallengeId, alpha: -0.2, delta: -0.4, langues: ['Franco Français'] },
+                  { id: thirdChallengeId, langues: ['Franco Français'] },
+                  { id: otherChallengeId, langues: ['Franco Français'] },
+                  { id: 'germanATChallengeId', statut: 'archivé', langues: ['Germano Autrichien'] },
+                  { id: 'germanChallengeId_web1', langues: ['Allemand'] },
                 ],
               },
             ],
@@ -131,11 +134,35 @@ describe('Acceptance | API | assessment-controller-get-next-challenge-for-campai
         expect(assessmentsInDb.lastQuestionDate).to.deep.equal(lastQuestionDate);
         expect(response.result.data.id).to.equal(assessmentId.toString());
         expect(response.result.data.relationships['next-challenge'].data.id).to.be.oneOf([
-          firstChallengeId,
-          secondChallengeId,
           thirdChallengeId,
           otherChallengeId,
         ]);
+      });
+
+      context('When user locale is de-AT', function () {
+        it('should return german validated challenge', async function () {
+          // given
+          const options = generateInjectOptions({
+            url: `/api/assessments/${assessmentId}`,
+            method: 'GET',
+            locale: 'de-AT',
+            audience: ' https://app.pix.org',
+            authorizationData: { userId: userId },
+            // headers: generateAuthenticatedUserRequestHeaders({ userId }),
+          });
+
+          const lastQuestionDate = new Date();
+
+          // when
+          const response = await server.inject(options);
+
+          // then
+
+          const assessmentsInDb = await knex('assessments').where('id', assessmentId).first('lastQuestionDate');
+          expect(assessmentsInDb.lastQuestionDate).to.deep.equal(lastQuestionDate);
+          expect(response.result.data.id).to.equal(assessmentId.toString());
+          expect(response.result.data.relationships['next-challenge'].data.id).to.be.equal('germanChallengeId_web1');
+        });
       });
     });
   });

@@ -6,7 +6,6 @@ import {
   databaseBuilder,
   expect,
   generateAuthenticatedUserRequestHeaders,
-  insertUserWithRoleSuperAdmin,
 } from '../../../../test-helper.js';
 
 describe('Certification | Session Management | Acceptance | Application | Routes | jury-certification', function () {
@@ -115,12 +114,12 @@ describe('Certification | Session Management | Acceptance | Application | Routes
         competenceId: 'recComp25',
         assessmentResultId: 456,
       });
-      const user = await insertUserWithRoleSuperAdmin();
+      const superAdmin = databaseBuilder.factory.buildUser.withRoleSuperAdmin();
       await databaseBuilder.commit();
       const options = {
         method: 'GET',
         url: '/api/admin/certifications/123',
-        headers: generateAuthenticatedUserRequestHeaders({ userId: user.id }),
+        headers: generateAuthenticatedUserRequestHeaders({ userId: superAdmin.id }),
       };
 
       // when
@@ -149,7 +148,7 @@ describe('Certification | Session Management | Acceptance | Application | Routes
           'created-at': new Date('2020-01-01'),
           'completed-at': new Date('2020-02-01'),
           'pix-score': 55,
-          'reached-mesh-index': 1,
+          'reached-result-key': 'CLEA.NONE',
           'certification-framework': 'CLEA',
           'jury-id': 66,
           'comment-for-candidate':

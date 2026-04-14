@@ -20,7 +20,7 @@
       "bad-request-error": "The data entered was not in the correct format.",
       "gateway-timeout-error": "The service is being slow. Please try again later.",
       "internal-server-error": "An error occurred, our teams are working on finding a solution. Please try again later.",
-      "login-unauthorized-error": "There was an error in the email address or username/password entered.",
+      "login-unauthorized-error": "The email address or username and/or password you entered are incorrect.",
       "login-user-blocked-error": "Your account has reached the maximum number of failed login attempts and has been temporarily blocked. Please '<'a href=\"{url}\"'>'contact us'</a>' to unblock it.",
       "login-user-temporary-blocked-error": "You have reached too many failed login attempts. Please try again later or '<'a href=\"{url}\"'>'reset your password here'</a>'.",
       "organization-not-found-error": "The organization \"{organizationId}\" does not exist.",
@@ -494,9 +494,30 @@
       "page-title": "Certification Frameworks"
     },
     "certifications": {
-      "external-jury-select-options": {
-        "REJECTED": "Rejected",
-        "UNSET": "Waiting"
+      "edu-results": {
+        "v2": {
+          "external-jury-select-options": {
+            "REJECTED": "Rejected",
+            "UNSET": "Pending"
+          }
+        },
+        "v3": {
+          "admissible": "Admissible",
+          "edit-disabled": "Cannot be edited because the session is not published",
+          "edit-external-jury": "Edit external jury section",
+          "error": "An error occurred",
+          "external-jury": "External jury section",
+          "external-jury-select-options": {
+            "ADVANCED": "Advanced",
+            "EXPERT": "Expert",
+            "UNSET": "Pending"
+          },
+          "internal-jury": "Pix section",
+          "select": "Select a level",
+          "success": "The external jury section result has been saved",
+          "title": "Pix+ Edu certification results",
+          "waiting": "Pending"
+        }
       },
       "global-actions": {
         "cancel": {
@@ -562,6 +583,7 @@
         "targetProfile": "Target profile"
       },
       "labels": {
+        "attestation": "Attestation",
         "created-at": "Date de création",
         "description": " Description",
         "illustration": "Illustration",
@@ -775,30 +797,6 @@
     "organizations": {
       "all-tags": {
         "recently-used-tags": "List of tags recently used with {tagName}"
-      },
-      "children": {
-        "attach-child-form": {
-          "input-information": "ID of organisation(s) to add",
-          "input-label": "Add one or more child organisations",
-          "name": "Add child organisation(s) form"
-        },
-        "create-child-organization-button": "Create a child organization"
-      },
-      "children-list": {
-        "actions": {
-          "detach": {
-            "button": "Detach",
-            "confirm-modal-message": "Are you sure you want to detach Orga ID {organizationId}?",
-            "confirm-modal-title": "Detach an organization"
-          }
-        },
-        "table-headers": {
-          "actions": "Actions",
-          "external-id": "External Identifier",
-          "id": "ID",
-          "name": "Name"
-        },
-        "table-name": "List of children organisations"
       },
       "creation": {
         "actions": {
@@ -1547,41 +1545,21 @@
       "navbar": {
         "aria-label": "Organization section navigation",
         "campaigns": "Campaigns",
-        "children": "Children organisations",
         "details": "Details",
         "features": "Features",
         "invitations": "Invitations",
-        "network": "Network {nbrOfChildren, plural, =1 {({nbrOfChildren} child)} other {({nbrOfChildren} children)}}",
+        "network": "Network {nbrOfChildren, plural, =0 {({nbrOfChildren} child)} =1 {({nbrOfChildren} child)} other {({nbrOfChildren} children)}}",
         "places": "Places",
         "tags": "Tags",
         "target-profiles": "Target profiles",
         "team": "Team"
       }
     },
-    "organization-children": {
-      "empty-table": "No child organisation",
-      "notifications": {
-        "error": {
-          "unable-to-attach-already-attached-child-organization": "Child organization {childOrganizationId} already belonging to a network",
-          "unable-to-attach-child-organization-to-another-child-organization": "Unable to attach the child organization to another child organization",
-          "unable-to-attach-child-organization-to-itself": "Unable to attach organization {childOrganizationId} to itself",
-          "unable-to-attach-to-organization-not-in-network": "Unable to attach an organisation to an organisation without a network",
-          "unable-to-detach-child-organization": "An error occurred while detaching the child organization."
-        },
-        "success": {
-          "attach-child-organization": "{count, plural, =1 {The child organization has been linked to the parent organization} other {The {count} child organizations have been linked to the parent organization}}",
-          "detach-child-organization": "The child organization has been successfully detached."
-        }
-      },
-      "title": "Children organisations"
-    },
     "organization-network": {
       "notifications": {
         "error": {
           "unable-to-attach-already-attached-child-organization": "Child organization {childOrganizationId} already belonging to a network",
-          "unable-to-attach-child-organization-to-another-child-organization": "Unable to attach the child organization to another child organization",
           "unable-to-attach-child-organization-to-itself": "Unable to attach organization {childOrganizationId} to itself",
-          "unable-to-attach-to-organization-not-in-network": "Unable to attach an organisation to an organisation without a network",
           "unable-to-detach-child-organization": "An error occurred while detaching the child organization."
         },
         "success": {
@@ -1841,8 +1819,7 @@
           "editorLogo": "Editor logo url",
           "editorName": "Editor name",
           "internalTitle": "Internal title",
-          "locales": "{ count, plural, one {Localized language} other {Localized languages}}",
-          "localizedLanguage": "Localized language",
+          "locales": "{ count, plural, one {Locale} other {Locales}}",
           "publishedOn": "Published on",
           "status": "Status",
           "status-label": {
@@ -1865,6 +1842,12 @@
         },
         "error-messages": {
           "incorrect-editor-logo-url-format": "The url format of the editor's logo is incorrect."
+        },
+        "form": {
+          "locales": {
+            "label": "Locales",
+            "placeholder": "-- Select one or more locales --"
+          }
         },
         "list": {
           "caption": "Trainings list",

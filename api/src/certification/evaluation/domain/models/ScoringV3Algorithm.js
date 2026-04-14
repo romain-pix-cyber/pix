@@ -7,7 +7,7 @@
  */
 
 import { COMPETENCES_COUNT, PIX_COUNT_BY_LEVEL } from '../../../../shared/domain/constants.js';
-import { MESH_CONFIGURATION } from '../../../shared/domain/constants/mesh-configuration.js';
+import { CORE_MESH_CONFIGURATION } from '../../../shared/domain/constants/mesh-configuration.js';
 import { Intervals } from './Intervals.js';
 
 export class ScoringV3Algorithm {
@@ -74,18 +74,17 @@ export class ScoringV3Algorithm {
 
     const scoringIntervals = new Intervals({ intervals: certificationScoringIntervals });
 
-    if (scoringIntervals.isCapacityBelowMinimum(capacity)) {
-      return 0;
-    }
-
     if (scoringIntervals.isCapacityAboveMaximum(capacity)) {
       return maximumReachableScore;
     }
 
     const intervalIndex = scoringIntervals.findIntervalIndexFromCapacity(capacity);
+    if (intervalIndex === null) {
+      return 0;
+    }
     const intervalMaximum = scoringIntervals.max(intervalIndex);
     const intervalMinimum = scoringIntervals.min(intervalIndex);
-    const meshes = Array.from(MESH_CONFIGURATION.values());
+    const meshes = Array.from(CORE_MESH_CONFIGURATION.values());
     const intervalWeight = meshes[intervalIndex].weight;
     const intervalCoefficient = meshes[intervalIndex].coefficient;
     const progressionPercentage = 1 - (intervalMaximum - capacity) / (intervalMaximum - intervalMinimum);
@@ -102,9 +101,6 @@ export class ScoringV3Algorithm {
   computeReachedMeshIndex({ capacity }) {
     const certificationScoringIntervals = this.v3CertificationScoring.intervals;
     const scoringIntervals = new Intervals({ intervals: certificationScoringIntervals });
-    if (scoringIntervals.isCapacityBelowMinimum(capacity)) {
-      return null;
-    }
     return scoringIntervals.findIntervalIndexFromCapacity(capacity);
   }
 

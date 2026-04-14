@@ -4,7 +4,6 @@ import {
   databaseBuilder,
   expect,
   generateAuthenticatedUserRequestHeaders,
-  insertUserWithRoleSuperAdmin,
   knex,
   learningContentBuilder,
   mockLearningContent,
@@ -194,7 +193,7 @@ describe('Acceptance | API | Autonomous Course', function () {
 
     it('should get a autonomous course with the specific id', async function () {
       // given
-      const superAdmin = await insertUserWithRoleSuperAdmin();
+      const superAdmin = databaseBuilder.factory.buildUser.withRoleSuperAdmin();
       const { id: autonomousCourseId, ...autonomousCourseAttributes } = databaseBuilder.factory.buildCampaign({
         name: 'Nom interne parcours autonome',
         title: 'Nom externe parcours autonome',
@@ -254,7 +253,7 @@ describe('Acceptance | API | Autonomous Course', function () {
 
     it('should update the autonomous course', async function () {
       // given
-      const superAdmin = await insertUserWithRoleSuperAdmin();
+      const superAdmin = databaseBuilder.factory.buildUser.withRoleSuperAdmin();
       const { id: autonomousCourseId } = databaseBuilder.factory.buildCampaign({
         name: 'Nom interne parcours autonome',
         title: 'Nom externe parcours autonome',

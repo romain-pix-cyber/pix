@@ -8,23 +8,32 @@ describe('Integration | Organizational Entities | Domain | UseCase | findChildre
   it('returns a list of children organizations', async function () {
     // given
     const organizationLearnerType = databaseBuilder.factory.buildOrganizationLearnerType();
-    const parentOrganizationId = databaseBuilder.factory.buildOrganization({
-      name: 'name_ok_1',
-      type: 'SCO',
-      externalId: '1234567A',
-      organizationLearnerTypeId: organizationLearnerType.id,
-    }).id;
+    const {
+      organization: parentOrganization,
+      structure: parentStructure,
+      network,
+    } = databaseBuilder.factory.buildNetworkAndHeadOrganization({
+      headOrganization: {
+        name: 'Parent Org',
+        type: 'SCO',
+        externalId: '1234567A',
+        organizationLearnerTypeId: organizationLearnerType.id,
+      },
+    });
 
-    const childOrganization = databaseBuilder.factory.buildOrganization({
-      name: 'First Child',
-      type: 'SCO',
-      parentOrganizationId,
-      organizationLearnerTypeId: organizationLearnerType.id,
+    const { organization: childOrganization } = databaseBuilder.factory.buildOrganizationInNetwork({
+      networkId: network.id,
+      parentStructureId: parentStructure.id,
+      organizationData: {
+        name: 'First Child',
+        type: 'SCO',
+        organizationLearnerTypeId: organizationLearnerType.id,
+      },
     });
 
     await databaseBuilder.commit();
 
-    const expectedChildOrganizations = new OrganizationForAdmin({
+    const expectedChildOrganization = new OrganizationForAdmin({
       ...childOrganization,
       organizationLearnerType: new OrganizationLearnerType({
         id: organizationLearnerType.id,
@@ -34,11 +43,11 @@ describe('Integration | Organizational Entities | Domain | UseCase | findChildre
 
     // when
     const childOrganizations = await usecases.findChildrenOrganizations({
-      parentOrganizationId,
+      parentOrganizationId: parentOrganization.id,
     });
 
     // then
-    expect(childOrganizations).to.deep.include.members([expectedChildOrganizations]);
+    expect(childOrganizations).to.deep.include.members([expectedChildOrganization]);
   });
 
   context('when parent organization does not exist', function () {

@@ -1,3 +1,4 @@
+import { PIX_PLUS_EDU_EXTERNAL_LEVELS } from '../../../../../src/certification/shared/domain/constants/mesh-configuration.js';
 import { AlgorithmEngineVersion } from '../../../../../src/certification/shared/domain/models/AlgorithmEngineVersion.js';
 import { Frameworks } from '../../../../../src/certification/shared/domain/models/Frameworks.js';
 import { Assessment } from '../../../../../src/shared/domain/models/Assessment.js';
@@ -7,7 +8,6 @@ import {
   domainBuilder,
   expect,
   generateAuthenticatedUserRequestHeaders,
-  insertUserWithRoleSuperAdmin,
   knex,
 } from '../../../../test-helper.js';
 import { createSuccessfulCertificationCourse } from '../../../shared/fixtures/certification-course.js';
@@ -43,7 +43,7 @@ describe('Certification | Session Management | Acceptance | Application | Routes
 
       beforeEach(async function () {
         server = await createServer();
-        await insertUserWithRoleSuperAdmin();
+        const superAdmin = databaseBuilder.factory.buildUser.withRoleSuperAdmin();
 
         databaseBuilder.factory.buildCertificationVersion({
           scope: 'CORE',
@@ -65,25 +65,22 @@ describe('Certification | Session Management | Acceptance | Application | Routes
           INSEECode: '01091',
           isActualName: true,
         });
+        const candidate = databaseBuilder.factory.buildCertificationCandidate();
         const certificationCourse = databaseBuilder.factory.buildCertificationCourse({
           verificationCode: 'ABCD123',
           createdAt: new Date('2019-12-21T15:44:38Z'),
           completedAt: new Date('2017-12-21T15:48:38Z'),
           sex: 'F',
+          candidate: candidate.id,
         });
         certificationCourseId = certificationCourse.id;
-
-        const candidate = databaseBuilder.factory.buildCertificationCandidate({
-          userId: certificationCourse.userId,
-          sessionId: certificationCourse.sessionId,
-        });
 
         databaseBuilder.factory.buildCoreSubscription({
           certificationCandidateId: candidate.id,
         });
 
         options = {
-          headers: generateAuthenticatedUserRequestHeaders(),
+          headers: generateAuthenticatedUserRequestHeaders({ userId: superAdmin.id }),
           method: 'PATCH',
           url: `/api/admin/certification-courses/${certificationCourseId}`,
           payload: {
@@ -150,19 +147,26 @@ describe('Certification | Session Management | Acceptance | Application | Routes
     describe('when certification is V2', function () {
       it('should create a new rejected AssessmentResult', async function () {
         // given
-        const userId = (await insertUserWithRoleSuperAdmin()).id;
+        const userId = databaseBuilder.factory.buildUser.withRoleSuperAdmin().id;
 
         const session = databaseBuilder.factory.buildSession({
           finalizedAt: new Date('2018-12-01T01:02:03Z'),
         });
 
+        const candidateId = databaseBuilder.factory.buildCertificationCandidate({
+          sessionId: session.id,
+          userId,
+          reconciledAt: new Date('2020-01-01'),
+        }).id;
+
         const certificationCourse = databaseBuilder.factory.buildCertificationCourse({
           sessionId: session.id,
           userId,
+          candidateId,
         });
 
         const { assessment, assessmentResult } = await createSuccessfulCertificationCourse({
-          sessionId: session.id,
+          candidateId,
           userId,
           certificationCourse,
         });
@@ -202,7 +206,7 @@ describe('Certification | Session Management | Acceptance | Application | Routes
     describe('when certification is V3', function () {
       it('should create a new rejected AssessmentResult', async function () {
         // given
-        const userId = (await insertUserWithRoleSuperAdmin()).id;
+        const userId = databaseBuilder.factory.buildUser.withRoleSuperAdmin().id;
 
         const session = databaseBuilder.factory.buildSession({
           finalizedAt: new Date('2018-12-01T01:02:03Z'),
@@ -213,18 +217,20 @@ describe('Certification | Session Management | Acceptance | Application | Routes
           startDate: new Date('2018-12-01T01:02:03Z'),
         });
 
+        const candidateId = databaseBuilder.factory.buildCertificationCandidate({
+          sessionId: session.id,
+          userId,
+          reconciledAt: new Date('2020-01-01'),
+        }).id;
         const certificationCourse = databaseBuilder.factory.buildCertificationCourse({
           sessionId: session.id,
           userId,
           version: 3,
-        });
-
-        databaseBuilder.factory.buildCertificationCandidate({
-          userId: userId,
-          sessionId: certificationCourse.sessionId,
+          candidateId,
         });
 
         const { assessment, assessmentResult } = await createSuccessfulCertificationCourse({
+          candidateId,
           userId,
           certificationCourse,
         });
@@ -265,24 +271,30 @@ describe('Certification | Session Management | Acceptance | Application | Routes
   describe('PATCH /api/admin/certification-courses/{certificationCourseId}/unreject', function () {
     it('should create a new unrejected AssessmentResult', async function () {
       // given
-      const userId = (await insertUserWithRoleSuperAdmin()).id;
+      const userId = databaseBuilder.factory.buildUser.withRoleSuperAdmin().id;
 
       const session = databaseBuilder.factory.buildSession({
         finalizedAt: new Date('2018-12-01T01:02:03Z'),
         version: AlgorithmEngineVersion.V3,
       });
 
+      const candidateId = databaseBuilder.factory.buildCertificationCandidate({
+        sessionId: session.id,
+        userId,
+        reconciledAt: new Date('2020-01-01'),
+      }).id;
       const certificationCourse = databaseBuilder.factory.buildCertificationCourse({
         sessionId: session.id,
         userId,
         isRejectedForFraud: true,
         version: AlgorithmEngineVersion.V3,
+        candidateId,
       });
 
       databaseBuilder.factory.buildCertificationVersion({ minimumAnswersRequiredToValidateACertification: 1 });
 
       const { assessment, assessmentResult } = await createSuccessfulCertificationCourse({
-        sessionId: session.id,
+        candidateId,
         userId,
         certificationCourse,
       });
@@ -339,13 +351,15 @@ describe('Certification | Session Management | Acceptance | Application | Routes
         certificationCourseId,
         lastAssessmentResultId: assessmentResultId,
       });
+      const superAdmin = databaseBuilder.factory.buildUser.withRoleSuperAdmin();
+      await databaseBuilder.commit();
 
       server = await createServer();
 
       options = {
         method: 'POST',
         url: `/api/admin/certification-courses/${certificationCourseId}/assessment-results`,
-        headers: generateAuthenticatedUserRequestHeaders(),
+        headers: generateAuthenticatedUserRequestHeaders({ userId: superAdmin.id }),
         payload: {
           data: {
             attributes: {
@@ -354,7 +368,6 @@ describe('Certification | Session Management | Acceptance | Application | Routes
           },
         },
       };
-      return insertUserWithRoleSuperAdmin();
     });
 
     it('should respond with a 403 - forbidden access - if user has not role Super Admin', async function () {
@@ -382,7 +395,7 @@ describe('Certification | Session Management | Acceptance | Application | Routes
     });
   });
 
-  describe('POST /api/admin/certification-courses-v3/{certificationCourseId}/details', function () {
+  describe('GET /api/admin/certification-courses-v3/{certificationCourseId}/details', function () {
     let certificationCourse;
     let certificationChallenges;
     let assessmentResult;
@@ -400,16 +413,22 @@ describe('Certification | Session Management | Acceptance | Application | Routes
         }),
       });
 
-      const user = await insertUserWithRoleSuperAdmin();
+      const superAdmin = databaseBuilder.factory.buildUser.withRoleSuperAdmin();
       const session = databaseBuilder.factory.buildSession();
+      const candidateId = databaseBuilder.factory.buildCertificationCandidate({
+        sessionId: session.id,
+        userId: superAdmin.id,
+        reconciledAt: new Date('2020-01-01'),
+      }).id;
       certificationCourse = databaseBuilder.factory.buildCertificationCourse({
         version: 3,
         sessionId: session.id,
-        userId: user.id,
+        userId: superAdmin.id,
+        candidateId,
       });
       ({ certificationChallenges, assessmentResult } = await createSuccessfulCertificationCourse({
-        sessionId: session.id,
-        userId: user.id,
+        candidateId,
+        userId: superAdmin.id,
         certificationCourse,
       }));
       await databaseBuilder.commit();
@@ -419,7 +438,7 @@ describe('Certification | Session Management | Acceptance | Application | Routes
       options = {
         method: 'GET',
         url: `/api/admin/certification-courses-v3/${certificationCourse.id}/details`,
-        headers: generateAuthenticatedUserRequestHeaders({ userId: user.id }),
+        headers: generateAuthenticatedUserRequestHeaders({ userId: superAdmin.id }),
       };
     });
 
@@ -449,7 +468,7 @@ describe('Certification | Session Management | Acceptance | Application | Routes
           'ended-at': null,
           'is-rejected-for-fraud': false,
           'pix-score': assessmentResult.pixScore,
-          'reached-mesh-index': assessmentResult.reachedMeshIndex,
+          'reached-result-key': 'CORE.BELOW_MINIMUM',
           'number-of-challenges': 10,
           'assessment-state': 'completed',
           'assessment-result-status': 'validated',
@@ -486,6 +505,86 @@ describe('Certification | Session Management | Acceptance | Application | Routes
           type: 'certification-challenges-for-administration',
         },
       ]);
+    });
+  });
+
+  describe('POST /api/admin/certification-courses/{certificationCourseId}/edu-v3-external-jury-result', function () {
+    let certificationCourseFromDB;
+    let assessmentResultFromDB;
+    let options;
+    let server;
+
+    beforeEach(async function () {
+      certificationCourseFromDB = databaseBuilder.factory.buildCertificationCourse({
+        isPublished: true,
+        framework: Frameworks.EDU_1ER_DEGRE,
+        version: AlgorithmEngineVersion.V3,
+        birthINSEECode: '12345',
+      });
+      assessmentResultFromDB = databaseBuilder.factory.buildAssessmentResult.last({
+        certificationCourseId: certificationCourseFromDB.id,
+        reachedMeshIndex: 0,
+        eduV3ExternalJuryResult: null,
+        commentByJury: null,
+      });
+
+      const superAdmin = databaseBuilder.factory.buildUser.withRoleSuperAdmin();
+      await databaseBuilder.commit();
+
+      server = await createServer();
+
+      options = {
+        method: 'POST',
+        url: `/api/admin/certification-courses/${certificationCourseFromDB.id}/edu-v3-external-jury-result`,
+        headers: generateAuthenticatedUserRequestHeaders({ userId: superAdmin.id }),
+        payload: {
+          data: {
+            attributes: {
+              'edu-v3-external-jury-result': PIX_PLUS_EDU_EXTERNAL_LEVELS.ADVANCED,
+            },
+          },
+        },
+      };
+    });
+
+    it('should save edu v3 external jury result in database and return the refreshed certification', async function () {
+      // when
+      const response = await server.inject(options);
+
+      // then
+      const assessmentResults = await knex('assessment-results').orderBy('createdAt', 'desc');
+      expect(assessmentResults).to.have.lengthOf(1);
+      expect(assessmentResults[0].eduV3ExternalJuryResult).to.equal(PIX_PLUS_EDU_EXTERNAL_LEVELS.ADVANCED);
+      expect(response.statusCode).to.equal(200);
+      expect(response.result.data.type).to.equal('certifications');
+      expect(response.result.data.id).to.equal(certificationCourseFromDB.id.toString());
+      expect(response.result.data.attributes).to.deep.equal({
+        'first-name': certificationCourseFromDB.firstName,
+        'last-name': certificationCourseFromDB.lastName,
+        sex: certificationCourseFromDB.sex,
+        'birth-country': certificationCourseFromDB.birthCountry,
+        'birth-insee-code': certificationCourseFromDB.birthINSEECode,
+        'birth-postal-code': certificationCourseFromDB.birthPostalCode,
+        birthdate: certificationCourseFromDB.birthdate,
+        birthplace: certificationCourseFromDB.birthplace,
+        'created-at': certificationCourseFromDB.createdAt,
+        'user-id': certificationCourseFromDB.userId,
+        'session-id': certificationCourseFromDB.sessionId,
+        version: certificationCourseFromDB.version,
+        'certification-framework': certificationCourseFromDB.framework,
+        'completed-at': certificationCourseFromDB.completedAt,
+        'is-published': certificationCourseFromDB.isPublished,
+        'assessment-id': assessmentResultFromDB.assessmentId,
+        'is-rejected-for-fraud': certificationCourseFromDB.isRejectedForFraud,
+        status: assessmentResultFromDB.status,
+        'pix-score': assessmentResultFromDB.pixScore,
+        'reached-result-key': Frameworks.EDU_1ER_DEGRE + '.' + PIX_PLUS_EDU_EXTERNAL_LEVELS.ADVANCED,
+        'comment-by-jury': assessmentResultFromDB.commentByJury,
+        'comment-for-candidate': assessmentResultFromDB.commentForCandidate,
+        'comment-for-organization': assessmentResultFromDB.commentForOrganization,
+        'jury-id': assessmentResultFromDB.juryId,
+        'competences-with-mark': [],
+      });
     });
   });
 });

@@ -13,7 +13,7 @@ describe('Quest | Unit | Infrastructure | Serializers | combined-course', functi
       combinedCourseItems: [{ campaignId: 1 }, { moduleId: 7 }],
     });
     await combinedCourseDetails.setEncryptedUrl();
-    combinedCourseDetails.generateItems();
+    combinedCourseDetails.setDataAndGenerateItems();
     // when
     const serializedCombinedCourse = combinedCourseSerializer.serialize(combinedCourseDetails);
 

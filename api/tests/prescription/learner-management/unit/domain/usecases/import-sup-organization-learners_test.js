@@ -1,8 +1,10 @@
+import { Readable } from 'node:stream';
+
 import { OrganizationImportStatus } from '../../../../../../src/prescription/learner-management/domain/models/OrganizationImportStatus.js';
 import { importSupOrganizationLearners } from '../../../../../../src/prescription/learner-management/domain/usecases/import-sup-organization-learners.js';
 import { SupOrganizationLearnerImportHeader } from '../../../../../../src/prescription/learner-management/infrastructure/serializers/csv/sup-organization-learner-import-header.js';
 import { getI18n } from '../../../../../../src/shared/infrastructure/i18n/i18n.js';
-import { catchErr, expect, sinon, toStream } from '../../../../../test-helper.js';
+import { catchErr, expect, sinon } from '../../../../../test-helper.js';
 
 const i18n = getI18n();
 
@@ -167,3 +169,7 @@ describe('Unit | UseCase | ImportSupOrganizationLearner', function () {
     });
   });
 });
+
+function toStream(data) {
+  return Readable.from([Buffer.from(data)]);
+}

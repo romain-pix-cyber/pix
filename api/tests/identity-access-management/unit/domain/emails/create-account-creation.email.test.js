@@ -23,7 +23,6 @@ describe('Unit | Identity Access Management | Domain | Email | create-account-cr
     const variables = email.variables;
     expect(variables).to.have.property('askForHelp').that.is.a('string');
     expect(variables).to.have.property('disclaimer').that.is.a('string');
-    expect(variables).to.have.property('displayNationalLogo').that.is.a('boolean');
     expect(variables).to.have.property('doNotAnswer').that.is.a('string');
     expect(variables).to.have.property('goToPix').that.is.a('string');
     expect(variables).to.have.property('helpdeskLinkLabel').that.is.a('string');

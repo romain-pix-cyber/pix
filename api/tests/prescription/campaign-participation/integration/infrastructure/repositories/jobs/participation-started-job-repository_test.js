@@ -15,9 +15,9 @@ describe('Integration | Prescription | Infrastructure | Repository | Jobs | part
 
       // then
       await expect(ParticipationStartedJob.name).to.have.been.performed.withJob({
-        retrylimit: 0,
-        retrydelay: 0,
-        retrybackoff: false,
+        retryLimit: 0,
+        retryDelay: 0,
+        retryBackoff: false,
         data: {
           campaignParticipationId: 777,
           correlationContext: EMPTY_CORRELATION_INFO,

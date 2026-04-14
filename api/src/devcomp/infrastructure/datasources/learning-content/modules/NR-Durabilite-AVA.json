@@ -168,7 +168,7 @@
                       "id": "10dbae70-c3ba-4cd6-a3a2-adf81cb60eba",
                       "type": "custom",
                       "title": "",
-                      "instruction": "<p>À votre avis, pour fabriquer un ordinateur portable, combien faut-il d’eau ?<br>Déplacez la jauge entre 1 litre et 1,5 tonne d’eau.</p>",
+                      "instruction": "<p>À votre avis, pour fabriquer un ordinateur portable, combien faut-il d’eau ?<br>Déplacez la jauge entre 1 litre et 1 500 litres d’eau.</p>",
                       "functionalInstruction": "",
                       "tagName": "pix-cursor",
                       "props": {
@@ -177,28 +177,28 @@
                             "label": "1 litre",
                             "feedback": {
                               "type": "bad",
-                              "text": "La fabrication d’un ordinateur portable nécessite environ 1,5 tonne d’eau, puisée dans les ressources d’eau douce, souvent prélevée dans des régions où cette ressource manque. Stockée dans des bassins industriels, elle se charge en substances toxiques puis s’infiltre dans l’environnement, contaminant les cours d’eau et menaçant la faune et la flore locales."
+                              "text": "La fabrication d’un ordinateur portable nécessite environ 1 500 litres d’eau, puisée dans les ressources d’eau douce, souvent prélevée dans des régions où cette ressource manque. Stockée dans des bassins industriels, elle se charge en substances toxiques puis s’infiltre dans l’environnement, contaminant les cours d’eau et menaçant la faune et la flore locales."
                             }
                           },
                           {
                             "label": "500 litres",
                             "feedback": {
                               "type": "bad",
-                              "text": "La fabrication d’un ordinateur portable nécessite environ 1,5 tonne d’eau, puisée dans les ressources d’eau douce, souvent prélevée dans des régions où cette ressource manque. Stockée dans des bassins industriels, elle se charge en substances toxiques puis s’infiltre dans l’environnement, contaminant les cours d’eau et menaçant la faune et la flore locales."
+                              "text": "La fabrication d’un ordinateur portable nécessite environ 1 500 litres d’eau, puisée dans les ressources d’eau douce, souvent prélevée dans des régions où cette ressource manque. Stockée dans des bassins industriels, elle se charge en substances toxiques puis s’infiltre dans l’environnement, contaminant les cours d’eau et menaçant la faune et la flore locales."
                             }
                           },
                           {
-                            "label": "1 tonne",
+                            "label": "1 000 litres",
                             "feedback": {
                               "type": "bad",
-                              "text": "La fabrication d’un ordinateur portable nécessite environ 1,5 tonne d’eau, puisée dans les ressources d’eau douce, souvent prélevée dans des régions où cette ressource manque. Stockée dans des bassins industriels, elle se charge en substances toxiques puis s’infiltre dans l’environnement, contaminant les cours d’eau et menaçant la faune et la flore locales."
+                              "text": "La fabrication d’un ordinateur portable nécessite environ 1 500 litres d’eau, puisée dans les ressources d’eau douce, souvent prélevée dans des régions où cette ressource manque. Stockée dans des bassins industriels, elle se charge en substances toxiques puis s’infiltre dans l’environnement, contaminant les cours d’eau et menaçant la faune et la flore locales."
                             }
                           },
                           {
-                            "label": "1,5 tonne",
+                            "label": "1 500 litres",
                             "feedback": {
                               "type": "good",
-                              "text": "La fabrication d’un ordinateur portable nécessite environ 1,5 tonne d’eau, puisée dans les ressources d’eau douce, souvent prélevée dans des régions où cette ressource manque. Stockée dans des bassins industriels, elle se charge en substances toxiques puis s’infiltre dans l’environnement, contaminant les cours d’eau et menaçant la faune et la flore locales."
+                              "text": "La fabrication d’un ordinateur portable nécessite environ 1 500 litres d’eau, puisée dans les ressources d’eau douce, souvent prélevée dans des régions où cette ressource manque. Stockée dans des bassins industriels, elle se charge en substances toxiques puis s’infiltre dans l’environnement, contaminant les cours d’eau et menaçant la faune et la flore locales."
                             }
                           }
                         ]
@@ -221,28 +221,28 @@
                             "label": "1kg",
                             "feedback": {
                               "type": "bad",
-                              "text": "La fabrication d’un ordinateur portable mobilise environ 200kg d’énergie fossile car l’extraction des minerais et l’assemblage nécessitent des machines très énergivores. Dans de nombreux pays producteurs d’énergie (Asie, Amérique du Sud, Afrique), cette dernière provient surtout du charbon, ce qui génère d’importantes émissions de gaz à effet de serre."
+                              "text": "La fabrication d’un ordinateur portable mobilise environ 200kg d’énergie fossile car l’extraction des minerais et l’assemblage nécessitent des machines très énergivores. Dans de nombreux pays (Asie, Amérique du Sud, Afrique), l’énergie est surtout produite à partir de charbon, ce qui émet beaucoup de gaz à effet de serre."
                             }
                           },
                           {
                             "label": "100kg",
                             "feedback": {
                               "type": "bad",
-                              "text": "La fabrication d’un ordinateur portable mobilise environ 200kg d’énergie fossile car l’extraction des minerais et l’assemblage nécessitent des machines très énergivores. Dans de nombreux pays producteurs d’énergie (Asie, Amérique du Sud, Afrique), cette dernière provient surtout du charbon, ce qui génère d’importantes émissions de gaz à effet de serre."
+                              "text": "La fabrication d’un ordinateur portable mobilise environ 200kg d’énergie fossile car l’extraction des minerais et l’assemblage nécessitent des machines très énergivores. Dans de nombreux pays (Asie, Amérique du Sud, Afrique), l’énergie est surtout produite à partir de charbon, ce qui émet beaucoup de gaz à effet de serre."
                             }
                           },
                           {
                             "label": "150kg",
                             "feedback": {
                               "type": "bad",
-                              "text": "La fabrication d’un ordinateur portable mobilise environ 200kg d’énergie fossile car l’extraction des minerais et l’assemblage nécessitent des machines très énergivores. Dans de nombreux pays producteurs d’énergie (Asie, Amérique du Sud, Afrique), cette dernière provient surtout du charbon, ce qui génère d’importantes émissions de gaz à effet de serre."
+                              "text": "La fabrication d’un ordinateur portable mobilise environ 200kg d’énergie fossile car l’extraction des minerais et l’assemblage nécessitent des machines très énergivores. Dans de nombreux pays (Asie, Amérique du Sud, Afrique), l’énergie est surtout produite à partir de charbon, ce qui émet beaucoup de gaz à effet de serre."
                             }
                           },
                           {
                             "label": "200kg",
                             "feedback": {
                               "type": "good",
-                              "text": "La fabrication d’un ordinateur portable mobilise environ 200kg d’énergie fossile car l’extraction des minerais et l’assemblage nécessitent des machines très énergivores. Dans de nombreux pays producteurs d’énergie (Asie, Amérique du Sud, Afrique), cette dernière provient surtout du charbon, ce qui génère d’importantes émissions de gaz à effet de serre."
+                              "text": "La fabrication d’un ordinateur portable mobilise environ 200kg d’énergie fossile car l’extraction des minerais et l’assemblage nécessitent des machines très énergivores. Dans de nombreux pays (Asie, Amérique du Sud, Afrique), l’énergie est surtout produite à partir de charbon, ce qui émet beaucoup de gaz à effet de serre."
                             }
                           }
                         ]
@@ -265,7 +265,7 @@
                 "id": "80b90a55-683b-4627-8538-5da724524046",
                 "type": "text",
                 "tag": " ",
-                "content": "<p>L’étape de fabrication des appareils numériques est très polluante. Elle consomme beaucoup de ressources, d’<strong>énergie</strong> et d’<strong>eau</strong>, tout en générant de <strong>fortes pollutions</strong> et des <strong>déchets industriels</strong>.<br><br>Fabriquer toujours plus de nouveaux appareils numériques contribue à accentuer un phénomène déjà présent&nbsp;: nous utilisons aujourd’hui <strong>plus de ressources naturelles</strong> que ce que la terre peut <strong>régénérer</strong>, <strong>fournir</strong> ou <strong>absorber</strong>.🌍</p>"
+                "content": "<p>L’étape de fabrication des appareils numériques est très polluante. Elle consomme beaucoup de ressources, d’<strong>énergie</strong> et d’<strong>eau</strong>, tout en générant de <strong>fortes pollutions</strong> et des <strong>déchets industriels</strong>.<br><br>Fabriquer toujours plus de nouveaux appareils numériques contribue à accentuer un phénomène déjà présent&nbsp;: nous utilisons aujourd’hui <strong>plus de ressources naturelles</strong> que ce que la Terre peut <strong>régénérer</strong>, <strong>fournir</strong> ou <strong>absorber</strong>.🌍</p>"
               }
             }
           ]
@@ -331,28 +331,28 @@
                           "id": "1",
                           "content": "<p>Le téléphone a plus d’un an, c’est normal qu’il ralentisse.</p>",
                           "feedback": {
-                            "diagnosis": "<p>Pas vraiment, ici le problème apparaît directement suite à l’installation de la mise à jour. On parle alors d’<strong>obsolescence logicielle</strong> puisque la mise à jour rend volontairement ce modèle de téléphone moins performant.</p>"
+                            "diagnosis": "<p>Pas vraiment, ici le problème apparaît directement suite à l’installation de la mise à jour. On parle alors d’<strong>obsolescence logicielle</strong> puisque la mise à jour rend délibérément ce modèle de téléphone moins performant.</p>"
                           }
                         },
                         {
                           "id": "2",
                           "content": "<p>L’utilisateur a certainement changé ses habitudes de navigation&nbsp;: onglets nombreux ou applications en arrière plan.</p>",
                           "feedback": {
-                            "diagnosis": "<p>Pas vraiment, même si ces pratiques utilisent de la batterie, ici le problème apparaît directement suite à l’installation de la mise à jour. On parle alors d’<strong>obsolescence logicielle</strong> puisque la mise à jour rend volontairement ce modèle de téléphone moins performant.</p>"
+                            "diagnosis": "<p>Pas vraiment, même si ces pratiques utilisent de la batterie, ici le problème apparaît directement suite à l’installation de la mise à jour. On parle alors d’<strong>obsolescence logicielle</strong> puisque la mise à jour rend délibérément ce modèle de téléphone moins performant.</p>"
                           }
                         },
                         {
                           "id": "3",
                           "content": "<p>Le fabricant limite les performances pour pousser à changer de modèle.</p>",
                           "feedback": {
-                            "diagnosis": "<p>Effectivement, ici, il semble que ce soit bien la mise à jour qui rend volontairement ce modèle de téléphone moins performant. On parle alors d’<strong>obsolescence logicielle</strong>.</p>"
+                            "diagnosis": "<p>Effectivement, ici, il semble que ce soit bien la mise à jour qui rend délibérément ce modèle de téléphone moins performant. On parle alors d’<strong>obsolescence logicielle</strong>.</p>"
                           }
                         },
                         {
                           "id": "4",
                           "content": "<p>Je ne sais pas.</p>",
                           "feedback": {
-                            "diagnosis": "<p>Ici le problème apparaît directement suite à l’installation de la mise à jour. On parle alors d’<strong>obsolescence logicielle</strong> puisque la mise à jour rend volontairement ce modèle de téléphone moins performant.</p>"
+                            "diagnosis": "<p>Ici le problème apparaît directement suite à l’installation de la mise à jour. On parle alors d’<strong>obsolescence logicielle</strong> puisque la mise à jour rend délibérément ce modèle de téléphone moins performant.</p>"
                           }
                         }
                       ],
@@ -675,7 +675,7 @@
                   },
                   {
                     "type": "text",
-                    "content": "</br><p>3 =</p>"
+                    "content": "</br><p>3 =&nbsp;</p>"
                   },
                   {
                     "type": "select",
@@ -708,7 +708,7 @@
                   },
                   {
                     "type": "text",
-                    "content": "</br><p>4 =</p>"
+                    "content": "</br><p>4 =&nbsp;</p>"
                   },
                   {
                     "type": "select",
@@ -769,7 +769,7 @@
                       "id": "12f35076-ff72-40f7-b41f-14a680bcb313",
                       "type": "text",
                       "tag": " ",
-                      "content": "<p>L’économie classique fonctionne de <strong>manière linéaire</strong>&nbsp;: on extrait, on produit, on consomme, puis on <strong>jette</strong>. 🚮 Chaque année, de nombreux appareils encore utilisables finissent à la poubelle. Ce sont autant d’occasions manquées de les réutiliser; autant de “trésors dans la poubelle”.</p>"
+                      "content": "<p>L’économie classique fonctionne de <strong>manière linéaire</strong>&nbsp;: on extrait, on produit, on consomme, puis on <strong>jette</strong>. 🚮 Chaque année, de nombreux appareils encore utilisables finissent à la poubelle. Ce sont autant d’occasions manquées de les réutiliser&nbsp;; autant de “trésors dans la poubelle”.</p>"
                     }
                   ]
                 },
@@ -1007,7 +1007,7 @@
                     {
                       "id": "0ececc0b-83c4-41b8-88f0-9c0673d98ffa",
                       "type": "qcu",
-                      "instruction": "<p>Un fabricant de smartphone propose une nouvelle gamme de couleurs  totalement inédites,  mise en avant par la publicité.</p>",
+                      "instruction": "<p>Un fabricant de smartphones propose une nouvelle gamme de couleurs  totalement inédites,  mise en avant par la publicité.</p>",
                       "hasShortProposals": false,
                       "proposals": [
                         {

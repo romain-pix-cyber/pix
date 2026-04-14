@@ -1,5 +1,6 @@
 import { render } from '@1024pix/ember-testing-library';
 import Service from '@ember/service';
+import { t } from 'ember-intl/test-support';
 import CertificationInformations from 'pix-admin/components/certifications/certification/informations';
 import { module, test } from 'qunit';
 import sinon from 'sinon';
@@ -61,6 +62,72 @@ module('Integration | Component | Certifications | Certification | Informations'
 
     // then
     assert.dom(screen.getByRole('heading', { name: 'Candidat' })).exists();
+  });
+
+  module('Pix+ Edu V3 results', function () {
+    test('should display Pix+ Edu V3 results when certification is Pix+ Edu, V3 and validated', async function (assert) {
+      // given
+      const certification = store.createRecord('certification', {
+        competencesWithMark: [],
+        certificationFramework: 'EDU_1ER_DEGRE',
+        version: 3,
+        status: 'validated',
+        reachedResultKey: 'PIX_EDU_FORMATION_INITIALE_1ER_DEGRE.ADVANCED',
+      });
+      const session = store.createRecord('session', { id: '7404' });
+
+      // when
+      const screen = await render(
+        <template><CertificationInformations @certification={{certification}} @session={{session}} /></template>,
+      );
+
+      // then
+      assert.dom(screen.getByRole('heading', { name: t('components.certifications.edu-results.v3.title') })).exists();
+    });
+
+    test('should not display Pix+ Edu V3 results when certification is cancelled', async function (assert) {
+      // given
+      const certification = store.createRecord('certification', {
+        competencesWithMark: [],
+        certificationFramework: 'EDU_1ER_DEGRE',
+        version: 3,
+        status: 'cancelled',
+        reachedResultKey: 'PIX_EDU_FORMATION_INITIALE_1ER_DEGRE.ADVANCED',
+      });
+      const session = store.createRecord('session', { id: '7404' });
+
+      // when
+      const screen = await render(
+        <template><CertificationInformations @certification={{certification}} @session={{session}} /></template>,
+      );
+
+      // then
+      assert
+        .dom(screen.queryByRole('heading', { name: t('components.certifications.edu-results.v3.title') }))
+        .doesNotExist();
+    });
+
+    test('should not display Pix+ Edu V3 results when certification is rejected', async function (assert) {
+      // given
+      const certification = store.createRecord('certification', {
+        competencesWithMark: [],
+        certificationFramework: 'EDU_1ER_DEGRE',
+        version: 3,
+        status: 'rejected',
+        reachedResultKey: 'BELOW_MINIMUM',
+      });
+      const session = store.createRecord('session', { id: '7404' });
+
+      // when
+      const screen = await render(
+        <template><CertificationInformations @certification={{certification}} @session={{session}} /></template>,
+      );
+
+      // then
+      assert
+        .dom(screen.queryByRole('heading', { name: t('components.certifications.edu-results.v3.title') }))
+        .doesNotExist();
+    });
   });
 
   module('issue reports', function () {

@@ -33,10 +33,6 @@ export class Candidate {
     return this.subscriptionScope === SCOPES.CORE && !this.hasCleaSubscription;
   }
 
-  get isScorable() {
-    return this.subscriptionScope === SCOPES.CORE || this.subscriptionScope.includes('EDU_');
-  }
-
   #validate() {
     const { error } = Candidate.#schema.validate(this, { allowUnknown: false });
     if (error) {

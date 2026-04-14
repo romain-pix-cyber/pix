@@ -23,13 +23,11 @@ module('Integration | Component | organizations/network/actions-section', functi
       this.owner.register('service:access-control', AccessControlStub);
     });
 
-    test('it should display create child organization button when user is superAdmin and organization belongs to a network', async function (assert) {
+    test('it should display create child organization button when user is superAdmin', async function (assert) {
       // given
-      const network = store.createRecord('network', { id: '10', name: 'Réseau Test' });
       const organization = store.createRecord('organization', {
         id: '1',
         name: 'Orga 1',
-        network,
       });
 
       const onAttachChildSubmitFormStub = sinon.stub();
@@ -46,33 +44,6 @@ module('Integration | Component | organizations/network/actions-section', functi
       );
     });
 
-    test('it should not display create child organization button if organization is already a child', async function (assert) {
-      // given
-      const network = store.createRecord('network', { id: '10', name: 'Réseau Test' });
-      const childOrganization = store.createRecord('organization', {
-        id: '2',
-        name: 'Orga 2',
-        parentOrganizationId: '1234',
-        network,
-      });
-
-      const onAttachChildSubmitFormStub = sinon.stub();
-
-      // when
-      const screen = await render(
-        <template>
-          <ActionsSection
-            @organization={{childOrganization}}
-            @onAttachChildSubmitForm={{onAttachChildSubmitFormStub}}
-          />
-        </template>,
-      );
-
-      assert.notOk(
-        screen.queryByRole('link', { name: t('components.organizations.network.create-child-organization-button') }),
-      );
-    });
-
     test('it should not display create child organization button when user is not superAdmin', async function (assert) {
       // given
       class AccessControlStub extends Service {
@@ -80,29 +51,6 @@ module('Integration | Component | organizations/network/actions-section', functi
       }
       this.owner.register('service:access-control', AccessControlStub);
 
-      const network = store.createRecord('network', { id: '10', name: 'Réseau Test' });
-      const organization = store.createRecord('organization', {
-        id: '1',
-        name: 'Orga 1',
-        network,
-      });
-
-      const onAttachChildSubmitFormStub = sinon.stub();
-
-      // when
-      const screen = await render(
-        <template>
-          <ActionsSection @organization={{organization}} @onAttachChildSubmitForm={{onAttachChildSubmitFormStub}} />
-        </template>,
-      );
-
-      assert.notOk(
-        screen.queryByRole('link', { name: t('components.organizations.network.create-child-organization-button') }),
-      );
-    });
-
-    test('it should not display create child organization button when organization does not belong to a network', async function (assert) {
-      // given
       const organization = store.createRecord('organization', {
         id: '1',
         name: 'Orga 1',

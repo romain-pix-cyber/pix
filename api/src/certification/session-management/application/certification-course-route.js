@@ -2,6 +2,7 @@ import Joi from 'joi';
 
 import { securityPreHandlers } from '../../../shared/application/security-pre-handlers.js';
 import { identifiersType } from '../../../shared/domain/types/identifiers-type.js';
+import { PIX_PLUS_EDU_EXTERNAL_LEVELS } from '../../shared/domain/constants/mesh-configuration.js';
 import { certificationCourseController } from './certification-course-controller.js';
 
 const register = async function (server) {
@@ -114,6 +115,43 @@ const register = async function (server) {
         notes: [
           "- **Cette route est restreinte aux utilisateurs ayant les droits d'accès**\n" +
             ' - Elle recrée un assessment result pour mettre à jour les notes internes du jury\n',
+        ],
+      },
+    },
+    {
+      method: 'POST',
+      path: '/api/admin/certification-courses/{certificationCourseId}/edu-v3-external-jury-result',
+      config: {
+        validate: {
+          params: Joi.object({
+            certificationCourseId: identifiersType.certificationCourseId,
+          }),
+          payload: Joi.object({
+            data: {
+              attributes: {
+                'edu-v3-external-jury-result': Joi.string()
+                  .allow(null)
+                  .valid(...Object.values(PIX_PLUS_EDU_EXTERNAL_LEVELS))
+                  .required(),
+              },
+            },
+          }),
+        },
+        pre: [
+          {
+            method: (request, h) =>
+              securityPreHandlers.hasAtLeastOneAccessOf([
+                securityPreHandlers.checkAdminMemberHasRoleSuperAdmin,
+                securityPreHandlers.checkAdminMemberHasRoleCertif,
+              ])(request, h),
+            assign: 'hasAuthorizationToAccessAdminScope',
+          },
+        ],
+        handler: certificationCourseController.updateEduV3ExternalJuryResult,
+        tags: ['api', 'admin', 'assessment-results', 'certification-courses', 'volet externe'],
+        notes: [
+          "- **Cette route est restreinte aux utilisateurs ayant les droits d'accès**\n" +
+            ' - Elle permet de mettre à jour le résultat du volet externe EDU\n',
         ],
       },
     },

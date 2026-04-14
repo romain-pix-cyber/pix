@@ -50,7 +50,7 @@ export default class CertificationInformationGlobalActions extends Component {
   }
 
   get displayRescoringCertificationButton() {
-    return this.canPerformCertificationActions;
+    return Boolean(!this.args.certification.isPublished && this.args.session.finalizedAt);
   }
 
   @action

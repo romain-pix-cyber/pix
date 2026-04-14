@@ -1,3 +1,4 @@
+import { DomainTransaction } from '../../../../../shared/domain/DomainTransaction.js';
 import { CommonCsvLearnerParser } from '../../../infrastructure/serializers/csv/common-csv-learner-parser.js';
 import { getDataBuffer } from '../../../infrastructure/utils/bufferize/get-data-buffer.js';
 import { AggregateImportError } from '../../errors.js';
@@ -7,6 +8,7 @@ const saveOrganizationLearnersFile = async function ({
   organizationImportId,
   organizationLearnerImportFormatRepository,
   organizationLearnerRepository,
+  organizationLearnerFilterRepository,
   organizationImportRepository,
   importStorage,
   dependencies = { getDataBuffer },
@@ -40,11 +42,20 @@ const saveOrganizationLearnersFile = async function ({
 
     const learners = learnerSet.learners;
 
-    await organizationLearnerRepository.disableCommonOrganizationLearnersFromOrganizationId({
-      organizationId,
-      excludeOrganizationLearnerIds: learners.existinglearnerIds,
+    await DomainTransaction.execute(async () => {
+      await organizationLearnerFilterRepository.deleteOrganizationLearnerFiltersFromOrganizationId(organizationId);
+      await organizationLearnerRepository.disableCommonOrganizationLearnersFromOrganizationId({
+        organizationId,
+        excludeOrganizationLearnerIds: learners.existinglearnerIds,
+      });
+      await organizationLearnerRepository.saveCommonOrganizationLearners(learners.list);
+
+      if (learnerSet.filtersAvailableValues.length > 0) {
+        await organizationLearnerFilterRepository.saveOrganizationLearnerFilters(
+          learnerSet.filtersAvailableValues.map((learnerFilter) => learnerFilter.dataToInsert),
+        );
+      }
     });
-    await organizationLearnerRepository.saveCommonOrganizationLearners(learners.list);
   } catch (error) {
     if (Array.isArray(error)) {
       errors.push(...error);

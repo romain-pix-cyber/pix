@@ -510,7 +510,7 @@
             "invalid-password": "Votre mot de passe doit contenir 8 caractères au minimum et comporter au moins une majuscule, une minuscule et un chiffre."
           },
           "login-button": "Je me connecte",
-          "new-connection-info": "Pas d’inquiétude, pour vous reconnecter il suffira désormais d’utiliser votre adresse email et le mot de passe défini ici.",
+          "new-connection-info": "Pas d’inquiétude, pour vous reconnecter il suffira désormais d’utiliser votre adresse e-mail et le mot de passe défini ici.",
           "password-label": "Mot de passe",
           "sco-connections": {
             "gar": "le Médiacentre",
@@ -2307,42 +2307,24 @@
       "validation": "Votre mot de passe a été mis à jour."
     },
     "user-account": {
-      "account-update-email": {
-        "email-information": "Cette adresse e-mail doit être valide en cas de mot de passe oublié. '<br>' Elle sera votre nouvelle adresse de connexion.",
+      "account-add-or-update-email-with-validation": {
+        "code-reception-information": "En validant votre demande d'ajout d'adresse e-mail, vous allez recevoir un code par e-mail.",
         "fields": {
-          "errors": {
-            "empty-password": "Votre mot de passe ne peut pas être vide.",
-            "invalid-password": "Le mot de passe que vous avez saisi est invalide.",
-            "mismatching-email": "Les deux adresses e-mail ne sont pas identiques. Veuillez vérifier votre saisie.",
-            "new-email-already-exist": "Cette adresse e-mail est déjà utilisée.",
-            "unknown-error": "Une erreur est survenue. Veuillez recommencer ou contacter le support.",
-            "wrong-email-format": "Votre adresse e-mail n’est pas valide."
+          "email": {
+            "add-email": {
+              "label": "Adresse e-mail"
+            },
+            "update-email": {
+              "label": "Nouvelle adresse e-mail"
+            }
           },
-          "new-email": {
-            "label": "Nouvelle adresse e-mail"
-          },
-          "new-email-confirmation": {
-            "label": "Confirmation de l'adresse e-mail"
-          },
-          "password": {
-            "label": "Mot de passe"
-          }
-        },
-        "password-information": "Saisissez votre mot de passe pour confirmer",
-        "save-button": "Confirmer",
-        "title": "Modification de votre adresse e-mail"
-      },
-      "account-update-email-with-validation": {
-        "fields": {
           "errors": {
             "empty-password": "Votre mot de passe ne peut pas être vide.",
             "invalid-email": "Votre adresse e-mail n’est pas valide.",
             "invalid-or-already-used-email": "Adresse e-mail invalide ou déjà utilisée",
             "invalid-password": "Le mot de passe que vous avez saisi est invalide.",
-            "new-email-already-exist": "Cette adresse e-mail est déjà utilisée."
-          },
-          "new-email": {
-            "label": "Nouvelle adresse e-mail"
+            "new-email-already-exist": "Cette adresse e-mail est déjà utilisée.",
+            "unknown-error": "Une erreur est survenue. Veuillez recommencer ou contacter le support."
           },
           "password": {
             "label": "Mot de passe",
@@ -2350,10 +2332,12 @@
           }
         },
         "save-button": "Recevoir un code de vérification",
-        "title": "Modification de votre adresse e-mail"
+        "title": {
+          "add-email": "Ajouter une adresse e-mail",
+          "update-email": "Modification de votre adresse e-mail"
+        }
       },
       "connexion-methods": {
-        "add-email": "Ajouter une adresse e-mail",
         "authentication-methods": {
           "connection-via": "Connexion via {identityProviderOrganizationName}",
           "gar": "Connexion via ENT/Mediacentre",
@@ -2395,12 +2379,14 @@
           "email-modification-demand-expired": "Ce code a expiré. Veuillez renouveler la demande.",
           "incorrect-code": "Le code saisi est incorrect.",
           "new-email-already-exist": "Cette adresse e-mail est déjà utilisée.",
+          "no-code": "Veuillez saisir le code à {numInputs} chiffres reçu par e-mail.",
           "unknown-error": "Une erreur est survenue. Veuillez recommencer ou contacter le support."
         },
         "send-back-the-code": "me renvoyer le code",
         "time-code-validation": "Le code reçu est valide pendant 10 minutes",
         "title": "Vérification de votre adresse e-mail",
-        "update-successful": "Votre adresse e-mail a été changée !"
+        "update-successful": "Votre adresse e-mail a été changée !",
+        "validate-new-email": "Valider ma nouvelle adresse e-mail"
       },
       "language": {
         "lang": "Langue",

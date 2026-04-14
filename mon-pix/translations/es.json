@@ -2292,42 +2292,24 @@
       "validation": "Tu contraseña ha sido actualizada."
     },
     "user-account": {
-      "account-update-email": {
-        "email-information": "Esta dirección de correo electrónico debe ser válida en caso de que olvides tu contraseña. '<br>' Esta será tu nueva dirección de conexión.",
+      "account-add-or-update-email-with-validation": {
+        "code-reception-information": "Al confirmar tu solicitud para añadir una dirección de correo electrónico, recibirás un código por correo electrónico.",
         "fields": {
-          "errors": {
-            "empty-password": "Tu contraseña no puede estar vacía.",
-            "invalid-password": "La contraseña que has introducido no es válida.",
-            "mismatching-email": "Las dos direcciones de correo electrónico no son idénticas. Por favor, comprueba la información introducida.",
-            "new-email-already-exist": "Esta dirección de correo electrónico ya se está utilizando.",
-            "unknown-error": "Se ha producido un error. Vuelve a intentarlo o ponte en contacto con el servicio de asistencia.",
-            "wrong-email-format": "Tu dirección de correo electrónico no es válida."
+          "email": {
+            "add-email": {
+              "label": "Dirección de correo electrónico"
+            },
+            "update-email": {
+              "label": "Nueva dirección de correo electrónico"
+            }
           },
-          "new-email": {
-            "label": "Nueva dirección de correo electrónico"
-          },
-          "new-email-confirmation": {
-            "label": "Confirmación de la dirección de correo electrónico"
-          },
-          "password": {
-            "label": "Contraseña"
-          }
-        },
-        "password-information": "Introduce tu contraseña para confirmar",
-        "save-button": "Confirmar",
-        "title": "Cambio de la dirección de correo electrónico"
-      },
-      "account-update-email-with-validation": {
-        "fields": {
           "errors": {
             "empty-password": "Tu contraseña no puede estar vacía.",
             "invalid-email": "Tu dirección de correo electrónico no es válida.",
             "invalid-or-already-used-email": "Dirección de correo electrónico no válida o ya utilizada",
             "invalid-password": "La contraseña que has introducido no es válida.",
-            "new-email-already-exist": "Esta dirección de correo electrónico ya se está utilizando."
-          },
-          "new-email": {
-            "label": "Nueva dirección de correo electrónico"
+            "new-email-already-exist": "Esta dirección de correo electrónico ya se está utilizando.",
+            "unknown-error": "Se ha producido un error. Vuelve a intentarlo o ponte en contacto con el servicio de asistencia."
           },
           "password": {
             "label": "Contraseña",
@@ -2335,10 +2317,12 @@
           }
         },
         "save-button": "Recibir un código de comprobación",
-        "title": "Cambio de la dirección de correo electrónico"
+        "title": {
+          "add-email": "Añadir una dirección de correo electrónico",
+          "update-email": "Cambio de la dirección de correo electrónico"
+        }
       },
       "connexion-methods": {
-        "add-email": "Añadir una dirección de correo electrónico",
         "authentication-methods": {
           "connection-via": "Conexión a través de {identityProviderOrganizationName}",
           "gar": "Conexión a través de ENT/Mediacentre",
@@ -2380,12 +2364,14 @@
           "email-modification-demand-expired": "Este código ha caducado. Por favor, renueva la solicitud.",
           "incorrect-code": "El código introducido es incorrecto.",
           "new-email-already-exist": "Esta dirección de correo electrónico ya se está utilizando.",
+          "no-code": "Por favor, introduce el código de {numInputs} dígitos que has recibido por correo electrónico.",
           "unknown-error": "Se ha producido un error. Vuelve a intentarlo o ponte en contacto con el servicio de asistencia."
         },
         "send-back-the-code": "volver a enviarme el código",
         "time-code-validation": "El código recibido es válido durante 10 minutos",
         "title": "Comprobación de tu dirección de correo electrónico",
-        "update-successful": "Tu dirección de correo electrónico ha sido modificada."
+        "update-successful": "Tu dirección de correo electrónico ha sido modificada.",
+        "validate-new-email": "Validar nuevo correo electrónico"
       },
       "language": {
         "lang": "Idioma",

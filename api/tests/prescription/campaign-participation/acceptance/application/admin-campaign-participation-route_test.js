@@ -18,10 +18,6 @@ describe('Acceptance | Controller | GET /api/admin/users/{userId}/participations
     randomUUIDStub.returns('1234');
   });
 
-  afterEach(function () {
-    sinon.restore();
-  });
-
   it('should return participations', async function () {
     // given
     const user = databaseBuilder.factory.buildUser();

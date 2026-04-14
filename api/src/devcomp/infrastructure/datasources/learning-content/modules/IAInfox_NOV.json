@@ -192,7 +192,7 @@
               "element": {
                 "id": "7a1b82fa-1e06-468d-922a-07b8f004f144",
                 "type": "custom",
-                "instruction": "",
+                "instruction": "Sélectionnez 3 éléments pour générer la vidéo de Caroline.",
                 "tagName": "qcm-deepfake",
                 "props": {
                   "titleLevel": 0,

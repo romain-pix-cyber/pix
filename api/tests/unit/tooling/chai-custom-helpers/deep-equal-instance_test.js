@@ -1,4 +1,5 @@
 import { domainBuilder, expect } from '../../../test-helper.js';
+import { expectChaiError } from '../../../tooling/chai-custom-helpers/chai-custom-test-helper.js';
 
 describe('Unit | chai-custom-helpers | deepEqualInstance', function () {
   it('should fail assertion when both objects are not of the same instance', function () {
@@ -8,10 +9,10 @@ describe('Unit | chai-custom-helpers | deepEqualInstance', function () {
     const answerDTO = { ...answer };
 
     // when / then
-    global.chaiErr(function () {
+    expectChaiError(function () {
       expect(campaign).to.deepEqualInstance(answer);
     }, "expected 'Campaign' to equal 'Answer'");
-    global.chaiErr(function () {
+    expectChaiError(function () {
       expect(answerDTO).to.deepEqualInstance(answer);
     }, "expected 'Object' to equal 'Answer'");
   });
@@ -35,7 +36,7 @@ describe('Unit | chai-custom-helpers | deepEqualInstance', function () {
     });
 
     // when/then
-    global.chaiErr(
+    expectChaiError(
       function () {
         expect(otherCompetence).to.deepEqualInstance(competence);
       },
@@ -45,7 +46,7 @@ describe('Unit | chai-custom-helpers | deepEqualInstance', function () {
         operator: 'deepStrictEqual',
       },
     );
-    global.chaiErr(
+    expectChaiError(
       function () {
         expect(anotherCompetence).to.deepEqualInstance(competence);
       },

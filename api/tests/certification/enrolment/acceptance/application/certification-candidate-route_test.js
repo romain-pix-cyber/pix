@@ -12,7 +12,6 @@ import {
   databaseBuilder,
   expect,
   generateAuthenticatedUserRequestHeaders,
-  insertUserWithRoleSuperAdmin,
   knex,
 } from '../../../../test-helper.js';
 
@@ -459,7 +458,7 @@ describe('Certification | Enrolment | Acceptance | Application | Routes | certif
   describe('GET /api/admin/certification-candidates/{certificationCandidateId}/timeline', function () {
     it('should respond with a 200 and timeline', async function () {
       // given
-      const superAdmin = await insertUserWithRoleSuperAdmin();
+      const superAdmin = databaseBuilder.factory.buildUser.withRoleSuperAdmin();
       const sessionId = databaseBuilder.factory.buildSession().id;
       const candidateUserId = databaseBuilder.factory.buildUser().id;
       const createdAt = dayjs().toDate();

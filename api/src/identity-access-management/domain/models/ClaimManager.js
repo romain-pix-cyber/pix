@@ -24,7 +24,6 @@ export class ClaimManager {
 
   /**
    * @param {Record<string, string>} userInfo
-   *
    * @returns {Record<string, string>} Mapped claims from userInfo
    */
   mapClaims(userInfo = {}) {
@@ -40,7 +39,6 @@ export class ClaimManager {
 
   /**
    * @param {Record<string, string>} userInfo
-   *
    * @returns {Record<string, string>} Additional claims from userInfo
    */
   pickAdditionalClaims(userInfo = {}) {
@@ -49,7 +47,6 @@ export class ClaimManager {
 
   /**
    * @param {Record<string, string>} userInfo
-   *
    * @returns {boolean} true if some claims are missing from userInfo
    */
   hasMissingClaims(userInfo = {}) {
@@ -59,7 +56,6 @@ export class ClaimManager {
 
   /**
    * @param {Record<string, string>} userInfo
-   *
    * @returns {string[]} missing mandatory claims from userInfo
    */
   getMissingMandatoryClaims(userInfo = {}) {

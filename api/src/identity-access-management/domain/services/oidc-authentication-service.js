@@ -12,11 +12,16 @@ import { OidcError, OidcMissingFieldsError } from '../../../shared/domain/errors
 import { AuthenticationSessionContent } from '../../../shared/domain/models/AuthenticationSessionContent.js';
 import { temporaryStorage } from '../../../shared/infrastructure/key-value-storages/index.js';
 import { logger } from '../../../shared/infrastructure/utils/logger.js';
-import { DEFAULT_CLAIM_MAPPING } from '../constants/oidc-identity-providers.js';
 import { AuthenticationMethod } from '../models/AuthenticationMethod.js';
 import { ClaimManager } from '../models/ClaimManager.js';
 
 const DEFAULT_SCOPE = 'openid profile';
+
+const DEFAULT_CLAIM_MAPPING = {
+  firstName: ['given_name'],
+  lastName: ['family_name'],
+  externalIdentityId: ['sub'],
+};
 
 const defaultSessionTemporaryStorage = temporaryStorage.withPrefix('oidc-session:');
 

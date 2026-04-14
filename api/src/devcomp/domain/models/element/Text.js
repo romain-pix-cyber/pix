@@ -6,7 +6,6 @@ const TextTagEnumValues = Object.freeze({
   CONTEXT: 'context',
   DID_YOU_KNOW: 'did-you-know',
   FURTHER_INFORMATION: 'further-information',
-  KEY_POINTS: 'key-points',
   TIP: 'tip',
 });
 
@@ -18,7 +17,7 @@ class Text extends Element {
     assertEnumValue(
       TextTagEnumValues,
       tag,
-      "The tag value must be one of: ' ', 'context', 'did-you-know', 'further-information', 'key-points', 'tip'",
+      "The tag value must be one of: ' ', 'context', 'did-you-know', 'further-information', 'tip'",
     );
 
     this.content = content;

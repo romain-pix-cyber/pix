@@ -18,11 +18,10 @@ describe('Unit | Serializer | JSON API | participant-result-serializer', functio
     const isCampaignArchived = false;
     const sharedAt = new Date('2020-01-01');
     let participationResults, competences, stages, badgeResultsDTO, reachedStage;
-    let clock, now, originalConstantValue;
+    let clock, now;
 
     beforeEach(function () {
       now = new Date('2020-01-04');
-      originalConstantValue = constants.MINIMUM_DELAY_IN_DAYS_BEFORE_RETRYING;
       clock = sinon.useFakeTimers({ now, toFake: ['Date'] });
       sinon.stub(constants, 'MINIMUM_DELAY_IN_DAYS_BEFORE_RETRYING').value(4);
 
@@ -99,7 +98,6 @@ describe('Unit | Serializer | JSON API | participant-result-serializer', functio
     });
     afterEach(function () {
       clock.restore();
-      sinon.stub(constants, 'MINIMUM_DELAY_IN_DAYS_BEFORE_RETRYING').value(originalConstantValue);
     });
 
     it('should convert a CampaignParticipationResult model object into JSON API data', function () {

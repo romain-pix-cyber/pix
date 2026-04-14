@@ -24,7 +24,7 @@ export default class InformationBanner extends Component {
       <PixNotificationAlert @type="warning" @withIcon={{true}}>
         {{t
           "banners.certification.message"
-          documentationLink="https://cloud.pix.fr/s/DEarDXyxFxM78ps"
+          documentationLink="https://cloud.pix.fr/s/EGzJMjHfkGdCG3d"
           linkClasses="link link--banner link--bold link--underlined"
           htmlSafe=true
           year=this.year

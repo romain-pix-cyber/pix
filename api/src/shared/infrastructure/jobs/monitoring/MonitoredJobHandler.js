@@ -35,24 +35,30 @@ class MonitoredJobHandler {
   }
 
   logJobStarting({ data, jobName, jobId }) {
-    this.logger.info({
-      data,
-      handlerName: jobName,
-      type: 'JOB_LOG',
-      message: 'Job Started',
-      jobId,
-    });
+    this.logger.info(
+      {
+        data,
+        handlerName: jobName,
+        type: 'JOB_LOG',
+        message: 'Job Started',
+        jobId,
+      },
+      'PGBOSS JOB STARTING',
+    );
   }
 
   logJobFailed({ data, jobName, jobId, error }) {
-    this.logger.error({
-      data,
-      handlerName: jobName,
-      error: error?.message ? error.message + ' (see dedicated log for more information)' : undefined,
-      type: 'JOB_LOG_ERROR',
-      message: 'Job failed',
-      jobId,
-    });
+    this.logger.error(
+      {
+        data,
+        handlerName: jobName,
+        error: error?.message ? error.message + ' (see dedicated log for more information)' : undefined,
+        type: 'JOB_LOG_ERROR',
+        message: 'Job failed',
+        jobId,
+      },
+      'PGBOSS ERROR IN JOB',
+    );
   }
 }
 

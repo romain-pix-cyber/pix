@@ -130,6 +130,18 @@ class NetworkAlreadyExistError extends DomainError {
   }
 }
 
+class ParentOrganizationNotInNetworkError extends DomainError {
+  constructor({
+    code = 'PARENT_ORGANIZATION_NOT_IN_NETWORK',
+    message = 'Parent organization not in network',
+    meta,
+  } = {}) {
+    super(message);
+    this.code = code;
+    this.meta = meta;
+  }
+}
+
 class StructureNotFoundError extends DomainError {
   constructor({ code = 'STRUCTURE_NOT_FOUND', message = 'Structure not found', meta } = {}) {
     super(message);
@@ -151,6 +163,7 @@ export {
   OrganizationBatchUpdateError,
   OrganizationLearnerTypeNotFound,
   OrganizationNotFound,
+  ParentOrganizationNotInNetworkError,
   StructureNotFoundError,
   TagNotFoundError,
   UnableToAttachChildOrganizationToParentOrganizationError,

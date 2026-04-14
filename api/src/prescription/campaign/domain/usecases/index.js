@@ -41,7 +41,6 @@ import * as groupRepository from '../../infrastructure/repositories/group-reposi
 import { repositories as campaignRepositories } from '../../infrastructure/repositories/index.js';
 import * as knowledgeElementSnapshotRepository from '../../infrastructure/repositories/knowledge-element-snapshot-repository.js';
 import * as stageCollectionRepository from '../../infrastructure/repositories/stage-collection-repository.js';
-import * as campaignUpdateValidator from '../validators/campaign-update-validator.js';
 
 const dependencies = {
   knowledgeElementForParticipationService,
@@ -63,7 +62,6 @@ const dependencies = {
   campaignReportRepository,
   campaignRepository,
   campaignToJoinRepository: campaignRepositories.campaignToJoinRepository,
-  campaignUpdateValidator,
   codeGenerator,
   competenceRepository,
   improvementService,

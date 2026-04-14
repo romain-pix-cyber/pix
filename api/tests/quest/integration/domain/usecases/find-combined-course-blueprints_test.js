@@ -4,9 +4,7 @@ import { databaseBuilder, expect } from '../../../../test-helper.js';
 
 describe('Integration | Quest | Domain | UseCases | find-combined-course-blueprints', function () {
   it('should return combined course blueprints array if at least a result is found', async function () {
-    databaseBuilder.factory.buildCombinedCourseBlueprint({
-      content: CombinedCourseBlueprint.buildContentItems([{ moduleShortId: 'abc-123' }]),
-    });
+    databaseBuilder.factory.buildCombinedCourseBlueprint();
     await databaseBuilder.commit();
     const results = await usecases.findCombinedCourseBlueprints();
     expect(results).lengthOf(1);

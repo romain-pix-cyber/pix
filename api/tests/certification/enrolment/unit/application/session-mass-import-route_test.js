@@ -1,35 +1,20 @@
-import fs from 'node:fs';
-import { stat, unlink, writeFile } from 'node:fs/promises';
-import * as url from 'node:url';
-
 import FormData from 'form-data';
-import streamToPromise from 'stream-to-promise';
 
 import { sessionMassImportController } from '../../../../../src/certification/enrolment/application/session-mass-import-controller.js';
 import * as moduleUnderTest from '../../../../../src/certification/enrolment/application/session-mass-import-route.js';
 import { securityPreHandlers } from '../../../../../src/shared/application/security-pre-handlers.js';
 import { expect, HttpTestServer, sinon } from '../../../../test-helper.js';
-const __dirname = url.fileURLToPath(new URL('.', import.meta.url));
 
 describe('Unit | Router | session-mass-import-route', function () {
   describe('POST /api/certification-centers/{certificationCenterId}/sessions/validate-for-mass-import', function () {
-    const testFilePath = `${__dirname}/testFile_temp.csv`;
-
     let headers;
     let payload;
 
-    beforeEach(async function () {
-      await writeFile(testFilePath, Buffer.alloc(0));
+    beforeEach(function () {
       const form = new FormData();
-      const { size: knownLength } = await stat(testFilePath);
-      form.append('file', fs.createReadStream(testFilePath), { knownLength });
-
+      form.append('file', Buffer.alloc(0), { filename: 'test-file' });
       headers = form.getHeaders();
-      payload = await streamToPromise(form);
-    });
-
-    afterEach(async function () {
-      await unlink(testFilePath);
+      payload = form.getBuffer();
     });
 
     it('should exist', async function () {

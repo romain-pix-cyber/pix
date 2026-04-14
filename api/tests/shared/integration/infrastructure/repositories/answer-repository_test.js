@@ -108,6 +108,7 @@ describe('Integration | Repository | answerRepository', function () {
       // given
       const olderAnswer = domainBuilder.buildAnswer({
         id: 1,
+        createdAt: new Date('2020-01-01'),
         result: AnswerStatus.OK,
         resultDetails: 'some details',
         timeout: 456,
@@ -187,6 +188,7 @@ describe('Integration | Repository | answerRepository', function () {
         // given
         const firstAnswer = domainBuilder.buildAnswer({
           id: 1,
+          createdAt: new Date('2019-01-01'),
           result: AnswerStatus.OK,
           resultDetails: 'some details',
           timeout: 456,
@@ -197,6 +199,7 @@ describe('Integration | Repository | answerRepository', function () {
         });
         const secondAnswer = domainBuilder.buildAnswer({
           id: 2,
+          createdAt: new Date('2020-01-01'),
           result: AnswerStatus.KO,
           resultDetails: 'some details',
           timeout: null,
@@ -206,8 +209,8 @@ describe('Integration | Repository | answerRepository', function () {
           timeSpent: 20,
         });
         databaseBuilder.factory.buildAssessment({ id: 123 });
-        databaseBuilder.factory.buildAnswer({ ...secondAnswer, result: 'ko', createdAt: new Date('2020-01-01') });
-        databaseBuilder.factory.buildAnswer({ ...firstAnswer, result: 'ok', createdAt: new Date('2019-01-01') });
+        databaseBuilder.factory.buildAnswer({ ...secondAnswer, result: 'ko' });
+        databaseBuilder.factory.buildAnswer({ ...firstAnswer, result: 'ok' });
         databaseBuilder.factory.buildAnswer();
         await databaseBuilder.commit();
 
@@ -225,19 +228,21 @@ describe('Integration | Repository | answerRepository', function () {
         const challengeId = 'recChallenge123';
         const olderAnswer = domainBuilder.buildAnswer({
           id: 1,
+          createdAt: new Date('2018-01-01'),
           assessmentId: 123,
           result: AnswerStatus.KO,
           challengeId,
         });
         const recentAnswer = domainBuilder.buildAnswer({
           id: 2,
+          createdAt: new Date('2020-01-01'),
           assessmentId: 123,
           result: AnswerStatus.KO,
           challengeId,
         });
         databaseBuilder.factory.buildAssessment({ id: 123 });
-        databaseBuilder.factory.buildAnswer({ ...recentAnswer, result: 'ko', createdAt: new Date('2020-01-01') });
-        databaseBuilder.factory.buildAnswer({ ...olderAnswer, result: 'ko', createdAt: new Date('2018-01-01') });
+        databaseBuilder.factory.buildAnswer({ ...recentAnswer, result: 'ko' });
+        databaseBuilder.factory.buildAnswer({ ...olderAnswer, result: 'ko' });
         databaseBuilder.factory.buildAnswer();
         await databaseBuilder.commit();
 

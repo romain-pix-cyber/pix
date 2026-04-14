@@ -11,48 +11,8 @@ import get from 'lodash/get';
 import ENV from 'mon-pix/config/environment';
 
 export default class EmailVerificationCode extends Component {
-  <template>
-    <div class="email-verification-code">
-      <h2 class="email-verification-code__title">{{t "pages.user-account.email-verification.title"}}</h2>
+  numInputs = 6;
 
-      <p class="email-verification-code__description">{{t "pages.user-account.email-verification.description"}}</p>
-      <p class="email-verification-code__email">{{@email}}</p>
-      <p class="email-verification-code__time-code-validation">{{t
-          "pages.user-account.email-verification.time-code-validation"
-        }}</p>
-      <div class="email-verification-code__input-code">
-        <PixInputCode
-          @ariaLabel={{t "pages.user-account.email-verification.code-label"}}
-          @legend={{t "pages.user-account.email-verification.code-legend"}}
-          @explanationOfUse={{t "pages.user-account.email-verification.code-explanation-of-use"}}
-          @numInputs={{6}}
-          @onAllInputsFilled={{this.onSubmitCode}}
-        />
-      </div>
-
-      {{#if this.errorMessage}}
-        <PixNotificationAlert @type="error" class="email-verification-code__error">
-          {{this.errorMessage}}
-        </PixNotificationAlert>
-      {{/if}}
-
-      {{#if this.isEmailSent}}
-        <PixNotificationAlert @type="success" class="email-verification-code__resend-confirmation-message">
-          {{t "pages.user-account.email-verification.confirmation-message"}}
-        </PixNotificationAlert>
-      {{else}}
-        <div class="email-verification-code__resend {{if this.showResendCode 'visible'}}">
-          <p>{{t "pages.user-account.email-verification.did-not-receive"}}</p>
-          <button type="button" disabled={{this.isResending}} {{on "click" this.resendVerificationCodeByEmail}}>
-            {{t "pages.user-account.email-verification.send-back-the-code"}}
-          </button>
-        </div>
-      {{/if}}
-      <PixButton @triggerAction={{@disableEmailEditionMode}} @variant="secondary">
-        {{t "common.actions.cancel"}}
-      </PixButton>
-    </div>
-  </template>
   @service currentUser;
   @service store;
   @service intl;
@@ -60,6 +20,7 @@ export default class EmailVerificationCode extends Component {
   @tracked isResending = false;
   @tracked isEmailSent = false;
   @tracked errorMessage = null;
+  @tracked code = null;
 
   constructor() {
     super(...arguments);
@@ -70,15 +31,22 @@ export default class EmailVerificationCode extends Component {
   }
 
   @action
+  setCode(code) {
+    this.code = code;
+  }
+
+  @action
   async resendVerificationCodeByEmail() {
     this.isResending = true;
     try {
       const emailVerificationCode = this.store.createRecord('email-verification-code', {
         password: this.args.password,
         newEmail: this.args.email.trim().toLowerCase(),
+        action: this.args.action,
       });
       await emailVerificationCode.sendNewEmail();
       this.isEmailSent = true;
+      this.code = null;
     } finally {
       this.isResending = false;
       setTimeout(() => {
@@ -88,7 +56,15 @@ export default class EmailVerificationCode extends Component {
   }
 
   @action
-  async onSubmitCode(code) {
+  async onSubmitCode() {
+    if (this.code?.length !== this.numInputs) {
+      this.errorMessage = this.intl.t('pages.user-account.email-verification.errors.no-code', {
+        numInputs: this.numInputs,
+      });
+      return;
+    }
+    const code = this.code;
+    this.code = null;
     const emailVerificationCode = this.store.createRecord('email-verification-code', { code });
     try {
       const email = await emailVerificationCode.verifyCode();
@@ -117,4 +93,52 @@ export default class EmailVerificationCode extends Component {
       }
     }
   }
+
+  <template>
+    <div class="email-verification-code">
+      <h2 class="email-verification-code__title">{{t "pages.user-account.email-verification.title"}}</h2>
+
+      <p class="email-verification-code__description">{{t "pages.user-account.email-verification.description"}}</p>
+      <p class="email-verification-code__email">{{@email}}</p>
+      <p class="email-verification-code__time-code-validation">{{t
+          "pages.user-account.email-verification.time-code-validation"
+        }}</p>
+      <div class="email-verification-code__input-code">
+        <PixInputCode
+          @ariaLabel={{t "pages.user-account.email-verification.code-label"}}
+          @legend={{t "pages.user-account.email-verification.code-legend"}}
+          @explanationOfUse={{t "pages.user-account.email-verification.code-explanation-of-use"}}
+          @numInputs={{this.numInputs}}
+          @onAllInputsFilled={{this.setCode}}
+        />
+      </div>
+
+      {{#if this.errorMessage}}
+        <PixNotificationAlert @type="error" class="email-verification-code__error">
+          {{this.errorMessage}}
+        </PixNotificationAlert>
+      {{/if}}
+
+      {{#if this.isEmailSent}}
+        <PixNotificationAlert @type="success" class="email-verification-code__resend-confirmation-message">
+          {{t "pages.user-account.email-verification.confirmation-message"}}
+        </PixNotificationAlert>
+      {{else}}
+        <div class="email-verification-code__resend {{if this.showResendCode 'visible'}}">
+          <p>{{t "pages.user-account.email-verification.did-not-receive"}}</p>
+          <button type="button" disabled={{this.isResending}} {{on "click" this.resendVerificationCodeByEmail}}>
+            {{t "pages.user-account.email-verification.send-back-the-code"}}
+          </button>
+        </div>
+      {{/if}}
+      <div class="email-verification-code__actions">
+        <PixButton @triggerAction={{@disableEmailEditionMode}} @variant="secondary">
+          {{t "common.actions.cancel"}}
+        </PixButton>
+        <PixButton @triggerAction={{this.onSubmitCode}} @variant="primary">
+          {{t "pages.user-account.email-verification.validate-new-email"}}
+        </PixButton>
+      </div>
+    </div>
+  </template>
 }

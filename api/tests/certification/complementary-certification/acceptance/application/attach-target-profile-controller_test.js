@@ -5,7 +5,6 @@ import {
   databaseBuilder,
   expect,
   generateAuthenticatedUserRequestHeaders,
-  insertUserWithRoleSuperAdmin,
   knex,
 } from '../../../../test-helper.js';
 
@@ -21,7 +20,7 @@ describe('Acceptance | Controller | Complementary certification | attach-target-
   describe('PUT /admin/complementary-certifications/{complementaryCertificationId}/badges/', function () {
     it('should return an OK status after saving in database', async function () {
       // given
-      const superAdmin = await insertUserWithRoleSuperAdmin();
+      const superAdmin = databaseBuilder.factory.buildUser.withRoleSuperAdmin();
       const complementaryCertification = databaseBuilder.factory.buildComplementaryCertification({
         id: 52,
         key: 'Pix+ key',

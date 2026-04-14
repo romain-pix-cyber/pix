@@ -70,10 +70,6 @@ import HeadInformation from 'pix-admin/components/organizations/head-information
         </LinkTo>
       {{/if}}
 
-      <LinkTo @route="authenticated.organizations.get.children" @model={{@model}}>
-        {{t "pages.organization.navbar.children"}}
-        ({{@model.children.length}})
-      </LinkTo>
       {{#if @controller.accessControl.currentUser.adminMember.isSuperAdmin}}
         {{#if @model.network.id}}
           <LinkTo @route="authenticated.organizations.get.network" @model={{@model}}>
