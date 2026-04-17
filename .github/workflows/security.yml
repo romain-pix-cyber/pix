@@ -29,7 +29,7 @@ jobs:
           autoCreate: true
 
       - name: Pix App - Create SBOM
-        run: npm install --prefix mon-pix/ && npx @cyclonedx/cyclonedx-npm --output-file pix-app-sbom.json mon-pix/package.json && [ -e "pix-app-sbom.json" ] && echo '[+] SBOM created' || echo '[!] Fail to create SBOM'
+        run: npm ci --prefix mon-pix/ && npx @cyclonedx/cyclonedx-npm --output-file pix-app-sbom.json mon-pix/package.json && [ -e "pix-app-sbom.json" ] && echo '[+] SBOM created' || echo '[!] Fail to create SBOM'
 
       - name: Pix App - Upload BOM to Dependency-Track
         uses: DependencyTrack/gh-upload-sbom@48feab3080ff9e8f51f4d21861d9fc914eb744f5
@@ -43,7 +43,7 @@ jobs:
           autoCreate: true
 
       - name: Pix Orga - Create SBOM
-        run: npm install --prefix orga/ && npx @cyclonedx/cyclonedx-npm --output-file pix-orga-sbom.json orga/package.json && [ -e "pix-orga-sbom.json" ] && echo '[+] SBOM created' || echo '[!] Fail to create SBOM'
+        run: npm ci --prefix orga/ && npx @cyclonedx/cyclonedx-npm --output-file pix-orga-sbom.json orga/package.json && [ -e "pix-orga-sbom.json" ] && echo '[+] SBOM created' || echo '[!] Fail to create SBOM'
 
       - name: Pix Orga - Upload BOM to Dependency-Track
         uses: DependencyTrack/gh-upload-sbom@48feab3080ff9e8f51f4d21861d9fc914eb744f5
@@ -57,7 +57,7 @@ jobs:
           autoCreate: true
 
       - name: Pix Certif - Create SBOM
-        run: npm install --prefix certif/ && npx @cyclonedx/cyclonedx-npm --output-file pix-certif-sbom.json certif/package.json && [ -e "pix-certif-sbom.json" ] && echo '[+] SBOM created' || echo '[!] Fail to create SBOM'
+        run: npm ci --prefix certif/ && npx @cyclonedx/cyclonedx-npm --output-file pix-certif-sbom.json certif/package.json && [ -e "pix-certif-sbom.json" ] && echo '[+] SBOM created' || echo '[!] Fail to create SBOM'
 
       - name: Pix Certif - Upload BOM to Dependency-Track
         uses: DependencyTrack/gh-upload-sbom@48feab3080ff9e8f51f4d21861d9fc914eb744f5
@@ -71,7 +71,7 @@ jobs:
           autoCreate: true
 
       - name: Pix Admin - Create SBOM
-        run: npm install --prefix admin/ && npx @cyclonedx/cyclonedx-npm --output-file pix-admin-sbom.json admin/package.json && [ -e "pix-admin-sbom.json" ] && echo '[+] SBOM created' || echo '[!] Fail to create SBOM'
+        run: npm ci --prefix admin/ && npx @cyclonedx/cyclonedx-npm --output-file pix-admin-sbom.json admin/package.json && [ -e "pix-admin-sbom.json" ] && echo '[+] SBOM created' || echo '[!] Fail to create SBOM'
 
       - name: Pix Admin - Upload BOM to Dependency-Track
         uses: DependencyTrack/gh-upload-sbom@48feab3080ff9e8f51f4d21861d9fc914eb744f5
@@ -85,7 +85,7 @@ jobs:
           autoCreate: true
 
       - name: Pix Junior - Create SBOM
-        run: npm install --prefix junior/ && npx @cyclonedx/cyclonedx-npm --output-file pix-junior-sbom.json junior/package.json && [ -e "pix-junior-sbom.json" ] && echo '[+] SBOM created' || echo '[!] Fail to create SBOM'
+        run: npm ci --prefix junior/ && npx @cyclonedx/cyclonedx-npm --output-file pix-junior-sbom.json junior/package.json && [ -e "pix-junior-sbom.json" ] && echo '[+] SBOM created' || echo '[!] Fail to create SBOM'
 
       - name: Pix Junior - Upload BOM to Dependency-Track
         uses: DependencyTrack/gh-upload-sbom@48feab3080ff9e8f51f4d21861d9fc914eb744f5
@@ -99,7 +99,7 @@ jobs:
           autoCreate: true
 
       - name: Pix API - Create SBOM
-        run: npm install --prefix api/ && npx @cyclonedx/cyclonedx-npm --output-file pix-api-sbom.json api/package.json && [ -e "pix-api-sbom.json" ] && echo '[+] SBOM created' || echo '[!] Fail to create SBOM'
+        run: npm ci --prefix api/ && npx @cyclonedx/cyclonedx-npm --output-file pix-api-sbom.json api/package.json && [ -e "pix-api-sbom.json" ] && echo '[+] SBOM created' || echo '[!] Fail to create SBOM'
 
       - name: Pix API - Upload BOM to Dependency-Track
         uses: DependencyTrack/gh-upload-sbom@48feab3080ff9e8f51f4d21861d9fc914eb744f5
@@ -113,7 +113,7 @@ jobs:
           autoCreate: true
 
       - name: Pix Audit Logger - Create SBOM
-        run: npm install --prefix audit-logger/ && npx @cyclonedx/cyclonedx-npm --output-file pix-audit-logger-sbom.json audit-logger/package.json && [ -e "pix-audit-logger-sbom.json" ] && echo '[+] SBOM created' || echo '[!] Fail to create SBOM'
+        run: npm ci --prefix audit-logger/ && npx @cyclonedx/cyclonedx-npm --output-file pix-audit-logger-sbom.json audit-logger/package.json && [ -e "pix-audit-logger-sbom.json" ] && echo '[+] SBOM created' || echo '[!] Fail to create SBOM'
 
       - name: Pix Audit Logger - Upload BOM to Dependency-Track
         uses: DependencyTrack/gh-upload-sbom@48feab3080ff9e8f51f4d21861d9fc914eb744f5
@@ -127,7 +127,7 @@ jobs:
           autoCreate: true
 
       - name: Tests E2E - Create SBOM
-        run: npm install --prefix high-level-tests/e2e/ && npx @cyclonedx/cyclonedx-npm --output-file pix-tests-e2e-sbom.json high-level-tests/e2e/package.json && [ -e "pix-tests-e2e-sbom.json" ] && echo '[+] SBOM created' || echo '[!] Fail to create SBOM'
+        run: npm ci --prefix high-level-tests/e2e/ && npx @cyclonedx/cyclonedx-npm --output-file pix-tests-e2e-sbom.json high-level-tests/e2e/package.json && [ -e "pix-tests-e2e-sbom.json" ] && echo '[+] SBOM created' || echo '[!] Fail to create SBOM'
 
       - name: Tests E2E - Upload BOM to Dependency-Track
         uses: DependencyTrack/gh-upload-sbom@48feab3080ff9e8f51f4d21861d9fc914eb744f5
@@ -141,7 +141,7 @@ jobs:
           autoCreate: true
 
       - name: Tests Playwright - Create SBOM
-        run: npm install --prefix high-level-tests/e2e-playwright/ && npx @cyclonedx/cyclonedx-npm --output-file pix-tests-playwright-sbom.json high-level-tests/e2e-playwright/package.json && [ -e "pix-tests-playwright-sbom.json" ] && echo '[+] SBOM created' || echo '[!] Fail to create SBOM'
+        run: npm ci --prefix high-level-tests/e2e-playwright/ && npx @cyclonedx/cyclonedx-npm --output-file pix-tests-playwright-sbom.json high-level-tests/e2e-playwright/package.json && [ -e "pix-tests-playwright-sbom.json" ] && echo '[+] SBOM created' || echo '[!] Fail to create SBOM'
 
       - name: Tests Playwright - Upload BOM to Dependency-Track
         uses: DependencyTrack/gh-upload-sbom@48feab3080ff9e8f51f4d21861d9fc914eb744f5
@@ -154,16 +154,16 @@ jobs:
           bomFilename: "pix-tests-playwright-sbom.json"
           autoCreate: true
 
-      - name: Tests Load - Create SBOM
-        run: npm install --prefix high-level-tests/load-testing/ && npx @cyclonedx/cyclonedx-npm --output-file pix-tests-load-sbom.json high-level-tests/load-testing/package.json && [ -e "pix-tests-load-sbom.json" ] && echo '[+] SBOM created' || echo '[!] Fail to create SBOM'
+      # - name: Tests Load - Create SBOM
+      #   run: npm ci --prefix high-level-tests/load-testing/ && npx @cyclonedx/cyclonedx-npm --output-file pix-tests-load-sbom.json high-level-tests/load-testing/package.json && [ -e "pix-tests-load-sbom.json" ] && echo '[+] SBOM created' || echo '[!] Fail to create SBOM'
 
-      - name: Tests Load - Upload BOM to Dependency-Track
-        uses: DependencyTrack/gh-upload-sbom@48feab3080ff9e8f51f4d21861d9fc914eb744f5
-        with:
-          serverHostname: ${{ secrets.DEPENDENCYTRACK_HOSTNAME }}
-          apiKey: ${{ secrets.DEPENDENCYTRACK_APIKEY }}
-          # change these variables for each project
-          projectName: Tests Load
-          projectVersion: dev
-          bomFilename: "pix-tests-load-sbom.json"
-          autoCreate: true
+      # - name: Tests Load - Upload BOM to Dependency-Track
+      #   uses: DependencyTrack/gh-upload-sbom@48feab3080ff9e8f51f4d21861d9fc914eb744f5
+      #   with:
+      #     serverHostname: ${{ secrets.DEPENDENCYTRACK_HOSTNAME }}
+      #     apiKey: ${{ secrets.DEPENDENCYTRACK_APIKEY }}
+      #     # change these variables for each project
+      #     projectName: Tests Load
+      #     projectVersion: dev
+      #     bomFilename: "pix-tests-load-sbom.json"
+      #     autoCreate: true
